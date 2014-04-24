@@ -4,17 +4,18 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.JComboBox;
 import javax.swing.table.AbstractTableModel;
 
-public class InstrumentTableModel extends AbstractTableModel{
+public class IMmapModel extends AbstractTableModel{
   /**
    * 
    */
   private static final long serialVersionUID = -5686596864300068524L;
-  List<InstrumentMap> instruments = new ArrayList<InstrumentMap>();
+  List<IMMap> instruments = new ArrayList<IMMap>();
 
-  public InstrumentTableModel() {
-    // TODO Auto-generated constructor stub
+  public IMmapModel() {
+    setFile(new File("C:/Users/Aswin/Downloads/rndmdngt.mid"));
   }
   
   public String getColumnName(int col) {
@@ -26,8 +27,9 @@ public class InstrumentTableModel extends AbstractTableModel{
     }
 }
   
-  public boolean isCellEditable(int row, int col)
-  { return false; }
+  public boolean isCellEditable(int row, int col) { 
+    if (col==2 ) return true;
+    else return false; }
   
 
   @Override
@@ -44,15 +46,14 @@ public class InstrumentTableModel extends AbstractTableModel{
 
   @Override
   public Object getValueAt(int row, int col) {
-    InstrumentMap instrument=(InstrumentMap) instruments.get(row);
+    IMMap instrument=(IMMap) instruments.get(row);
     switch (col) {
       case 0:
         return new Integer(instrument.getChannel());
       case 1:
         return new Integer(instrument.getInstrument());
       case 2:
-        if (instrument.getEv3()==null) return "Not Assigned";
-        else return instrument.getEv3().getName();
+        return new JComboBox<BrickInfo>(new ComboBrick());
       default:
         return "Error";
     }

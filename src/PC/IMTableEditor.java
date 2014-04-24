@@ -1,10 +1,7 @@
 package PC;
 
-import java.awt.BorderLayout;
 import java.awt.EventQueue;
-import java.util.List;
 
-import javax.sound.midi.MidiDevice;
 import javax.sound.midi.MidiDevice.Info;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -15,7 +12,6 @@ import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.JToolBar;
 import javax.swing.ImageIcon;
-import javax.swing.SwingConstants;
 import javax.swing.JTabbedPane;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
@@ -30,16 +26,26 @@ import javax.swing.JTextField;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.io.File;
+
 import com.jgoodies.forms.layout.FormLayout;
 import com.jgoodies.forms.layout.ColumnSpec;
 import com.jgoodies.forms.factories.FormFactory;
 import com.jgoodies.forms.layout.RowSpec;
+
 import javax.swing.SpringLayout;
+
 import java.awt.GridLayout;
+
 import javax.swing.JTable;
 import javax.swing.JScrollPane;
 
-public class BoRControl extends JFrame {
+
+/** IMTableEditor lets you edit and maintain the InstrumentMusician Mapping table;
+ * 
+ * @author Aswin
+ *
+ */
+public class IMTableEditor extends JFrame {
 
   private JPanel contentPane;
   private JTextField MidiFile;
@@ -60,7 +66,7 @@ public class BoRControl extends JFrame {
     EventQueue.invokeLater(new Runnable() {
       public void run() {
         try {
-          BoRControl frame = new BoRControl();
+          IMTableEditor frame = new IMTableEditor();
           frame.setVisible(true);
         }
         catch (Exception e) {
@@ -75,7 +81,7 @@ public class BoRControl extends JFrame {
   /**
    * Create the frame.
    */
-  public BoRControl() {
+  public IMTableEditor() {
     setTitle("Band of Robots");
     setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     setBounds(100, 100, 696, 553);
@@ -88,16 +94,16 @@ public class BoRControl extends JFrame {
     
     
     JButton btnPlay = new JButton("");
-    btnPlay.setIcon(new ImageIcon(BoRControl.class.getResource("/icons/play-icon.png")));
+    btnPlay.setIcon(new ImageIcon(IMTableEditor.class.getResource("/icons/play-icon.png")));
     toolBar.add(btnPlay);
     
     JButton btnNewButton = new JButton("");
-    btnNewButton.setIcon(new ImageIcon(BoRControl.class.getResource("/icons/pause-icon.png")));
+    btnNewButton.setIcon(new ImageIcon(IMTableEditor.class.getResource("/icons/pause-icon.png")));
     toolBar.add(btnNewButton);
     
     JButton btnTest = new JButton("");
-    btnTest.setIcon(new ImageIcon(BoRControl.class.getResource("/icons/stop-icon.png")));
-    btnTest.setSelectedIcon(new ImageIcon(BoRControl.class.getResource("/icons/stop-icon.png")));
+    btnTest.setIcon(new ImageIcon(IMTableEditor.class.getResource("/icons/stop-icon.png")));
+    btnTest.setSelectedIcon(new ImageIcon(IMTableEditor.class.getResource("/icons/stop-icon.png")));
     toolBar.add(btnTest);
         
         JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
@@ -106,9 +112,9 @@ public class BoRControl extends JFrame {
         tabbedPane.addTab("MIDI", null, panel, null);
         GridBagLayout gbl_panel = new GridBagLayout();
         gbl_panel.columnWidths = new int[]{127, 391, 28, 28, 0};
-        gbl_panel.rowHeights = new int[]{0, 20, 0, 0};
-        gbl_panel.columnWeights = new double[]{1.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
-        gbl_panel.rowWeights = new double[]{0.0, 0.0, 0.0, Double.MIN_VALUE};
+        gbl_panel.rowHeights = new int[]{0, 20, 0, 0, 0};
+        gbl_panel.columnWeights = new double[]{1.0, 1.0, 0.0, 0.0, Double.MIN_VALUE};
+        gbl_panel.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
         panel.setLayout(gbl_panel);
         
         JLabel lblFile = new JLabel("File");
@@ -167,7 +173,7 @@ public class BoRControl extends JFrame {
             JLabel lblSynthesizer = new JLabel("synthesizer");
             GridBagConstraints gbc_lblSynthesizer = new GridBagConstraints();
             gbc_lblSynthesizer.anchor = GridBagConstraints.WEST;
-            gbc_lblSynthesizer.insets = new Insets(0, 0, 0, 5);
+            gbc_lblSynthesizer.insets = new Insets(0, 0, 5, 5);
             gbc_lblSynthesizer.gridx = 0;
             gbc_lblSynthesizer.gridy = 2;
             panel.add(lblSynthesizer, gbc_lblSynthesizer);
@@ -175,7 +181,7 @@ public class BoRControl extends JFrame {
             JComboBox<Info> SelectSynthesizer = new JComboBox<Info>(new ComboSynthesizers());
             GridBagConstraints gbc_SelectSynthesizer = new GridBagConstraints();
             gbc_SelectSynthesizer.fill = GridBagConstraints.HORIZONTAL;
-            gbc_SelectSynthesizer.insets = new Insets(0, 0, 0, 5);
+            gbc_SelectSynthesizer.insets = new Insets(0, 0, 5, 5);
             gbc_SelectSynthesizer.anchor = GridBagConstraints.NORTH;
             gbc_SelectSynthesizer.gridx = 1;
             gbc_SelectSynthesizer.gridy = 2;
@@ -190,7 +196,7 @@ public class BoRControl extends JFrame {
             FormFactory.RELATED_GAP_ROWSPEC,
             RowSpec.decode("default:grow"),}));
         
-        table = new JTable(new InstrumentTableModel());
+        table = new JTable(new IMmapModel());
         panel_1.add(table, "2, 2, fill, fill");
             GroupLayout gl_contentPane = new GroupLayout(contentPane);
             gl_contentPane.setHorizontalGroup(

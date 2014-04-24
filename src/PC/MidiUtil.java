@@ -9,9 +9,16 @@ import java.util.TreeMap;
 import javax.sound.midi.*;
 
 
+/**
+ * Utilities for exploring Midi files and devices
+ * @author Aswin
+ *
+ */
 public class MidiUtil {
   
   private MidiUtil() {};
+  
+  
   
 static void dumpSequence(Sequence seq, int levels) {
   System.out.println("divType = " + seq.getDivisionType());
@@ -251,9 +258,9 @@ public static List getInstrumentsOld(Sequence seq) {
 }
 
 
-public static List<InstrumentMap> getInstruments(File file) {
+public static List<IMMap> getInstruments(File file) {
   Sequence seq;
-  List<InstrumentMap> instruments = new ArrayList<InstrumentMap>();
+  List<IMMap> instruments = new ArrayList<IMMap>();
   try {
     seq = MidiSystem.getSequence(file);
     Track[] tracks=seq.getTracks();
@@ -263,16 +270,16 @@ public static List<InstrumentMap> getInstruments(File file) {
         if (event.getMessage() instanceof ShortMessage) {
           ShortMessage message=(ShortMessage)event.getMessage();
           if (message.getCommand()==ShortMessage.PROGRAM_CHANGE) {
-            InstrumentMap newMap=new InstrumentMap(message.getChannel(),message.getData1());
+            IMMap newMap=new IMMap(file, message.getChannel(),message.getData1());
             boolean unique=true;
-            for (InstrumentMap existing : instruments) {
+            for (IMMap existing : instruments) {
               if (newMap.isEqual(existing)) {
                 unique=false;
                 break;
               }
             }
             if (unique) {
-              instruments.add(new InstrumentMap(message.getChannel(),message.getData1()));
+              instruments.add(new IMMap(file, message.getChannel(),message.getData1()));
             System.out.println("Instrument = " + message.getData1() + " Channel = " + message.getChannel());
             }
           }
@@ -290,6 +297,7 @@ public static List<InstrumentMap> getInstruments(File file) {
   return instruments;
 }
 
+// TODO: combine next to methods into one
 
 public static List<MidiDevice.Info> getSequencers() {
   List<MidiDevice.Info> devices=new ArrayList<MidiDevice.Info>();
