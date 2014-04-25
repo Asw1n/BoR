@@ -18,24 +18,32 @@ public class IMmapModel extends AbstractTableModel{
     setFile(new File("C:/Users/Aswin/Downloads/rndmdngt.mid"));
   }
   
+  @Override
   public String getColumnName(int col) {
     switch (col) {
       case 0: return "Channel";
       case 1: return "Instrument";
       case 2: return "EV3";
+      case 3: return "Supress";
       default: return "Error";
     }
 }
   
+  public Class getColumnClass(int columnIndex) {
+    if (columnIndex==2) return BrickHub.class;
+    return Integer.class;
+  }
+  
   public boolean isCellEditable(int row, int col) { 
-    if (col==2 ) return true;
-    else return false; }
+    if (col==2 || col==3 ) return true;
+    else return false;
+    }
   
 
   @Override
   public int getColumnCount() {
     // TODO Auto-generated method stub
-    return 3;
+    return 4;
   }
 
   @Override
@@ -47,13 +55,16 @@ public class IMmapModel extends AbstractTableModel{
   @Override
   public Object getValueAt(int row, int col) {
     IMMap instrument=(IMMap) instruments.get(row);
+    
     switch (col) {
       case 0:
         return new Integer(instrument.getChannel());
       case 1:
         return new Integer(instrument.getInstrument());
       case 2:
-        return new JComboBox<BrickInfo>(new ComboBrick());
+        return instrument.getBrickInfo();
+      case 3:
+        return new Boolean(instrument.isSupressed());
       default:
         return "Error";
     }

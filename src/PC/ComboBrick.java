@@ -2,7 +2,6 @@ package PC;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import javax.swing.ComboBoxModel;
@@ -10,10 +9,10 @@ import javax.swing.event.ListDataListener;
 
 import lejos.hardware.BrickFinder;
 
-public class ComboBrick implements ComboBoxModel<BrickInfo>{
-  static List<BrickInfo> bricks;
-  BrickInfo selected;
-  static BrickInfo deselect = new BrickInfo("Unassigned","","");
+public class ComboBrick implements ComboBoxModel<BrickHub>{
+  static List<BrickHub> bricks;
+  BrickHub selected;
+  static BrickHub deselect = new BrickHub("Unassigned","","");
 
   public ComboBrick() {
     if (bricks==null) scan();
@@ -26,7 +25,7 @@ public class ComboBrick implements ComboBoxModel<BrickInfo>{
   }
 
   @Override
-  public BrickInfo getElementAt(int arg0) {
+  public BrickHub getElementAt(int arg0) {
     if (arg0==bricks.size()) return deselect;
     return bricks.get(arg0);
   }
@@ -49,7 +48,7 @@ public class ComboBrick implements ComboBoxModel<BrickInfo>{
 
   @Override
   public void setSelectedItem(Object arg0) {
-    selected=(BrickInfo) arg0;
+    selected=(BrickHub) arg0;
   }
   
   /**
@@ -57,9 +56,9 @@ public class ComboBrick implements ComboBoxModel<BrickInfo>{
    */
   public void scan() {
     try {
-      bricks=new ArrayList<BrickInfo>();
+      bricks=new ArrayList<BrickHub>();
       for(lejos.hardware.BrickInfo info : BrickFinder.discover()) {
-        bricks.add(new BrickInfo(info));
+        bricks.add(new BrickHub(info));
       }
       selected=deselect;
     }

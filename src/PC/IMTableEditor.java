@@ -6,6 +6,7 @@ import javax.sound.midi.MidiDevice.Info;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+import javax.swing.DefaultCellEditor;
 import javax.swing.JButton;
 import javax.swing.UIManager;
 import javax.swing.GroupLayout;
@@ -111,9 +112,9 @@ public class IMTableEditor extends JFrame {
         JPanel panel =  new JPanel();
         tabbedPane.addTab("MIDI", null, panel, null);
         GridBagLayout gbl_panel = new GridBagLayout();
-        gbl_panel.columnWidths = new int[]{127, 391, 28, 28, 0};
+        gbl_panel.columnWidths = new int[]{127, 391, 0, 28, 28, 0};
         gbl_panel.rowHeights = new int[]{0, 20, 0, 0, 0};
-        gbl_panel.columnWeights = new double[]{1.0, 1.0, 0.0, 0.0, Double.MIN_VALUE};
+        gbl_panel.columnWeights = new double[]{1.0, 1.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
         gbl_panel.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
         panel.setLayout(gbl_panel);
         
@@ -133,26 +134,27 @@ public class IMTableEditor extends JFrame {
         gbc_MidiFile.gridy = 0;
         panel.add(MidiFile, gbc_MidiFile);
         MidiFile.setColumns(10);
-        
-        JButton btnFile = new JButton("File");
-        btnFile.addActionListener(new ActionListener() {
-          public void actionPerformed(ActionEvent arg0) {
-            {
-               if (fc.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
-                sequenceFile=fc.getSelectedFile();
-                  MidiFile.setText(sequenceFile.getAbsolutePath());
-            }
-            }
-          }
-        });
-        
-            GridBagConstraints gbc_btnFile = new GridBagConstraints();
-            gbc_btnFile.insets = new Insets(0, 0, 5, 5);
-            gbc_btnFile.gridx = 2;
-            gbc_btnFile.gridy = 0;
-            panel.add(btnFile, gbc_btnFile);
             
-            JLabel lblSequencer = new JLabel("sequencer");
+            JButton btnFile = new JButton("");
+            btnFile.setIcon(fc.getIcon(new File("Test.mid")));
+            btnFile.addActionListener(new ActionListener() {
+              public void actionPerformed(ActionEvent arg0) {
+                {
+                   if (fc.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
+                    sequenceFile=fc.getSelectedFile();
+                      MidiFile.setText(sequenceFile.getAbsolutePath());
+                }
+                }
+              }
+            });
+            
+                GridBagConstraints gbc_btnFile = new GridBagConstraints();
+                gbc_btnFile.insets = new Insets(0, 0, 5, 5);
+                gbc_btnFile.gridx = 2;
+                gbc_btnFile.gridy = 0;
+                panel.add(btnFile, gbc_btnFile);
+            
+            JLabel lblSequencer = new JLabel("Sequencer");
             GridBagConstraints gbc_lblSequencer = new GridBagConstraints();
             gbc_lblSequencer.anchor = GridBagConstraints.WEST;
             gbc_lblSequencer.insets = new Insets(0, 0, 5, 5);
@@ -170,7 +172,7 @@ public class IMTableEditor extends JFrame {
             panel.add(selectSequencer, gbc_selectSequencer);
 
             
-            JLabel lblSynthesizer = new JLabel("synthesizer");
+            JLabel lblSynthesizer = new JLabel("Synthesizer");
             GridBagConstraints gbc_lblSynthesizer = new GridBagConstraints();
             gbc_lblSynthesizer.anchor = GridBagConstraints.WEST;
             gbc_lblSynthesizer.insets = new Insets(0, 0, 5, 5);
@@ -191,13 +193,20 @@ public class IMTableEditor extends JFrame {
         tabbedPane.addTab("Instruments", null, panel_1, null);
         panel_1.setLayout(new FormLayout(new ColumnSpec[] {
             FormFactory.RELATED_GAP_COLSPEC,
+            ColumnSpec.decode("default:grow"),
+            FormFactory.RELATED_GAP_COLSPEC,
             ColumnSpec.decode("default:grow"),},
           new RowSpec[] {
             FormFactory.RELATED_GAP_ROWSPEC,
             RowSpec.decode("default:grow"),}));
         
+        JScrollPane scrollPane = new JScrollPane();
+        panel_1.add(scrollPane, "2, 2, fill, fill");
+        
         table = new JTable(new IMmapModel());
-        panel_1.add(table, "2, 2, fill, fill");
+        table.setRowSelectionAllowed(false);
+        scrollPane.setViewportView(table);
+        table.getColumnModel().getColumn(2).setCellEditor(new DefaultCellEditor(new JComboBox<BrickHub>(new ComboBrick())));
             GroupLayout gl_contentPane = new GroupLayout(contentPane);
             gl_contentPane.setHorizontalGroup(
               gl_contentPane.createParallelGroup(Alignment.LEADING)
