@@ -162,7 +162,7 @@ public class IMTableEditor extends JFrame {
             gbc_lblSequencer.gridy = 1;
             panel.add(lblSequencer, gbc_lblSequencer);
             
-            JComboBox<Info> selectSequencer = new JComboBox<Info>(new ComboSequencers());
+            JComboBox selectSequencer = new JComboBox(new ComboSequencers());
             GridBagConstraints gbc_selectSequencer = new GridBagConstraints();
             gbc_selectSequencer.fill = GridBagConstraints.HORIZONTAL;
             gbc_selectSequencer.anchor = GridBagConstraints.NORTH;
@@ -180,7 +180,7 @@ public class IMTableEditor extends JFrame {
             gbc_lblSynthesizer.gridy = 2;
             panel.add(lblSynthesizer, gbc_lblSynthesizer);
             
-            JComboBox<Info> SelectSynthesizer = new JComboBox<Info>(new ComboSynthesizers());
+            JComboBox SelectSynthesizer = new JComboBox(new ComboSynthesizers());
             GridBagConstraints gbc_SelectSynthesizer = new GridBagConstraints();
             gbc_SelectSynthesizer.fill = GridBagConstraints.HORIZONTAL;
             gbc_SelectSynthesizer.insets = new Insets(0, 0, 5, 5);
@@ -206,7 +206,7 @@ public class IMTableEditor extends JFrame {
         table = new JTable(new IMmapModel());
         table.setRowSelectionAllowed(false);
         scrollPane.setViewportView(table);
-        table.getColumnModel().getColumn(2).setCellEditor(new DefaultCellEditor(new JComboBox<BrickHub>(new ComboBrick())));
+        table.getColumnModel().getColumn(2).setCellEditor(new DefaultCellEditor(new JComboBox(new ComboBrick())));
             GroupLayout gl_contentPane = new GroupLayout(contentPane);
             gl_contentPane.setHorizontalGroup(
               gl_contentPane.createParallelGroup(Alignment.LEADING)

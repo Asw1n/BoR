@@ -9,7 +9,7 @@ import javax.swing.event.ListDataListener;
 
 import lejos.hardware.BrickFinder;
 
-public class ComboBrick implements ComboBoxModel<BrickHub>{
+public class ComboBrick implements ComboBoxModel{
   static List<BrickHub> bricks;
   BrickHub selected;
   static BrickHub deselect = new BrickHub("Unassigned","","");

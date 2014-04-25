@@ -4,7 +4,6 @@ import java.io.File;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 
-import Brick.Musician;
 import lejos.hardware.BrickInfo;
 
 /** The Instrument Musican Map maps an instrument in a midi file to a a robot musician.

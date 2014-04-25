@@ -3,8 +3,6 @@ package PC;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 
-import Brick.Musician;
-
 public class BrickHub extends lejos.hardware.BrickInfo {
 
   private Musician hub;

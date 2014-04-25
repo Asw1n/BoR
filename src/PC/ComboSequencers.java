@@ -11,7 +11,7 @@ import javax.swing.JComboBox;
 import javax.swing.event.ListDataListener;
 
 
-public class ComboSequencers implements ComboBoxModel<MidiDevice.Info> {
+public class ComboSequencers implements ComboBoxModel {
   static List<MidiDevice.Info> sequencers=MidiUtil.getSequencers();
   MidiDevice.Info selected;
   

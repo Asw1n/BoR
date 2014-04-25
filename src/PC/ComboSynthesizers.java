@@ -11,7 +11,7 @@ import javax.swing.JComboBox;
 import javax.swing.event.ListDataListener;
 
 
-public class ComboSynthesizers implements ComboBoxModel<MidiDevice.Info> {
+public class ComboSynthesizers implements ComboBoxModel {
   static List<MidiDevice.Info> synthesizers=MidiUtil.getSynthesizers();
   MidiDevice.Info selected;
   
