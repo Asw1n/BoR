@@ -13,10 +13,6 @@ The robots will be controlled via a Midi file. Each robot in the band is assigne
 Obviously the project needs robot musicians. Guitar players, Base players, drummers, horns, piano players, etc, etc. You could build a musician. If the robots are to play together they should have similar size and style. The project needs musician builders.
 The project also needs software. On the PC it needs a program that can handle Midi and one that sends midi events to the different musicians. It also needs a program that helps to select a midi file, extract the instruments used by the file and that is able to link the instruments to robots. The project needs software developers.
 
-# Jazz
-
-<iframe width="420" height="315" src="//www.youtube.com/embed/J53kGW8vhWs" frameborder="0" allowfullscreen></iframe>
-
 # Software
 
-![ScreenShot](https://raw.github.com/Asw1n/BoR/master/docs/GarageBand.tiff)
+![ScreenShot](https://raw.github.com/Asw1n/BoR/master/docs/GarageBand.png)
