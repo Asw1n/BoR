@@ -1,8 +1,6 @@
 BoR (Band of Robots)
 ====================
 
-# Introduction
-
 ## What is the project about?
 The project aims to create a collection of robot musicians made with the EV3 that form a band or orchestra. The musicians do not actually play the music, this is done by a computer. But they all have an instrument and it looks like they are playing it as they move in rhythm with the actual music. Very much like the Bimboboxes I used to love when I was young (although I doubt that they are called Bimboboxes in english).
 
