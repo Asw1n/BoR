@@ -1,10 +1,9 @@
 package PC;
 
-import java.io.File;
-import java.rmi.registry.LocateRegistry;
-import java.rmi.registry.Registry;
+import PC.BrickHub;
+import PC.IMMap;
 
-import lejos.hardware.BrickInfo;
+mport java.io.File;
 
 /** The Instrument Musican Map maps an instrument in a midi file to a a robot musician.
  * 
@@ -16,8 +15,7 @@ public class IMMap {
   int channel=0;
   int instrument=0;
   boolean supress=false;
-  BrickInfo brickInfo=null;
-  Musician musician;
+  BrickHub brickHub=null;
    
 
   /** Contructor
@@ -33,34 +31,24 @@ public class IMMap {
     this.instrument=instrument;
   }
   
-  public Musician getMusician() {
-    return musician;
-  }
 
   public void connect() {
-    musician=null;
-    try {
-      Registry registry = LocateRegistry.getRegistry(brickInfo.getIPAddress());
-      musician = (Musician) registry.lookup("Musician");
-  } catch (Exception e) {
-      System.err.println("Client exception: " + e.toString());
-      e.printStackTrace();
-  }
+    brickHub.connect();
   }
   
    
   /** Returns a BrickInfo object describing the brick the instrument is mapped to
    * @return
    */
-  public BrickInfo getBrickInfo() {
-    return brickInfo;
+  public BrickHub getBrickInfo() {
+    return brickHub;
   }
 
   /** Maps a Brick to an instrument
    * @param ev3
    */
-  public void setBrickInfo(BrickInfo brickInfo) {
-    this.brickInfo = brickInfo;
+  public void setBrickInfo(BrickHub brickHub) {
+    this.brickHub = brickHub;
   }
 
   /** Returns the channel for this mapping
