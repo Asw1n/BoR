@@ -3,7 +3,7 @@ package PC;
 import PC.BrickHub;
 import PC.IMMap;
 
-mport java.io.File;
+import java.io.File;
 
 /** The Instrument Musican Map maps an instrument in a midi file to a a robot musician.
  * 

@@ -6,7 +6,6 @@ import javax.sound.midi.MidiMessage;
 import javax.sound.midi.Receiver;
 import javax.sound.midi.ShortMessage;
 
-import Brick.Musician;
 
 public class BoRConductor implements Receiver {
   IMMap[]    map;

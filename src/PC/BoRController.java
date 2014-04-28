@@ -17,10 +17,6 @@ File midiFile;
 IMMap[] map;
 BoRConductor conductor=new BoRConductor();
 
-Public BoRController() {
-  
-}
-
 public Sequencer getSequencer() {
   return sequencer;
 }
