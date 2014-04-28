@@ -6,12 +6,17 @@ import javax.sound.midi.MidiDevice;
 import javax.sound.midi.MidiDevice.Info;
 import javax.sound.midi.MidiSystem;
 import javax.sound.midi.MidiUnavailableException;
+import javax.sound.midi.Sequencer;
 import javax.swing.ComboBoxModel;
 import javax.swing.JComboBox;
 import javax.swing.event.ListDataListener;
 
 
-public class ComboSequencers implements ComboBoxModel {
+/** Model for a combobox that allows to select a sequencer
+ * @author Aswin
+ *
+ */
+public class ComboSequencers implements ComboBoxModel<MidiDevice.Info> {
   static List<MidiDevice.Info> sequencers=MidiUtil.getSequencers();
   MidiDevice.Info selected;
   
@@ -32,7 +37,7 @@ public class ComboSequencers implements ComboBoxModel {
   }
 
   @Override
-  public Info getElementAt(int arg0) {
+  public MidiDevice.Info getElementAt(int arg0) {
     // TODO Auto-generated method stub
     return sequencers.get(arg0);
   }

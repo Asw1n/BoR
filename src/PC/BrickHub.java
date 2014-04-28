@@ -3,6 +3,10 @@ package PC;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 
+/** Containes information about a remote EV3 brick and has methods to establish a connection to the brick.
+ * @author Aswin
+ *
+ */
 public class BrickHub extends lejos.hardware.BrickInfo {
 
   private Musician hub;

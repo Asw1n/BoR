@@ -7,11 +7,14 @@ import javax.sound.midi.MidiDevice.Info;
 import javax.sound.midi.MidiSystem;
 import javax.sound.midi.MidiUnavailableException;
 import javax.swing.ComboBoxModel;
-import javax.swing.JComboBox;
 import javax.swing.event.ListDataListener;
 
 
-public class ComboSynthesizers implements ComboBoxModel {
+/** Model for a combobox that allows to select a Synthesizer
+ * @author Aswin
+ *
+ */
+public class ComboSynthesizers implements ComboBoxModel<MidiDevice.Info> {
   static List<MidiDevice.Info> synthesizers=MidiUtil.getSynthesizers();
   MidiDevice.Info selected;
   

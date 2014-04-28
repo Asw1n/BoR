@@ -3,6 +3,10 @@ package PC;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
 
+/** Interface that defines the remote EV3 Hub
+ * @author Aswin
+ *
+ */
 public interface Musician extends Remote {
 
   /** The start() method indicates that a song starts

@@ -7,6 +7,14 @@ import javax.sound.midi.Receiver;
 import javax.sound.midi.ShortMessage;
 
 
+/** The BoRConductor receives MIDI events from the sequencer when this is playing a song.
+ * It determines to what channel and instrument this message belongs. If there is a misician that "plays"
+ * the corresponding instrument, then the conductor will translate the midi message into appropriate method call on  
+ * the musician.<br>
+ * Currently the conductor only dumps the midi message to ystem.out. 
+ * @author Aswin
+ *
+ */
 public class BoRConductor implements Receiver {
   IMMap[]    map;
   Musician[] musicians;

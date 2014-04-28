@@ -4,9 +4,12 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.swing.JComboBox;
 import javax.swing.table.AbstractTableModel;
 
+/** Model to show a IMmapping table in a table editor
+ * @author Aswin
+ *
+ */
 public class IMmapModel extends AbstractTableModel{
   /**
    * 
@@ -15,8 +18,9 @@ public class IMmapModel extends AbstractTableModel{
   List<IMMap> instruments = new ArrayList<IMMap>();
 
   public IMmapModel() {
-    setFile(new File("C:/Users/Aswin/Downloads/rndmdngt.mid"));
+    
   }
+  
   
   @Override
   public String getColumnName(int col) {
@@ -72,6 +76,7 @@ public class IMmapModel extends AbstractTableModel{
   
   public void setFile(File file) {
     instruments=MidiUtil.getInstruments(file);
+    this.fireTableDataChanged();
   }
 
 }

@@ -10,6 +10,11 @@ import javax.sound.midi.MidiUnavailableException;
 import javax.sound.midi.Sequencer;
 import javax.sound.midi.Synthesizer;
 
+/** The BoRController controls the PC side of the BoR system. It instructs the sequencer to play a song and links a 
+ * synthesizer and a BoR Conductor to the sequencer.
+ * @author Aswin
+ *
+ */
 public class BoRController {
 Sequencer sequencer;
 Synthesizer synthesizer;

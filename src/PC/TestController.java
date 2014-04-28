@@ -11,12 +11,16 @@ import javax.sound.midi.Synthesizer;
 import lejos.utility.Delay;
 
 
+/** Helper class to aid in developing the controller and conductor
+ * @author Aswin
+ *
+ */
 public class TestController {
   
   private BoRController myController;
   private Sequencer mySequencer;
   private Synthesizer mySynthesizer;
-  private static File testMidiFile= new File("MIDI/spain.mid"); 
+  private static File testMidiFile= new File("MIDI/7steps2h.mid"); 
   
 
   public TestController() {

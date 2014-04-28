@@ -5,7 +5,7 @@ import PC.IMMap;
 
 import java.io.File;
 
-/** The Instrument Musican Map maps an instrument in a midi file to a a robot musician.
+/** The Instrument Musican Map maps an instrument in a midi file to a remote brick (arobot musician).
  * 
  * @author Aswin
  *

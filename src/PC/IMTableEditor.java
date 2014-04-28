@@ -2,7 +2,7 @@ package PC;
 
 import java.awt.EventQueue;
 
-import javax.sound.midi.MidiDevice.Info;
+import javax.sound.midi.MidiDevice;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
@@ -32,11 +32,6 @@ import com.jgoodies.forms.layout.FormLayout;
 import com.jgoodies.forms.layout.ColumnSpec;
 import com.jgoodies.forms.factories.FormFactory;
 import com.jgoodies.forms.layout.RowSpec;
-
-import javax.swing.SpringLayout;
-
-import java.awt.GridLayout;
-
 import javax.swing.JTable;
 import javax.swing.JScrollPane;
 
@@ -48,6 +43,8 @@ import javax.swing.JScrollPane;
  */
 public class IMTableEditor extends JFrame {
 
+
+  private static final long serialVersionUID = 6318810593044644641L;
   private JPanel contentPane;
   private JTextField MidiFile;
 //Create a file chooser
@@ -55,6 +52,7 @@ public class IMTableEditor extends JFrame {
   private File sequenceFile;
   private JTable table;
 
+  private IMmapModel mapModel=new  IMmapModel();
   /**
    * Launch the application.
    */
@@ -143,6 +141,7 @@ public class IMTableEditor extends JFrame {
                    if (fc.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
                     sequenceFile=fc.getSelectedFile();
                       MidiFile.setText(sequenceFile.getAbsolutePath());
+                      mapModel.setFile(sequenceFile);
                 }
                 }
               }
@@ -162,7 +161,7 @@ public class IMTableEditor extends JFrame {
             gbc_lblSequencer.gridy = 1;
             panel.add(lblSequencer, gbc_lblSequencer);
             
-            JComboBox selectSequencer = new JComboBox(new ComboSequencers());
+            JComboBox<MidiDevice.Info> selectSequencer = new JComboBox<MidiDevice.Info>(new ComboSequencers());
             GridBagConstraints gbc_selectSequencer = new GridBagConstraints();
             gbc_selectSequencer.fill = GridBagConstraints.HORIZONTAL;
             gbc_selectSequencer.anchor = GridBagConstraints.NORTH;
@@ -180,7 +179,7 @@ public class IMTableEditor extends JFrame {
             gbc_lblSynthesizer.gridy = 2;
             panel.add(lblSynthesizer, gbc_lblSynthesizer);
             
-            JComboBox SelectSynthesizer = new JComboBox(new ComboSynthesizers());
+            JComboBox<MidiDevice.Info> SelectSynthesizer = new JComboBox<MidiDevice.Info>(new ComboSynthesizers());
             GridBagConstraints gbc_SelectSynthesizer = new GridBagConstraints();
             gbc_SelectSynthesizer.fill = GridBagConstraints.HORIZONTAL;
             gbc_SelectSynthesizer.insets = new Insets(0, 0, 5, 5);
@@ -203,10 +202,10 @@ public class IMTableEditor extends JFrame {
         JScrollPane scrollPane = new JScrollPane();
         panel_1.add(scrollPane, "2, 2, fill, fill");
         
-        table = new JTable(new IMmapModel());
+        table = new JTable(mapModel);
         table.setRowSelectionAllowed(false);
         scrollPane.setViewportView(table);
-        table.getColumnModel().getColumn(2).setCellEditor(new DefaultCellEditor(new JComboBox(new ComboBrick())));
+        table.getColumnModel().getColumn(2).setCellEditor(new DefaultCellEditor(new JComboBox<BrickHub>(new ComboBrick())));
             GroupLayout gl_contentPane = new GroupLayout(contentPane);
             gl_contentPane.setHorizontalGroup(
               gl_contentPane.createParallelGroup(Alignment.LEADING)
