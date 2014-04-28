@@ -116,4 +116,8 @@ public void stop() {
   sequencer.stop();
 }
 
+public boolean isPlaying() {
+  return sequencer.isRunning();
+}
+
 }
