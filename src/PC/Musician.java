@@ -31,13 +31,13 @@ public interface Musician extends Remote {
    * The tone expressed in ?
    * @throws RemoteException
    */
-  public void ToneOn(int tone) throws RemoteException;
+  public void noteOn(int tone) throws RemoteException;
   
   /** Indicates the end of a tone
    * @param tone
    * The tone expressed in ?
    * @throws RemoteException
    */
-  public void ToneOff(int tone) throws RemoteException;
+  public void noteOff(int tone) throws RemoteException;
 
 }

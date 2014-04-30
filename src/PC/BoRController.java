@@ -2,6 +2,7 @@ package PC;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 
 import javax.sound.midi.InvalidMidiDataException;
 import javax.sound.midi.MidiDevice;
@@ -19,7 +20,7 @@ public class BoRController {
 Sequencer sequencer;
 Synthesizer synthesizer;
 File midiFile;
-IMMap[] map;
+List<IMMap> map;
 BoRConductor conductor=new BoRConductor();
 
 public Sequencer getSequencer() {
@@ -66,11 +67,11 @@ public File getMidiFile() {
 public void setMidiFile(File midiFile) {
   this.midiFile = midiFile;
 }
-public IMMap[] getMap() {
+public List<IMMap> getMap() {
   return map;
 }
-public void setMap(IMMap[] map) {
-  this.map = map;
+public void setMap(List<IMMap> list) {
+  this.map = list;
 }
 
 public void open() {
@@ -79,6 +80,7 @@ public void open() {
     synthesizer.open();
     conductor.setMap(map);
     conductor.open();
+    connect();
     sequencer.getTransmitter().setReceiver(synthesizer.getReceiver());
     sequencer.getTransmitter().setReceiver(conductor);
     try {
@@ -99,6 +101,12 @@ public void open() {
   }
   
 }
+
+private void connect() {
+  
+}
+
+
 
 public void close() {
   sequencer.close();

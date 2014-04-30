@@ -25,8 +25,8 @@ public class IMmapModel extends AbstractTableModel{
   @Override
   public String getColumnName(int col) {
     switch (col) {
-      case 0: return "Channel";
-      case 1: return "Instrument";
+      case 0: return "Instrument";
+      case 1: return "Channel";
       case 2: return "EV3";
       case 3: return "Supress";
       default: return "Error";
@@ -63,9 +63,9 @@ public class IMmapModel extends AbstractTableModel{
     
     switch (col) {
       case 0:
-        return new Integer(instrument.getChannel());
-      case 1:
         return new Integer(instrument.getInstrument());
+      case 1:
+        return new Integer(instrument.getChannel());
       case 2:
         return instrument.getBrickInfo();
       case 3:
@@ -88,6 +88,12 @@ public class IMmapModel extends AbstractTableModel{
   public void setFile(File file) {
     instruments=MidiUtil.getInstruments(file);
     this.fireTableDataChanged();
+  }
+
+
+  public List<IMMap> getMap() {
+    // TODO Auto-generated method stub
+    return instruments;
   }
 
 }

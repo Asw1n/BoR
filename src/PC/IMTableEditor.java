@@ -3,6 +3,8 @@ package PC;
 import java.awt.EventQueue;
 
 import javax.sound.midi.MidiDevice;
+import javax.sound.midi.Sequencer;
+import javax.sound.midi.Synthesizer;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
@@ -32,9 +34,15 @@ import com.jgoodies.forms.layout.FormLayout;
 import com.jgoodies.forms.layout.ColumnSpec;
 import com.jgoodies.forms.factories.FormFactory;
 import com.jgoodies.forms.layout.RowSpec;
+
 import javax.swing.JTable;
 import javax.swing.JScrollPane;
 import javax.swing.LayoutStyle.ComponentPlacement;
+
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 
 /** IMTableEditor lets you edit and maintain the InstrumentMusician Mapping table;
@@ -44,12 +52,13 @@ import javax.swing.LayoutStyle.ComponentPlacement;
  */
 public class IMTableEditor extends JFrame {
 
+  private BoRController myController=new BoRController();
 
   private static final long serialVersionUID = 6318810593044644641L;
   private JPanel contentPane;
   private JTextField MidiFile;
 //Create a file chooser
-  final JFileChooser fc = new JFileChooser();
+  final JFileChooser fc = new JFileChooser(new File("C:/Users/Aswin/git/BoR/MIDI"));
   private File sequenceFile;
   private JTable table;
 
@@ -94,6 +103,13 @@ public class IMTableEditor extends JFrame {
     
     
     JButton btnPlay = new JButton("");
+    btnPlay.addMouseListener(new MouseAdapter() {
+      @Override
+      public void mouseClicked(MouseEvent arg0) {
+        myController.open();
+        myController.play();
+      }
+    });
     btnPlay.setIcon(new ImageIcon(IMTableEditor.class.getResource("/icons/play-icon.png")));
     toolBar.add(btnPlay);
     
@@ -102,6 +118,13 @@ public class IMTableEditor extends JFrame {
     toolBar.add(btnNewButton);
     
     JButton btnTest = new JButton("");
+    btnTest.addMouseListener(new MouseAdapter() {
+      @Override
+      public void mouseClicked(MouseEvent arg0) {
+        myController.stop();
+        myController.close();
+      }
+    });
     btnTest.setIcon(new ImageIcon(IMTableEditor.class.getResource("/icons/stop-icon.png")));
     btnTest.setSelectedIcon(new ImageIcon(IMTableEditor.class.getResource("/icons/stop-icon.png")));
     toolBar.add(btnTest);
@@ -120,6 +143,8 @@ public class IMTableEditor extends JFrame {
                     sequenceFile=fc.getSelectedFile();
                       MidiFile.setText(sequenceFile.getAbsolutePath());
                       mapModel.setFile(sequenceFile);
+                      myController.setMidiFile(sequenceFile);
+                      myController.setMap(mapModel.getMap());
                 }
                 }
               }
@@ -128,11 +153,23 @@ public class IMTableEditor extends JFrame {
             JLabel lblSequencer = new JLabel("Sequencer");
             
             JComboBox<MidiDevice.Info> selectSequencer = new JComboBox<MidiDevice.Info>(new ComboSequencers());
+            myController.setSequencer((MidiDevice.Info) selectSequencer.getSelectedItem());
+            selectSequencer.addActionListener(new ActionListener() {
+              public void actionPerformed(ActionEvent arg0) {
+                myController.setSequencer((MidiDevice.Info) ((JComboBox)arg0.getSource()).getSelectedItem());
+              }
+            });
             
                         
                         JLabel lblSynthesizer = new JLabel("Synthesizer");
             
             JComboBox<MidiDevice.Info> SelectSynthesizer = new JComboBox<MidiDevice.Info>(new ComboSynthesizers());
+            myController.setSynthesizer((MidiDevice.Info) SelectSynthesizer.getSelectedItem());
+            selectSequencer.addActionListener(new ActionListener() {
+              public void actionPerformed(ActionEvent arg0) {
+                myController.setSynthesizer((MidiDevice.Info) ((JComboBox)arg0.getSource()).getSelectedItem());
+              }
+            });
             
             JPanel panel_1 = new JPanel();
             panel_1.setLayout(new FormLayout(new ColumnSpec[] {
@@ -145,7 +182,7 @@ public class IMTableEditor extends JFrame {
                 RowSpec.decode("default:grow"),}));
             
             JScrollPane scrollPane = new JScrollPane();
-            panel_1.add(scrollPane, "2, 2, fill, fill");
+            panel_1.add(scrollPane, "2, 2, 3, 1, fill, fill");
             
             table = new JTable(mapModel);
             table.setRowSelectionAllowed(false);
