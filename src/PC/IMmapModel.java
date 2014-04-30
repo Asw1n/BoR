@@ -35,7 +35,8 @@ public class IMmapModel extends AbstractTableModel{
   
   public Class getColumnClass(int columnIndex) {
     if (columnIndex==2) return BrickHub.class;
-    return Integer.class;
+    if (columnIndex==3) return Boolean.class;
+    return String.class;
   }
   
   public boolean isCellEditable(int row, int col) { 
@@ -73,6 +74,16 @@ public class IMmapModel extends AbstractTableModel{
         return "Error";
     }
   }
+  
+  @Override
+  public void setValueAt(Object value, int row, int col) {
+    if (col==2) {
+    IMMap instrument=instruments.get(row);
+    instrument.setBrickInfo((BrickHub)value);
+    }
+  }
+  
+  
   
   public void setFile(File file) {
     instruments=MidiUtil.getInstruments(file);

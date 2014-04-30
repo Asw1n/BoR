@@ -34,6 +34,7 @@ import com.jgoodies.forms.factories.FormFactory;
 import com.jgoodies.forms.layout.RowSpec;
 import javax.swing.JTable;
 import javax.swing.JScrollPane;
+import javax.swing.LayoutStyle.ComponentPlacement;
 
 
 /** IMTableEditor lets you edit and maintain the InstrumentMusician Mapping table;
@@ -104,34 +105,11 @@ public class IMTableEditor extends JFrame {
     btnTest.setIcon(new ImageIcon(IMTableEditor.class.getResource("/icons/stop-icon.png")));
     btnTest.setSelectedIcon(new ImageIcon(IMTableEditor.class.getResource("/icons/stop-icon.png")));
     toolBar.add(btnTest);
-        
-        JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
-        
-        JPanel panel =  new JPanel();
-        tabbedPane.addTab("MIDI", null, panel, null);
-        GridBagLayout gbl_panel = new GridBagLayout();
-        gbl_panel.columnWidths = new int[]{127, 391, 0, 28, 28, 0};
-        gbl_panel.rowHeights = new int[]{0, 20, 0, 0, 0};
-        gbl_panel.columnWeights = new double[]{1.0, 1.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
-        gbl_panel.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
-        panel.setLayout(gbl_panel);
-        
-        JLabel lblFile = new JLabel("File");
-        GridBagConstraints gbc_lblFile = new GridBagConstraints();
-        gbc_lblFile.insets = new Insets(0, 0, 5, 5);
-        gbc_lblFile.anchor = GridBagConstraints.WEST;
-        gbc_lblFile.gridx = 0;
-        gbc_lblFile.gridy = 0;
-        panel.add(lblFile, gbc_lblFile);
-        
-        MidiFile = new JTextField();
-        GridBagConstraints gbc_MidiFile = new GridBagConstraints();
-        gbc_MidiFile.insets = new Insets(0, 0, 5, 5);
-        gbc_MidiFile.fill = GridBagConstraints.HORIZONTAL;
-        gbc_MidiFile.gridx = 1;
-        gbc_MidiFile.gridy = 0;
-        panel.add(MidiFile, gbc_MidiFile);
-        MidiFile.setColumns(10);
+            
+            JLabel lblFile = new JLabel("File");
+            
+            MidiFile = new JTextField();
+            MidiFile.setColumns(10);
             
             JButton btnFile = new JButton("");
             btnFile.setIcon(fc.getIcon(new File("Test.mid")));
@@ -147,75 +125,54 @@ public class IMTableEditor extends JFrame {
               }
             });
             
-                GridBagConstraints gbc_btnFile = new GridBagConstraints();
-                gbc_btnFile.insets = new Insets(0, 0, 5, 5);
-                gbc_btnFile.gridx = 2;
-                gbc_btnFile.gridy = 0;
-                panel.add(btnFile, gbc_btnFile);
-            
             JLabel lblSequencer = new JLabel("Sequencer");
-            GridBagConstraints gbc_lblSequencer = new GridBagConstraints();
-            gbc_lblSequencer.anchor = GridBagConstraints.WEST;
-            gbc_lblSequencer.insets = new Insets(0, 0, 5, 5);
-            gbc_lblSequencer.gridx = 0;
-            gbc_lblSequencer.gridy = 1;
-            panel.add(lblSequencer, gbc_lblSequencer);
             
             JComboBox<MidiDevice.Info> selectSequencer = new JComboBox<MidiDevice.Info>(new ComboSequencers());
-            GridBagConstraints gbc_selectSequencer = new GridBagConstraints();
-            gbc_selectSequencer.fill = GridBagConstraints.HORIZONTAL;
-            gbc_selectSequencer.anchor = GridBagConstraints.NORTH;
-            gbc_selectSequencer.insets = new Insets(0, 0, 5, 5);
-            gbc_selectSequencer.gridx = 1;
-            gbc_selectSequencer.gridy = 1;
-            panel.add(selectSequencer, gbc_selectSequencer);
-
             
-            JLabel lblSynthesizer = new JLabel("Synthesizer");
-            GridBagConstraints gbc_lblSynthesizer = new GridBagConstraints();
-            gbc_lblSynthesizer.anchor = GridBagConstraints.WEST;
-            gbc_lblSynthesizer.insets = new Insets(0, 0, 5, 5);
-            gbc_lblSynthesizer.gridx = 0;
-            gbc_lblSynthesizer.gridy = 2;
-            panel.add(lblSynthesizer, gbc_lblSynthesizer);
+                        
+                        JLabel lblSynthesizer = new JLabel("Synthesizer");
             
             JComboBox<MidiDevice.Info> SelectSynthesizer = new JComboBox<MidiDevice.Info>(new ComboSynthesizers());
-            GridBagConstraints gbc_SelectSynthesizer = new GridBagConstraints();
-            gbc_SelectSynthesizer.fill = GridBagConstraints.HORIZONTAL;
-            gbc_SelectSynthesizer.insets = new Insets(0, 0, 5, 5);
-            gbc_SelectSynthesizer.anchor = GridBagConstraints.NORTH;
-            gbc_SelectSynthesizer.gridx = 1;
-            gbc_SelectSynthesizer.gridy = 2;
-            panel.add(SelectSynthesizer, gbc_SelectSynthesizer);
-        
-        JPanel panel_1 = new JPanel();
-        tabbedPane.addTab("Instruments", null, panel_1, null);
-        panel_1.setLayout(new FormLayout(new ColumnSpec[] {
-            FormFactory.RELATED_GAP_COLSPEC,
-            ColumnSpec.decode("default:grow"),
-            FormFactory.RELATED_GAP_COLSPEC,
-            ColumnSpec.decode("default:grow"),},
-          new RowSpec[] {
-            FormFactory.RELATED_GAP_ROWSPEC,
-            RowSpec.decode("default:grow"),}));
-        
-        JScrollPane scrollPane = new JScrollPane();
-        panel_1.add(scrollPane, "2, 2, fill, fill");
-        
-        table = new JTable(mapModel);
-        table.setRowSelectionAllowed(false);
-        scrollPane.setViewportView(table);
-        table.getColumnModel().getColumn(2).setCellEditor(new DefaultCellEditor(new JComboBox<BrickHub>(new ComboBrick())));
+            
+            JPanel panel_1 = new JPanel();
+            panel_1.setLayout(new FormLayout(new ColumnSpec[] {
+                FormFactory.RELATED_GAP_COLSPEC,
+                ColumnSpec.decode("default:grow"),
+                FormFactory.RELATED_GAP_COLSPEC,
+                ColumnSpec.decode("default:grow"),},
+              new RowSpec[] {
+                FormFactory.RELATED_GAP_ROWSPEC,
+                RowSpec.decode("default:grow"),}));
+            
+            JScrollPane scrollPane = new JScrollPane();
+            panel_1.add(scrollPane, "2, 2, fill, fill");
+            
+            table = new JTable(mapModel);
+            table.setRowSelectionAllowed(false);
+            scrollPane.setViewportView(table);
+            table.getColumnModel().getColumn(2).setCellEditor(new DefaultCellEditor(new JComboBox<BrickHub>(new ComboBrick())));
             GroupLayout gl_contentPane = new GroupLayout(contentPane);
             gl_contentPane.setHorizontalGroup(
               gl_contentPane.createParallelGroup(Alignment.LEADING)
                 .addGroup(gl_contentPane.createSequentialGroup()
                   .addGap(5)
                   .addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-                    .addComponent(tabbedPane, GroupLayout.DEFAULT_SIZE, 665, Short.MAX_VALUE)
-                    .addGroup(gl_contentPane.createSequentialGroup()
-                      .addComponent(toolBar, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-                      .addGap(415))))
+                    .addComponent(panel_1, Alignment.TRAILING, GroupLayout.PREFERRED_SIZE, 660, GroupLayout.PREFERRED_SIZE)
+                    .addComponent(toolBar, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+                  .addContainerGap())
+                .addGroup(gl_contentPane.createSequentialGroup()
+                  .addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+                    .addComponent(lblFile, GroupLayout.PREFERRED_SIZE, 46, GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblSequencer)
+                    .addComponent(lblSynthesizer))
+                  .addPreferredGap(ComponentPlacement.RELATED)
+                  .addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING, false)
+                    .addComponent(SelectSynthesizer, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(selectSequencer, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(MidiFile, GroupLayout.DEFAULT_SIZE, 400, Short.MAX_VALUE))
+                  .addPreferredGap(ComponentPlacement.RELATED)
+                  .addComponent(btnFile)
+                  .addContainerGap(155, Short.MAX_VALUE))
             );
             gl_contentPane.setVerticalGroup(
               gl_contentPane.createParallelGroup(Alignment.LEADING)
@@ -223,7 +180,21 @@ public class IMTableEditor extends JFrame {
                   .addGap(5)
                   .addComponent(toolBar, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
                   .addGap(18)
-                  .addComponent(tabbedPane, GroupLayout.PREFERRED_SIZE, 408, GroupLayout.PREFERRED_SIZE)
+                  .addGroup(gl_contentPane.createParallelGroup(Alignment.TRAILING, false)
+                    .addComponent(btnFile, 0, 0, Short.MAX_VALUE)
+                    .addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
+                      .addComponent(lblFile)
+                      .addComponent(MidiFile)))
+                  .addPreferredGap(ComponentPlacement.UNRELATED)
+                  .addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
+                    .addComponent(lblSequencer)
+                    .addComponent(selectSequencer, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+                  .addPreferredGap(ComponentPlacement.UNRELATED)
+                  .addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
+                    .addComponent(lblSynthesizer)
+                    .addComponent(SelectSynthesizer, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+                  .addPreferredGap(ComponentPlacement.UNRELATED)
+                  .addComponent(panel_1, GroupLayout.PREFERRED_SIZE, 245, GroupLayout.PREFERRED_SIZE)
                   .addGap(19))
             );
             contentPane.setLayout(gl_contentPane);
