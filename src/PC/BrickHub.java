@@ -1,5 +1,6 @@
 package PC;
 
+import java.rmi.Remote;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 
@@ -26,8 +27,12 @@ public class BrickHub extends lejos.hardware.BrickInfo {
   public void connect() {
     if (hub == null) {
       try {
-        Registry registry = LocateRegistry.getRegistry(getIPAddress());
-        hub = (Musician) registry.lookup("Musician");
+        Registry registry = LocateRegistry.getRegistry(getIPAddress(),1098);
+        for (String l : registry.list()) {
+          System.out.println(l);
+        }
+        Remote obj= registry.lookup("Musician");
+        hub = (Musician) obj;
       }
       catch (Exception e) {
         System.err.println("Client exception: " + e.toString());
