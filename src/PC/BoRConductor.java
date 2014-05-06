@@ -1,11 +1,11 @@
 package PC;
 
-import java.rmi.RemoteException;
 import java.util.List;
 
 import javax.sound.midi.MidiMessage;
 import javax.sound.midi.Receiver;
 import javax.sound.midi.ShortMessage;
+
 
 
 /** The BoRConductor receives MIDI events from the sequencer when this is playing a song.
@@ -17,9 +17,9 @@ import javax.sound.midi.ShortMessage;
  *
  */
 public class BoRConductor implements Receiver {
-  private boolean verbose=true;
+  private boolean verbose=false;
   List<IMMap>    map;
-  Musician[] musicians;
+  BrickHub[] musicians;
 
   public BoRConductor() {
   }
@@ -30,7 +30,6 @@ public class BoRConductor implements Receiver {
 
   @Override
   public void close() {
-    // TODO: find out how to terminate hubs
     musicians = null;
 
   }
@@ -40,25 +39,21 @@ public class BoRConductor implements Receiver {
     if (message instanceof ShortMessage) {
       //MidiUtil.dumpMessage(message);
     ShortMessage shortMessage = (ShortMessage) message;
+    int channel=shortMessage.getChannel();
+    int data1=shortMessage.getData1();
+    int data2=shortMessage.getData2();
+    BrickHub hub=musicians[channel];
         switch (shortMessage.getCommand()) {
           case ShortMessage.NOTE_ON: {
-            noteOn(shortMessage.getChannel(),shortMessage.getData1());
+            if (hub != null) hub.noteOn(data1);
             break;
           }
           case ShortMessage.NOTE_OFF: {
-            noteOff(shortMessage.getChannel(),shortMessage.getData1());
+            if (hub != null) hub.noteOff(data1);
             }
             break;
           case ShortMessage.PROGRAM_CHANGE: {
             setChannel(shortMessage.getChannel(), shortMessage.getData1());
-            break;
-          }
-          case ShortMessage.START: {
-            start();
-            break;
-          }
-          case ShortMessage.STOP: {
-            //stop();
             break;
           }
           default:
@@ -67,58 +62,9 @@ public class BoRConductor implements Receiver {
     }
     }
 
-  private void noteOff(int channel, int tone) {
-    if (verbose) System.out.println("                                   ".substring(0, channel)+".");
-    if (musicians[channel] != null) {
-      try {
-        musicians[channel].noteOff(tone);
-      }
-      catch (RemoteException e) {
-        e.printStackTrace();
-      }
-    }
-  }
-
-
-  private void noteOn(int channel, int tone) {
-    if (verbose) System.out.println("                                   ".substring(0, channel)+"*");
-    if (musicians[channel] != null) {
-      try {
-
-        musicians[channel].noteOn(tone);
-      }
-      catch (RemoteException e) {
-        e.printStackTrace();
-      }
-    }
-  }
+ 
   
-  private void start() {
-    if (verbose) System.out.println("Start");
-  for (Musician musician : musicians) {
-    if (musician != null) {
-      try {
-        musician.start();
-      }
-      catch (RemoteException e) {
-      }
-    }
-  }
-  }
-  
-  private void stop() {
-    if (verbose) System.out.println("Stop");
-    for (Musician musician : musicians) {
-      if (musician != null) {
-        try {
-          musician.stop();
-        }
-        catch (RemoteException e) {
-        }
-      }
-    }
 
-  }
 
   private void setChannel(int channel, int instrument) {
     musicians[channel] = null;
@@ -126,7 +72,7 @@ public class BoRConductor implements Receiver {
       if (immap.getChannel() == channel && immap.getInstrument() == instrument) {
         if (verbose) System.out.print("Setting instrument "+ instrument + " on channel " + channel +" to ");
         if (immap.getBrickInfo() instanceof BrickHub) {
-          musicians[channel] = immap.getBrickInfo().getHub();
+          musicians[channel] = immap.getBrickInfo();
           if (verbose) System.out.println(immap.getBrickInfo().toString());
         }
         else {
@@ -140,7 +86,7 @@ public class BoRConductor implements Receiver {
   }
 
   public void open() {
-    musicians = new Musician[16];
+    musicians = new BrickHub[16];
   }
 
 }

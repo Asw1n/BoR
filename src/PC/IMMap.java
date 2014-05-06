@@ -33,7 +33,8 @@ public class IMMap {
   
 
   public void connect() {
-    brickHub.connect();
+    if (brickHub != null)
+      brickHub.connect();
   }
   
    

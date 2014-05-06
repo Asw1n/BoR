@@ -79,8 +79,8 @@ public void open() {
     sequencer.open();
     synthesizer.open();
     conductor.setMap(map);
-    conductor.open();
     connect();
+    conductor.open();
     sequencer.getTransmitter().setReceiver(synthesizer.getReceiver());
     sequencer.getTransmitter().setReceiver(conductor);
     try {
@@ -103,6 +103,9 @@ public void open() {
 }
 
 private void connect() {
+  for (IMMap oneMap : map) {
+    oneMap.connect();
+  }
   
 }
 

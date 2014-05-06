@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 
+import BoRBrick.Musician;
 import lejos.hardware.BrickFinder;
 import lejos.utility.Delay;
 

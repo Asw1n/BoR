@@ -1,8 +1,11 @@
 package PC;
 
 import java.rmi.Remote;
+import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
+
+import BoRBrick.Musician;
 
 /** Containes information about a remote EV3 brick and has methods to establish a connection to the brick.
  * @author Aswin
@@ -37,6 +40,7 @@ public class BrickHub extends lejos.hardware.BrickInfo {
       catch (Exception e) {
         System.err.println("Client exception: " + e.toString());
         e.printStackTrace();
+        hub=null;
       }
     }
   }
@@ -46,6 +50,30 @@ public class BrickHub extends lejos.hardware.BrickInfo {
   }
   
   public void disconnect() {
+    hub=null;
+  }
+  
+  public void noteOff(int tone) {
+    if (hub != null) {
+      try {
+        hub.noteOff(tone);
+      }
+      catch (RemoteException e) {
+        e.printStackTrace();
+      }
+    }
+  }
+
+
+  public void noteOn( int tone) {
+    if (hub != null) {
+      try {
+        hub.noteOn(tone);
+      }
+      catch (RemoteException e) {
+        e.printStackTrace();
+      }
+    }
   }
 
 }

@@ -15,7 +15,7 @@ public class StartBoR {
     Registry registry;
     System.out.println("Starting RMI registry using port 1098");
   try {
-    Musician obj = new BaseMusician();
+    Musician obj = new GuitarPlayer();
   Musician stub = (Musician) UnicastRemoteObject.exportObject(obj, 0);
 
   // Bind the remote object's stub in the registry
@@ -24,9 +24,9 @@ public class StartBoR {
   for (String l : registry.list()) {
     System.out.println(l);
   }
-//  TextLCD lcd = LocalEV3.get().getTextLCD();
-//  lcd.clear();
-//  lcd.drawString("Musician waiting for conductor..", 0, 0);
+  TextLCD lcd = LocalEV3.get().getTextLCD();
+  lcd.clear();
+  lcd.drawString("Musician waiting for conductor..", 0, 0);
   System.err.println("Musician ready");
 }
 catch (Exception e) {
