@@ -83,38 +83,36 @@ public void open() {
     conductor.open();
     sequencer.getTransmitter().setReceiver(synthesizer.getReceiver());
     sequencer.getTransmitter().setReceiver(conductor);
-    try {
-      sequencer.setSequence(MidiSystem.getSequence(midiFile));
-    }
-    catch (InvalidMidiDataException e) {
+    sequencer.setSequence(MidiSystem.getSequence(midiFile));
+  }
+    catch (Exception e) {
       // TODO Auto-generated catch block
       e.printStackTrace();
     }
-    catch (IOException e) {
-      // TODO Auto-generated catch block
-      e.printStackTrace();
-    }
-  }
-  catch (MidiUnavailableException e) {
-    // TODO Auto-generated catch block
-    e.printStackTrace();
-  }
-  
 }
 
 private void connect() {
   for (IMMap oneMap : map) {
-    oneMap.connect();
+    if (oneMap.brickHub !=null)
+    oneMap.brickHub.connect();
   }
   
 }
 
+private void disconnect() {
+  for (IMMap oneMap : map) {
+    if (oneMap.brickHub !=null)
+    oneMap.brickHub.disconnect();
+  }
+  
+}
 
 
 public void close() {
   sequencer.close();
   synthesizer.close();
   conductor.close();
+  disconnect();
 }
 
 public void play() {

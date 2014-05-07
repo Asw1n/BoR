@@ -11,11 +11,12 @@ import java.io.File;
  *
  */
 public class IMMap {
-  File file=null;
   int channel=0;
   int instrument=0;
   boolean supress=false;
   BrickHub brickHub=null;
+  int highestNote=0;
+  int lowestNote=127;
    
 
   /** Contructor
@@ -26,29 +27,53 @@ public class IMMap {
    * @param instrument
    * Number representing the instrument (See General Midi instrument specification
    */
-  public IMMap(File file, int channel, int instrument) {
+  public IMMap( int channel, int instrument) {
     this.channel=channel;
     this.instrument=instrument;
   }
   
-
-  public void connect() {
-    if (brickHub != null)
-      brickHub.connect();
-  }
-  
-   
-  /** Returns a BrickInfo object describing the brick the instrument is mapped to
+  /** Returns the highest note for this instrument in the song
    * @return
    */
-  public BrickHub getBrickInfo() {
+  public int getHighestNote() {
+    return highestNote;
+  }
+
+
+
+  protected void setHighestNote(int highestNote) {
+    this.highestNote = highestNote;
+  }
+
+
+
+  /** Returns the lowest note for this instrument in the song
+   * @return
+   */
+  public int getLowestNote() {
+    return lowestNote;
+  }
+
+
+
+  protected void setLowestNote(int lowestNote) {
+    this.lowestNote = lowestNote;
+  }
+
+  
+
+    
+  /** Returns a BrickHub object describing the brick the instrument is mapped to
+   * @return
+   */
+  public BrickHub getBrick() {
     return brickHub;
   }
 
   /** Maps a Brick to an instrument
    * @param ev3
    */
-  public void setBrickInfo(BrickHub brickHub) {
+  public void setBrick(BrickHub brickHub) {
     this.brickHub = brickHub;
   }
 

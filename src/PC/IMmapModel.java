@@ -67,7 +67,7 @@ public class IMmapModel extends AbstractTableModel{
       case 1:
         return new Integer(instrument.getChannel());
       case 2:
-        return instrument.getBrickInfo();
+        return instrument.getBrick();
       case 3:
         return new Boolean(instrument.isSupressed());
       default:
@@ -79,7 +79,7 @@ public class IMmapModel extends AbstractTableModel{
   public void setValueAt(Object value, int row, int col) {
     if (col==2) {
     IMMap instrument=instruments.get(row);
-    instrument.setBrickInfo((BrickHub)value);
+    instrument.setBrick((BrickHub)value);
     }
   }
   

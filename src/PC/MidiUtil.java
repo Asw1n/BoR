@@ -271,7 +271,7 @@ public static List<IMMap> getInstruments(File file) {
         if (event.getMessage() instanceof ShortMessage) {
           ShortMessage message=(ShortMessage)event.getMessage();
           if (message.getCommand()==ShortMessage.PROGRAM_CHANGE) {
-            IMMap newMap=new IMMap(file, message.getChannel(),message.getData1());
+            IMMap newMap=new IMMap( message.getChannel(),message.getData1());
             boolean unique=true;
             for (IMMap existing : instruments) {
               if (newMap.isEqual(existing)) {
@@ -280,7 +280,7 @@ public static List<IMMap> getInstruments(File file) {
               }
             }
             if (unique) {
-              instruments.add(new IMMap(file, message.getChannel(),message.getData1()));
+              instruments.add(new IMMap( message.getChannel(),message.getData1()));
             System.out.println("Instrument = " + message.getData1() + " Channel = " + message.getChannel());
             }
           }

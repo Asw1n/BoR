@@ -17,7 +17,6 @@ import javax.sound.midi.ShortMessage;
  *
  */
 public class BoRConductor implements Receiver {
-  private boolean verbose=false;
   List<IMMap>    map;
   BrickHub[] musicians;
 
@@ -40,16 +39,14 @@ public class BoRConductor implements Receiver {
       //MidiUtil.dumpMessage(message);
     ShortMessage shortMessage = (ShortMessage) message;
     int channel=shortMessage.getChannel();
-    int data1=shortMessage.getData1();
-    int data2=shortMessage.getData2();
     BrickHub hub=musicians[channel];
         switch (shortMessage.getCommand()) {
           case ShortMessage.NOTE_ON: {
-            if (hub != null) hub.noteOn(data1);
+            if (hub != null) hub.sendEvent(shortMessage);
             break;
           }
           case ShortMessage.NOTE_OFF: {
-            if (hub != null) hub.noteOff(data1);
+            if (hub != null) hub.sendEvent(shortMessage);
             }
             break;
           case ShortMessage.PROGRAM_CHANGE: {
@@ -70,14 +67,11 @@ public class BoRConductor implements Receiver {
     musicians[channel] = null;
     for (IMMap immap : map) {
       if (immap.getChannel() == channel && immap.getInstrument() == instrument) {
-        if (verbose) System.out.print("Setting instrument "+ instrument + " on channel " + channel +" to ");
-        if (immap.getBrickInfo() instanceof BrickHub) {
-          musicians[channel] = immap.getBrickInfo();
-          if (verbose) System.out.println(immap.getBrickInfo().toString());
+        if (immap.getBrick() instanceof BrickHub) {
+          musicians[channel] = immap.getBrick();
         }
         else {
           musicians[channel]=null;
-          if (verbose) System.out.println("null");
         }
         break;
       }
