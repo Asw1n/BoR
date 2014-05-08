@@ -50,7 +50,7 @@ import java.awt.event.MouseEvent;
  * @author Aswin
  *
  */
-public class IMTableEditor extends JFrame {
+public class BoR extends JFrame {
 
   private BoRController myController=new BoRController();
 
@@ -62,7 +62,7 @@ public class IMTableEditor extends JFrame {
   private File sequenceFile;
   private JTable table;
 
-  private IMmapModel mapModel=new  IMmapModel();
+  private SongTableModel songModel = new SongTableModel();
   /**
    * Launch the application.
    */
@@ -75,7 +75,7 @@ public class IMTableEditor extends JFrame {
     EventQueue.invokeLater(new Runnable() {
       public void run() {
         try {
-          IMTableEditor frame = new IMTableEditor();
+          BoR frame = new BoR();
           frame.setVisible(true);
         }
         catch (Exception e) {
@@ -90,7 +90,7 @@ public class IMTableEditor extends JFrame {
   /**
    * Create the frame.
    */
-  public IMTableEditor() {
+  public BoR() {
     setTitle("Band of Robots");
     setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     setBounds(100, 100, 696, 553);
@@ -110,11 +110,11 @@ public class IMTableEditor extends JFrame {
         myController.play();
       }
     });
-    btnPlay.setIcon(new ImageIcon(IMTableEditor.class.getResource("/icons/play-icon.png")));
+    btnPlay.setIcon(new ImageIcon(BoR.class.getResource("/icons/play-icon.png")));
     toolBar.add(btnPlay);
     
     JButton btnNewButton = new JButton("");
-    btnNewButton.setIcon(new ImageIcon(IMTableEditor.class.getResource("/icons/pause-icon.png")));
+    btnNewButton.setIcon(new ImageIcon(BoR.class.getResource("/icons/pause-icon.png")));
     toolBar.add(btnNewButton);
     
     JButton btnTest = new JButton("");
@@ -125,8 +125,8 @@ public class IMTableEditor extends JFrame {
         myController.close();
       }
     });
-    btnTest.setIcon(new ImageIcon(IMTableEditor.class.getResource("/icons/stop-icon.png")));
-    btnTest.setSelectedIcon(new ImageIcon(IMTableEditor.class.getResource("/icons/stop-icon.png")));
+    btnTest.setIcon(new ImageIcon(BoR.class.getResource("/icons/stop-icon.png")));
+    btnTest.setSelectedIcon(new ImageIcon(BoR.class.getResource("/icons/stop-icon.png")));
     toolBar.add(btnTest);
             
             JLabel lblFile = new JLabel("File");
@@ -142,9 +142,8 @@ public class IMTableEditor extends JFrame {
                    if (fc.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
                     sequenceFile=fc.getSelectedFile();
                       MidiFile.setText(sequenceFile.getAbsolutePath());
-                      mapModel.setFile(sequenceFile);
-                      myController.setMidiFile(sequenceFile);
-                      myController.setMap(mapModel.getMap());
+                      songModel.setFile(sequenceFile);
+                      myController.setSong(songModel.getSong());
                 }
                 }
               }
@@ -184,44 +183,59 @@ public class IMTableEditor extends JFrame {
             JScrollPane scrollPane = new JScrollPane();
             panel_1.add(scrollPane, "2, 2, 3, 1, fill, fill");
             
-            table = new JTable(mapModel);
+            table = new JTable(songModel);
             table.setRowSelectionAllowed(false);
             scrollPane.setViewportView(table);
             table.getColumnModel().getColumn(2).setCellEditor(new DefaultCellEditor(new JComboBox<BrickHub>(new ComboBrick())));
+            
+            JButton scan = new JButton("");
+            scan.setBackground(UIManager.getColor("Button.darkShadow"));
+            scan.addMouseListener(new MouseAdapter() {
+              @Override
+              public void mouseClicked(MouseEvent arg0) {
+                ComboBrick.scan();
+              }
+            });
             GroupLayout gl_contentPane = new GroupLayout(contentPane);
             gl_contentPane.setHorizontalGroup(
               gl_contentPane.createParallelGroup(Alignment.LEADING)
                 .addGroup(gl_contentPane.createSequentialGroup()
-                  .addGap(5)
                   .addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-                    .addComponent(panel_1, Alignment.TRAILING, GroupLayout.PREFERRED_SIZE, 660, GroupLayout.PREFERRED_SIZE)
-                    .addComponent(toolBar, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-                  .addContainerGap())
-                .addGroup(gl_contentPane.createSequentialGroup()
-                  .addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-                    .addComponent(lblFile, GroupLayout.PREFERRED_SIZE, 46, GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lblSequencer)
-                    .addComponent(lblSynthesizer))
-                  .addPreferredGap(ComponentPlacement.RELATED)
-                  .addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING, false)
-                    .addComponent(SelectSynthesizer, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(selectSequencer, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(MidiFile, GroupLayout.DEFAULT_SIZE, 400, Short.MAX_VALUE))
-                  .addPreferredGap(ComponentPlacement.RELATED)
-                  .addComponent(btnFile)
-                  .addContainerGap(155, Short.MAX_VALUE))
+                    .addGroup(gl_contentPane.createSequentialGroup()
+                      .addGap(5)
+                      .addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+                        .addComponent(panel_1, Alignment.TRAILING, GroupLayout.PREFERRED_SIZE, 660, GroupLayout.PREFERRED_SIZE)
+                        .addGroup(gl_contentPane.createSequentialGroup()
+                          .addComponent(toolBar, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                          .addGap(18)
+                          .addComponent(scan, GroupLayout.PREFERRED_SIZE, 55, GroupLayout.PREFERRED_SIZE))))
+                    .addGroup(gl_contentPane.createSequentialGroup()
+                      .addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+                        .addComponent(lblFile, GroupLayout.PREFERRED_SIZE, 46, GroupLayout.PREFERRED_SIZE)
+                        .addComponent(lblSequencer)
+                        .addComponent(lblSynthesizer))
+                      .addPreferredGap(ComponentPlacement.RELATED)
+                      .addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING, false)
+                        .addComponent(SelectSynthesizer, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(selectSequencer, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(MidiFile, GroupLayout.DEFAULT_SIZE, 400, Short.MAX_VALUE))
+                      .addPreferredGap(ComponentPlacement.RELATED)
+                      .addComponent(btnFile)))
+                  .addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             );
             gl_contentPane.setVerticalGroup(
               gl_contentPane.createParallelGroup(Alignment.LEADING)
                 .addGroup(gl_contentPane.createSequentialGroup()
-                  .addGap(5)
-                  .addComponent(toolBar, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                  .addContainerGap()
+                  .addGroup(gl_contentPane.createParallelGroup(Alignment.TRAILING)
+                    .addComponent(toolBar, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                    .addComponent(scan, GroupLayout.PREFERRED_SIZE, 55, GroupLayout.PREFERRED_SIZE))
                   .addGap(18)
                   .addGroup(gl_contentPane.createParallelGroup(Alignment.TRAILING, false)
                     .addComponent(btnFile, 0, 0, Short.MAX_VALUE)
                     .addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
                       .addComponent(lblFile)
-                      .addComponent(MidiFile)))
+                      .addComponent(MidiFile, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)))
                   .addPreferredGap(ComponentPlacement.UNRELATED)
                   .addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
                     .addComponent(lblSequencer)

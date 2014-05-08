@@ -10,14 +10,16 @@ import javax.swing.table.AbstractTableModel;
  * @author Aswin
  *
  */
-public class IMmapModel extends AbstractTableModel{
+public class SongTableModel extends AbstractTableModel{
   /**
    * 
    */
   private static final long serialVersionUID = -5686596864300068524L;
-  List<IMMap> instruments = new ArrayList<IMMap>();
-
-  public IMmapModel() {
+  List<InstrumentMusicianMap> instruments = new ArrayList<InstrumentMusicianMap>();
+  Song thisSong = new Song();
+  
+  
+  public SongTableModel() {
     
   }
   
@@ -28,39 +30,36 @@ public class IMmapModel extends AbstractTableModel{
       case 0: return "Instrument";
       case 1: return "Channel";
       case 2: return "EV3";
-      case 3: return "Supress";
+      case 3: return "Lowest tone";
+      case 4: return "Highest tone";
       default: return "Error";
     }
 }
   
   public Class getColumnClass(int columnIndex) {
     if (columnIndex==2) return BrickHub.class;
-    if (columnIndex==3) return Boolean.class;
-    return String.class;
+    return Integer.class;
   }
   
   public boolean isCellEditable(int row, int col) { 
-    if (col==2 || col==3 ) return true;
+    if (col==2 ) return true;
     else return false;
     }
   
 
   @Override
   public int getColumnCount() {
-    // TODO Auto-generated method stub
-    return 4;
+    return 5;
   }
 
   @Override
   public int getRowCount() {
-    // TODO Auto-generated method stub
-    return instruments.size();
+    return thisSong.getNumberOfInstruments();
   }
 
   @Override
   public Object getValueAt(int row, int col) {
-    IMMap instrument=(IMMap) instruments.get(row);
-    
+    InstrumentMusicianMap instrument=thisSong.getInstrument(row);
     switch (col) {
       case 0:
         return new Integer(instrument.getInstrument());
@@ -69,7 +68,9 @@ public class IMmapModel extends AbstractTableModel{
       case 2:
         return instrument.getBrick();
       case 3:
-        return new Boolean(instrument.isSupressed());
+        return new Integer(instrument.getLowestNote());
+      case 4:
+        return new Integer(instrument.getHighestNote());
       default:
         return "Error";
     }
@@ -78,22 +79,20 @@ public class IMmapModel extends AbstractTableModel{
   @Override
   public void setValueAt(Object value, int row, int col) {
     if (col==2) {
-    IMMap instrument=instruments.get(row);
+    InstrumentMusicianMap instrument=thisSong.getInstrument(row);
     instrument.setBrick((BrickHub)value);
     }
   }
   
-  
-  
   public void setFile(File file) {
-    instruments=MidiUtil.getInstruments(file);
+    thisSong=new Song();
+    thisSong.setSong(file);
     this.fireTableDataChanged();
   }
 
 
-  public List<IMMap> getMap() {
-    // TODO Auto-generated method stub
-    return instruments;
+  public Song getSong() {
+    return thisSong;
   }
-
+ 
 }

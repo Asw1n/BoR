@@ -1,7 +1,7 @@
 package PC;
 
 import PC.BrickHub;
-import PC.IMMap;
+import PC.InstrumentMusicianMap;
 
 import java.io.File;
 
@@ -10,7 +10,7 @@ import java.io.File;
  * @author Aswin
  *
  */
-public class IMMap {
+public class InstrumentMusicianMap {
   int channel=0;
   int instrument=0;
   boolean supress=false;
@@ -27,7 +27,7 @@ public class IMMap {
    * @param instrument
    * Number representing the instrument (See General Midi instrument specification
    */
-  public IMMap( int channel, int instrument) {
+  public InstrumentMusicianMap( int channel, int instrument) {
     this.channel=channel;
     this.instrument=instrument;
   }
@@ -40,6 +40,10 @@ public class IMMap {
   }
 
 
+  protected void updateDynamicRange(int note) {
+    if (note<lowestNote) lowestNote=note;
+    if (note>highestNote) highestNote=note;
+  }
 
   protected void setHighestNote(int highestNote) {
     this.highestNote = highestNote;
@@ -92,7 +96,7 @@ public class IMMap {
   }
   
  // TODO: probably misplaced here
-  public boolean isEqual(IMMap other) {
+  public boolean isEqual(InstrumentMusicianMap other) {
     if (other.getChannel()==channel && other.getInstrument()==instrument) return true;
     return false;
   }
@@ -100,6 +104,17 @@ public class IMMap {
   public boolean isSupressed() {
     // TODO Auto-generated method stub
     return supress;
+  }
+
+  public void dump() {
+    System.out.println("Channel :"+channel);
+    System.out.println("Instrument :"+instrument);
+    System.out.println("Lowest note: "+lowestNote);
+    System.out.println("Highest note: "+highestNote);
+    if (brickHub==null)
+      System.out.println("Not mapped");
+    else
+      System.out.println("brickHub.toString()");
   }
 
 }

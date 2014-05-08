@@ -17,13 +17,13 @@ import javax.sound.midi.ShortMessage;
  *
  */
 public class BoRConductor implements Receiver {
-  List<IMMap>    map;
+  List<InstrumentMusicianMap>    map;
   BrickHub[] musicians;
 
   public BoRConductor() {
   }
 
-  public void setMap(List<IMMap> map) {
+  public void setMap(List<InstrumentMusicianMap> map) {
     this.map = map;
   }
 
@@ -65,7 +65,7 @@ public class BoRConductor implements Receiver {
 
   private void setChannel(int channel, int instrument) {
     musicians[channel] = null;
-    for (IMMap immap : map) {
+    for (InstrumentMusicianMap immap : map) {
       if (immap.getChannel() == channel && immap.getInstrument() == instrument) {
         if (immap.getBrick() instanceof BrickHub) {
           musicians[channel] = immap.getBrick();

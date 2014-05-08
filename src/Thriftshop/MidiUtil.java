@@ -1,4 +1,4 @@
-package PC;
+package Thriftshop;
 
 import java.io.File;
 import java.io.IOException;
@@ -8,6 +8,8 @@ import java.util.List;
 import java.util.TreeMap;
 
 import javax.sound.midi.*;
+
+import PC.InstrumentMusicianMap;
 
 
 /**
@@ -259,9 +261,9 @@ public static List getInstrumentsOld(Sequence seq) {
 }
 
 
-public static List<IMMap> getInstruments(File file) {
+public static List<InstrumentMusicianMap> getInstruments(File file) {
   Sequence seq;
-  List<IMMap> instruments = new ArrayList<IMMap>();
+  List<InstrumentMusicianMap> instruments = new ArrayList<InstrumentMusicianMap>();
   try {
     seq = MidiSystem.getSequence(file);
     Track[] tracks=seq.getTracks();
@@ -271,16 +273,16 @@ public static List<IMMap> getInstruments(File file) {
         if (event.getMessage() instanceof ShortMessage) {
           ShortMessage message=(ShortMessage)event.getMessage();
           if (message.getCommand()==ShortMessage.PROGRAM_CHANGE) {
-            IMMap newMap=new IMMap( message.getChannel(),message.getData1());
+            InstrumentMusicianMap newMap=new InstrumentMusicianMap( message.getChannel(),message.getData1());
             boolean unique=true;
-            for (IMMap existing : instruments) {
+            for (InstrumentMusicianMap existing : instruments) {
               if (newMap.isEqual(existing)) {
                 unique=false;
                 break;
               }
             }
             if (unique) {
-              instruments.add(new IMMap( message.getChannel(),message.getData1()));
+              instruments.add(new InstrumentMusicianMap( message.getChannel(),message.getData1()));
             System.out.println("Instrument = " + message.getData1() + " Channel = " + message.getChannel());
             }
           }

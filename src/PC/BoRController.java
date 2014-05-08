@@ -19,8 +19,9 @@ import javax.sound.midi.Synthesizer;
 public class BoRController {
 Sequencer sequencer;
 Synthesizer synthesizer;
-File midiFile;
-List<IMMap> map;
+Song song;
+//File midiFile;
+//List<InstrumentMusicianMap> map;
 BoRConductor conductor=new BoRConductor();
 
 public Sequencer getSequencer() {
@@ -35,7 +36,6 @@ public void setSequencer(MidiDevice.Info sequencer) {
     this.sequencer = (Sequencer) MidiSystem.getMidiDevice(sequencer);
   }
   catch (MidiUnavailableException e) {
-    // TODO Auto-generated catch block
     e.printStackTrace();
   }
 }
@@ -54,57 +54,40 @@ public void setSynthesizer(MidiDevice.Info synthesizer) {
     this.synthesizer = (Synthesizer) MidiSystem.getMidiDevice(synthesizer);
   }
   catch (MidiUnavailableException e) {
-    // TODO Auto-generated catch block
     e.printStackTrace();
   }
 }
 
 
-
-public File getMidiFile() {
-  return midiFile;
-}
-public void setMidiFile(File midiFile) {
-  this.midiFile = midiFile;
-}
-public List<IMMap> getMap() {
-  return map;
-}
-public void setMap(List<IMMap> list) {
-  this.map = list;
-}
-
 public void open() {
   try {
     sequencer.open();
     synthesizer.open();
-    conductor.setMap(map);
+    conductor.setMap(song.getMapping());
     connect();
     conductor.open();
     sequencer.getTransmitter().setReceiver(synthesizer.getReceiver());
     sequencer.getTransmitter().setReceiver(conductor);
-    sequencer.setSequence(MidiSystem.getSequence(midiFile));
+    sequencer.setSequence(MidiSystem.getSequence(song.getFile()));
   }
     catch (Exception e) {
-      // TODO Auto-generated catch block
       e.printStackTrace();
     }
 }
 
 private void connect() {
-  for (IMMap oneMap : map) {
-    if (oneMap.brickHub !=null)
-    oneMap.brickHub.connect();
+  for (InstrumentMusicianMap mapping : song.getMapping()) {
+    if (mapping.getBrick() !=null)
+    mapping.getBrick().connect();
   }
   
 }
 
 private void disconnect() {
-  for (IMMap oneMap : map) {
-    if (oneMap.brickHub !=null)
-    oneMap.brickHub.disconnect();
+  for (InstrumentMusicianMap mapping : song.getMapping()) {
+    if (mapping.getBrick() !=null)
+    mapping.getBrick().disconnect();
   }
-  
 }
 
 
@@ -132,6 +115,9 @@ public void stop() {
 
 public boolean isPlaying() {
   return sequencer.isRunning();
+}
+public void setSong(Song song) {
+  this.song=song;
 }
 
 }

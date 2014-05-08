@@ -1,5 +1,6 @@
 package PC;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.sound.midi.MidiDevice;
@@ -17,7 +18,7 @@ import javax.swing.event.ListDataListener;
  *
  */
 public class ComboSequencers implements ComboBoxModel<MidiDevice.Info> {
-  static List<MidiDevice.Info> sequencers=MidiUtil.getSequencers();
+  static List<MidiDevice.Info> sequencers=getSequencers();
   MidiDevice.Info selected;
   
   public ComboSequencers() {
@@ -28,6 +29,23 @@ public class ComboSequencers implements ComboBoxModel<MidiDevice.Info> {
       // TODO Auto-generated catch block
       e.printStackTrace();
     }
+  }
+  
+  private static List<MidiDevice.Info> getSequencers() {
+    List<MidiDevice.Info> devices=new ArrayList<MidiDevice.Info>();
+    MidiDevice device;
+    MidiDevice.Info[] infos = MidiSystem.getMidiDeviceInfo();
+    for (int i = 0; i < infos.length; i++) {
+        try {
+            device = MidiSystem.getMidiDevice(infos[i]);
+            if (device instanceof Sequencer) {
+              devices.add(infos[i]);
+            }
+            } catch (MidiUnavailableException e) {
+              // Handle or throw exception...
+        }
+    }
+    return devices;
   }
   
   @Override
