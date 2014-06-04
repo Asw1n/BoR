@@ -11,7 +11,15 @@ import BoRBrick.Musician;
 
 /**
  * Represents a remote EV3 brick. 
- * This class establish the connection to the remote brick and sends (translated) midi events to it.
+ * This class establish the connection to the remote brick and sends (translated) midi events to it. <br>
+ * The class knows two modes, buffered and unbuffered.
+ * In unbuffered mode every midi event is sent to the brick as soon as it is received. 
+ * While the event is processed (remotely) the current thread is locked.
+ * In buffered mode midi events are sent using a seperate thread. 
+ * If new events are recieved while the current event is still being processed,
+ * then these events are discarded. <br>
+ * Buffered mode ensures smooth operation even on fast songs with losts of notes. 
+ *
  * 
  * @author Aswin
  * 
@@ -54,10 +62,8 @@ public class BrickHub extends lejos.hardware.BrickInfo {
   public void connect() {
     if (hub == null) {
       try {
+        System.out.println("Connect to " + this.toString());
         Registry registry = LocateRegistry.getRegistry(getIPAddress(), 1098);
-        for (String l : registry.list()) {
-          System.out.println(l);
-        }
         Remote obj = registry.lookup("Musician");
         hub = (Musician) obj;
         if (bufferedMode) {
@@ -91,6 +97,7 @@ public class BrickHub extends lejos.hardware.BrickInfo {
   private void noteOff(int tone) {
     if (hub != null) {
       try {
+        System.out.println(this.toString() + " Tone off: " + tone);
         hub.noteOff(tone);
       }
       catch (RemoteException e) {
@@ -102,6 +109,7 @@ public class BrickHub extends lejos.hardware.BrickInfo {
   private void noteOn(int tone) {
     if (hub != null) {
       try {
+        System.out.println(this.toString() + " Tone on: " + tone);
         hub.noteOn(tone);
       }
       catch (RemoteException e) {
@@ -138,8 +146,6 @@ public class BrickHub extends lejos.hardware.BrickInfo {
         break;
       default:
     }
-    System.out.println("Midi event sent");
-    
   }
 
   /**

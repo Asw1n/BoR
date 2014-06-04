@@ -61,6 +61,7 @@ public void setSynthesizer(MidiDevice.Info synthesizer) {
 
 public void open() {
   try {
+    System.out.println("Binding resources.");
     sequencer.open();
     synthesizer.open();
     conductor.setMap(song.getMapping());
@@ -76,6 +77,7 @@ public void open() {
 }
 
 private void connect() {
+  System.out.println("Connecting to musicians.");
   for (InstrumentMusicianMap mapping : song.getMapping()) {
     if (mapping.getBrick() !=null)
     mapping.getBrick().connect();
@@ -84,6 +86,7 @@ private void connect() {
 }
 
 private void disconnect() {
+  System.out.println("Disconnecting from musicians.");
   for (InstrumentMusicianMap mapping : song.getMapping()) {
     if (mapping.getBrick() !=null)
     mapping.getBrick().disconnect();
@@ -92,6 +95,7 @@ private void disconnect() {
 
 
 public void close() {
+  System.out.println("Releasing resources.");
   sequencer.close();
   synthesizer.close();
   conductor.close();
@@ -99,9 +103,9 @@ public void close() {
 }
 
 public void play() {
+  System.out.println("Start song.");
   sequencer.setTickPosition(0);
   sequencer.start();
-  
 }
  
 public void pause() {
@@ -110,6 +114,7 @@ public void pause() {
 }
 
 public void stop() {
+  System.out.println("Stop song.");
   sequencer.stop();
 }
 

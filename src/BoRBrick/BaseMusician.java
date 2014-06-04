@@ -1,65 +1,43 @@
 package BoRBrick;
 
-import lejos.hardware.ev3.LocalEV3;
-import lejos.utility.Delay;
 
+/** Base class for musicians. Implements Musician. <br>
+ * Provides debug information for Musician methods. <br>
+ * Provides some utility methods (in the future).
+ * @author Aswin
+ *
+ */
 public class BaseMusician implements Musician {
   
-  private Heartbeat heartbeat;
 
   public BaseMusician() {
-  heartbeat = new Heartbeat();
-  heartbeat.setDaemon(true);
-  //heartbeat.start();
-  System.out.println("2");
+  System.out.println("Musician "+this.getClass().getName()+ " loaded.");
 }
 
   @Override
   public void start() {
+    System.out.println("Start song");
   }
 
   @Override
   public void stop() {
+    System.out.println("End song");
   }
 
   @Override
   public void setTempo(int tempo) {
+    System.out.println("Set tempo: " + tempo);
   }
 
   @Override
   public void noteOn(int tone) {
-    //System.out.println("+");
-    LocalEV3.get().getLED().setPattern(1);
-    heartbeat.setLastTime(tone);
+    System.out.println("Tone on: " + tone);
   }
 
   @Override
   public void noteOff(int tone) {
-    //System.out.println("-");
-    LocalEV3.get().getLED().setPattern(0);
+    System.out.println("Tone off: " + tone);
   }
   
-  private class Heartbeat extends Thread {
-    long lastTime=0;
-    int tone;
-    
-   public void run() {
-//     while(true) {
-//     long now=System.currentTimeMillis();
-//     if (lastTime !=0 ) {
-//       if (now-lastTime >50) {
-//         noteOff(tone);
-//         lastTime=0;
-//       }
-//     }
-//     Delay.msDelay(50);
-//     }
-   }
-     public void setLastTime(int tone) {
-       this.tone=tone;
-       lastTime=System.currentTimeMillis();
-     }
-      
-  }
   
 }
