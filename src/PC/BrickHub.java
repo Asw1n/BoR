@@ -183,4 +183,26 @@ public class BrickHub extends lejos.hardware.BrickInfo {
     }
   }
 
+  public void sendDynamicRange(int lowestNote, int highestNote) {
+    try {
+      hub.sendDynamicRange(lowestNote,  highestNote);
+    }
+    catch (RemoteException e) {
+      // TODO Auto-generated catch block
+      e.printStackTrace();
+    }
+    
+  }
+
+  public void sendStart() {
+    try {
+      hub.start();
+    }
+    catch (RemoteException e) {
+      // TODO Auto-generated catch block
+      e.printStackTrace();
+    }
+    
+  }
+
 }

@@ -105,6 +105,7 @@ public void close() {
 public void play() {
   System.out.println("Start song.");
   sequencer.setTickPosition(0);
+  conductor.start();
   sequencer.start();
 }
  

@@ -1,5 +1,7 @@
 package BoRBrick;
 
+import java.rmi.RemoteException;
+
 
 /** Base class for musicians. Implements Musician. <br>
  * Provides debug information for Musician methods. <br>
@@ -37,6 +39,11 @@ public class BaseMusician implements Musician {
   @Override
   public void noteOff(int tone) {
     System.out.println("Tone off: " + tone);
+  }
+
+  @Override
+  public void sendDynamicRange(int lowestNote, int highestNote) throws RemoteException {
+    System.out.println("Dynamic range: " + lowestNote + " to " + highestNote );
   }
   
   

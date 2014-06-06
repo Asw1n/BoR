@@ -1,5 +1,7 @@
 package BoRBrick;
 
+import java.rmi.RemoteException;
+
 import lejos.hardware.motor.EV3LargeRegulatedMotor;
 import lejos.hardware.port.MotorPort;
 import lejos.robotics.RegulatedMotor;
@@ -39,6 +41,15 @@ public class GuitarPlayer extends BaseMusician {
     leftHand.setSpeed(600);
   }
   
+  
+  
+  @Override
+  public void sendDynamicRange(int lowestNote, int highestNote) throws RemoteException {
+    super.sendDynamicRange(lowestNote, highestNote);
+    high=highestNote;
+    low=lowestNote;
+  }
+
   @Override
   public void noteOn(int tone) {
     //super.noteOn(tone);

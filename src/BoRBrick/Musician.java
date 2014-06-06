@@ -8,6 +8,7 @@ import java.rmi.RemoteException;
  *
  */
 public interface Musician extends Remote {
+  //static final long serialVersionUID = 43L;
 
   /** The start() method indicates that a song starts
    * @throws RemoteException
@@ -39,5 +40,13 @@ public interface Musician extends Remote {
    * @throws RemoteException
    */
   public void noteOff(int tone) throws RemoteException;
+
+  /** Communicates the dynamic range of the instrument to the musician
+   * @param lowestNote
+   * The highest note found in the song
+   * @param highestNote
+   * The lowest note found in the song
+   */
+  public void sendDynamicRange(int lowestNote, int highestNote) throws RemoteException;
 
 }

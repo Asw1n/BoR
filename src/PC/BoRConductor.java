@@ -64,7 +64,7 @@ public class BoRConductor implements Receiver {
 
 
   private void setChannel(int channel, int instrument) {
-    musicians[channel] = null;
+    
     for (InstrumentMusicianMap immap : map) {
       if (immap.getChannel() == channel && immap.getInstrument() == instrument) {
         if (immap.getBrick() instanceof BrickHub) {
@@ -81,6 +81,16 @@ public class BoRConductor implements Receiver {
 
   public void open() {
     musicians = new BrickHub[16];
+  }
+
+  public void start() {
+    for (InstrumentMusicianMap immap : map) {
+      if (immap.getBrick() instanceof BrickHub) {
+        immap.getBrick().sendDynamicRange(immap.lowestNote, immap.highestNote);
+        immap.getBrick().sendStart();
+      }
+    }
+    
   }
 
 }
