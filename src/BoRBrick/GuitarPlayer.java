@@ -44,8 +44,8 @@ public class GuitarPlayer extends BaseMusician {
   
   
   @Override
-  public void sendDynamicRange(int lowestNote, int highestNote) throws RemoteException {
-    super.sendDynamicRange(lowestNote, highestNote);
+  public void setDynamicRange(int lowestNote, int highestNote) throws RemoteException {
+    super.setDynamicRange(lowestNote, highestNote);
     high=highestNote;
     low=lowestNote;
   }

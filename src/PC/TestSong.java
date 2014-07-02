@@ -7,8 +7,8 @@ public class TestSong {
   
   public static void main(String[] args) {
     TestSong foobar = new TestSong();
-    foobar.mySong.setSong(new File("MIDI/blues.mid"));
-    foobar.mySong.dump();
+    foobar.mySong.setSong(new File("MIDI/blues_tempo_changes.mid"));
   }
 
 }
+ 

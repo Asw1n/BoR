@@ -2,6 +2,8 @@ package PC;
 
 import java.util.List;
 
+import javax.sound.midi.MetaEventListener;
+import javax.sound.midi.MetaMessage;
 import javax.sound.midi.MidiMessage;
 import javax.sound.midi.Receiver;
 import javax.sound.midi.ShortMessage;
@@ -16,7 +18,7 @@ import javax.sound.midi.ShortMessage;
  * @author Aswin
  *
  */
-public class BoRConductor implements Receiver {
+public class BoRConductor implements Receiver, MetaEventListener {
   List<InstrumentMusicianMap>    map;
   BrickHub[] musicians;
 
@@ -57,7 +59,15 @@ public class BoRConductor implements Receiver {
             break;
         }
     }
+
     }
+  
+  private void setTempo(int b) {
+      for (InstrumentMusicianMap immap : map) {
+          if (immap.brickHub != null)
+              immap.brickHub.setTempo(b);
+      }
+  }
 
  
   
@@ -92,5 +102,24 @@ public class BoRConductor implements Receiver {
     }
     
   }
+
+@Override
+public void meta(MetaMessage metaMessage) {
+        switch (metaMessage.getMessage()[1]) {
+            case 81: {
+                int b=0;
+                for (int p=2;p>=0;p--) {
+                    b += ((int)(metaMessage.getMessage()[5-p] & 0xFF)) * Math.pow(255,p);
+                }
+                b=Math.round(b/1000f);
+                System.out.println("Set tempo: "+b);
+                setTempo(b);
+                break;
+            }
+            default:
+                break;
+           }
+                
+}
 
 }

@@ -70,6 +70,7 @@ public void open() {
     sequencer.getTransmitter().setReceiver(synthesizer.getReceiver());
     sequencer.getTransmitter().setReceiver(conductor);
     sequencer.setSequence(MidiSystem.getSequence(song.getFile()));
+    sequencer.addMetaEventListener(conductor);
   }
     catch (Exception e) {
       e.printStackTrace();

@@ -3,6 +3,7 @@ package BoRBrick;
 import java.rmi.RemoteException;
 
 
+
 /** Base class for musicians. Implements Musician. <br>
  * Provides debug information for Musician methods. <br>
  * Provides some utility methods (in the future).
@@ -10,10 +11,15 @@ import java.rmi.RemoteException;
  *
  */
 public class BaseMusician implements Musician {
+    protected int tempo =125;
+    private boolean running=false;
   
 
   public BaseMusician() {
   System.out.println("Musician "+this.getClass().getName()+ " loaded.");
+  Runner runner = new Runner();
+  runner.setDaemon(true);
+  runner.start();
 }
 
   @Override
@@ -42,9 +48,27 @@ public class BaseMusician implements Musician {
   }
 
   @Override
-  public void sendDynamicRange(int lowestNote, int highestNote) throws RemoteException {
+  public void setDynamicRange(int lowestNote, int highestNote) throws RemoteException {
     System.out.println("Dynamic range: " + lowestNote + " to " + highestNote );
   }
   
+  public void enableBeat() {
+      running =true;
+  }
   
+  private class Runner extends Thread {
+      @Override
+      public void run() {
+        long nextTime=System.currentTimeMillis();
+        long currentTime;
+        while (true) {
+          if (running) {
+          }
+        }
+      }
+
+    }
 }
+  
+ 
+

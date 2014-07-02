@@ -185,7 +185,7 @@ public class BrickHub extends lejos.hardware.BrickInfo {
 
   public void sendDynamicRange(int lowestNote, int highestNote) {
     try {
-      hub.sendDynamicRange(lowestNote,  highestNote);
+      hub.setDynamicRange(lowestNote,  highestNote);
     }
     catch (RemoteException e) {
       // TODO Auto-generated catch block
@@ -204,5 +204,16 @@ public class BrickHub extends lejos.hardware.BrickInfo {
     }
     
   }
+
+public void setTempo(int tempo) {
+    try {
+        hub.setTempo(tempo);
+    }
+    catch (RemoteException e) {
+        // TODO Auto-generated catch block
+        e.printStackTrace();
+    }
+    
+}
 
 }

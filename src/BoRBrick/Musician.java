@@ -47,6 +47,6 @@ public interface Musician extends Remote {
    * @param highestNote
    * The lowest note found in the song
    */
-  public void sendDynamicRange(int lowestNote, int highestNote) throws RemoteException;
+  public void setDynamicRange(int lowestNote, int highestNote) throws RemoteException;
 
 }
