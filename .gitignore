@@ -1,12 +1,2 @@
-/bin
-/icons
-/BoR.jar
-/build
 /Video
-/build.xml
-/GuitarPlayer.jar
-/GuiterPlayer.jar
-/HelloWorld.jar
-/IMTableEditor.jar
-/local.properties
-/StartBoR.jar
+/build

@@ -2,6 +2,8 @@ package BoRBrick;
 
 import java.rmi.RemoteException;
 
+import lejos.hardware.LED;
+import lejos.hardware.ev3.LocalEV3;
 import lejos.hardware.motor.EV3LargeRegulatedMotor;
 import lejos.hardware.port.MotorPort;
 import lejos.robotics.RegulatedMotor;
@@ -16,6 +18,9 @@ public class GuitarPlayer extends BaseMusician {
   private static int low=55;
   private static int toneRange=high-low;
   private float ticksPerTone=(float)leftHandRange/(float)toneRange;
+  LED led=LocalEV3.get().getLED();
+  boolean ledState=false;
+
 
   
   
@@ -65,6 +70,17 @@ public class GuitarPlayer extends BaseMusician {
     rightHand.rotateTo(0,true);
     leftHand.setSpeed(60);
     leftHand.rotateTo(0, true);
+  }
+  
+  @Override
+  protected void beatPulse() {
+      ledState= ! ledState;
+      if (ledState) {
+          led.setPattern(3);
+      }
+      else {
+          led.setPattern(0);
+      }
   }
 
   

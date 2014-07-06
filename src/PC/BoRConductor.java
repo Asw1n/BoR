@@ -111,7 +111,7 @@ public void meta(MetaMessage metaMessage) {
                 for (int p=2;p>=0;p--) {
                     b += ((int)(metaMessage.getMessage()[5-p] & 0xFF)) * Math.pow(255,p);
                 }
-                b=Math.round(b/1000f);
+                b=Math.round(4*b/1000f);
                 System.out.println("Set tempo: "+b);
                 setTempo(b);
                 break;
@@ -120,6 +120,14 @@ public void meta(MetaMessage metaMessage) {
                 break;
            }
                 
+}
+
+public void stop() {
+    for (InstrumentMusicianMap immap : map) {
+        if (immap.getBrick() instanceof BrickHub) {
+          immap.getBrick().sendStop();
+        }
+      }
 }
 
 }

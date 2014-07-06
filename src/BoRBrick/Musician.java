@@ -8,7 +8,7 @@ import java.rmi.RemoteException;
  *
  */
 public interface Musician extends Remote {
-  //static final long serialVersionUID = 43L;
+  static final long serialVersionUID = 43L;
 
   /** The start() method indicates that a song starts
    * @throws RemoteException

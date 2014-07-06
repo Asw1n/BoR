@@ -216,4 +216,13 @@ public void setTempo(int tempo) {
     
 }
 
+public void sendStop() {
+    try {
+        hub.stop();
+      }
+      catch (RemoteException e) {
+        e.printStackTrace();
+      }
+}
+
 }

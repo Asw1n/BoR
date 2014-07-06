@@ -117,6 +117,7 @@ public void pause() {
 
 public void stop() {
   System.out.println("Stop song.");
+  conductor.stop();
   sequencer.stop();
 }
 
