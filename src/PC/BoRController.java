@@ -1,10 +1,5 @@
 package PC;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.List;
-
-import javax.sound.midi.InvalidMidiDataException;
 import javax.sound.midi.MidiDevice;
 import javax.sound.midi.MidiSystem;
 import javax.sound.midi.MidiUnavailableException;
@@ -23,6 +18,13 @@ Song song;
 //File midiFile;
 //List<InstrumentMusicianMap> map;
 BoRConductor conductor=new BoRConductor();
+TimeBuffer timeBuffer ;
+
+public BoRController() {
+    timeBuffer = new TimeBuffer(100);
+    timeBuffer.setDaemon(true);
+    timeBuffer.start();
+}
 
 public Sequencer getSequencer() {
   return sequencer;
@@ -67,7 +69,8 @@ public void open() {
     conductor.setMap(song.getMapping());
     connect();
     conductor.open();
-    sequencer.getTransmitter().setReceiver(synthesizer.getReceiver());
+    timeBuffer.setReceiver(synthesizer.getReceiver());
+    sequencer.getTransmitter().setReceiver(timeBuffer);
     sequencer.getTransmitter().setReceiver(conductor);
     sequencer.setSequence(MidiSystem.getSequence(song.getFile()));
     sequencer.addMetaEventListener(conductor);

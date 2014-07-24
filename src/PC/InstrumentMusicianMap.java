@@ -92,7 +92,12 @@ public class InstrumentMusicianMap {
    * @return
    */
   public int getInstrument() {
+      if (instrument>0)
     return instrument;
+      else {
+          System.err.println("Error: instrument 0");
+          return 1;
+      }
   }
   
  // TODO: probably misplaced here

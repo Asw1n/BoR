@@ -32,11 +32,13 @@ public class SongTableModel extends AbstractTableModel{
       case 2: return "EV3";
       case 3: return "Lowest tone";
       case 4: return "Highest tone";
+      case 5: return "Instrument";
       default: return "Error";
     }
 }
   
   public Class getColumnClass(int columnIndex) {
+      if (columnIndex==0) return String.class;
     if (columnIndex==2) return BrickHub.class;
     return Integer.class;
   }
@@ -49,7 +51,7 @@ public class SongTableModel extends AbstractTableModel{
 
   @Override
   public int getColumnCount() {
-    return 5;
+    return 6;
   }
 
   @Override
@@ -62,7 +64,8 @@ public class SongTableModel extends AbstractTableModel{
     InstrumentMusicianMap instrument=thisSong.getInstrument(row);
     switch (col) {
       case 0:
-        return new Integer(instrument.getInstrument());
+        //return new Integer(instrument.getInstrument());
+        return Instrument.values()[instrument.getInstrument()-1].toString();
       case 1:
         return new Integer(instrument.getChannel());
       case 2:
@@ -71,6 +74,8 @@ public class SongTableModel extends AbstractTableModel{
         return new Integer(instrument.getLowestNote());
       case 4:
         return new Integer(instrument.getHighestNote());
+      case 5:
+          return new Integer(instrument.getInstrument());
       default:
         return "Error";
     }
