@@ -1,10 +1,13 @@
 package org.aswinmp.lejos.ev3.bandofrobots.pc.shell;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.aswinmp.lejos.ev3.bandofrobots.pc.shell.commands.BoRCommand;
 import org.aswinmp.lejos.ev3.bandofrobots.pc.shell.commands.QuitCommand;
+import org.aswinmp.lejos.ev3.bandofrobots.pc.shell.commands.ShellCommand;
+import org.aswinmp.lejos.ev3.bandofrobots.pc.shell.commands.ShellExecute;
 
 /**
  * An input process for the interactive BoR shell.
@@ -14,13 +17,15 @@ import org.aswinmp.lejos.ev3.bandofrobots.pc.shell.commands.QuitCommand;
  */
 public class InputProcessor {
 
-	private final Map<String, BoRCommand> commandMap = new HashMap<>();
+	private final Map<String, Object> commandMap = new HashMap<>();
 
 	public InputProcessor() {
-		// populate command map
-		// TODO populate dynamically by introspection
+		// TODO populate command map dynamically by reflection on commands
+		// package
 		final QuitCommand quitCommand = new QuitCommand();
-		commandMap.put(quitCommand.getLabel(), quitCommand);
+		final String label = quitCommand.getClass()
+				.getAnnotation(ShellCommand.class).label();
+		commandMap.put(label, quitCommand);
 	}
 
 	/**
@@ -30,20 +35,21 @@ public class InputProcessor {
 	 *            the user input
 	 * @return true in case the user signaled "quit", else false
 	 */
-	public boolean process(final String input) {
+	public boolean process(final String input)
+			throws InvocationTargetException, IllegalAccessException {
 		boolean result = false;
 		// retrieve matching command
-		final BoRCommand command = commandMap.get(input);
+		final Object command = commandMap.get(input);
 		if (command == null) {
 			// show help
 			displayHelp();
 		} else {
-			// is this the quit ommand?
+			// is this the quit command?
 			if (command instanceof QuitCommand) {
 				result = true;
 			}
-			// else execute command
-			command.execute();
+			// execute command
+			invokeShellExecutes(command);
 		}
 		return result;
 
@@ -51,10 +57,23 @@ public class InputProcessor {
 
 	private void displayHelp() {
 		System.out.println("Available commands:");
-		for (final BoRCommand command : commandMap.values()) {
-			System.out.println(command.getLabel() + " ["
-					+ command.getDescription() + "]");
+		for (final Object command : commandMap.values()) {
+			final ShellCommand shellCommand = command.getClass().getAnnotation(
+					ShellCommand.class);
+			System.out.println(shellCommand.label() + " ["
+					+ shellCommand.description() + "]");
 		}
 	}
 
+	private void invokeShellExecutes(final Object shellCommand)
+			throws InvocationTargetException, IllegalAccessException {
+		final Method[] methods = shellCommand.getClass().getMethods();
+		for (final Method method : methods) {
+			final ShellExecute shellExecute = method
+					.getAnnotation(ShellExecute.class);
+			if (shellExecute != null) {
+				method.invoke(shellCommand);
+			}
+		}
+	}
 }

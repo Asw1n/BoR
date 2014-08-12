@@ -1,5 +1,6 @@
 package org.aswinmp.lejos.ev3.bandofrobots.pc.shell;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.Scanner;
 
 /**
@@ -11,7 +12,8 @@ import java.util.Scanner;
  */
 public class Shell {
 
-	public static void main(final String[] args) {
+	public static void main(final String[] args)
+			throws InvocationTargetException, IllegalAccessException {
 		// start shell
 		System.out.println("Band of Robots Interactive Shell");
 		// instantiate input processor
