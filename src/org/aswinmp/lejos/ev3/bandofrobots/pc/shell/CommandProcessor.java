@@ -8,6 +8,7 @@ import java.util.Map;
 import javax.sound.midi.MidiSystem;
 import javax.sound.midi.MidiUnavailableException;
 
+import org.aswinmp.lejos.ev3.bandofrobots.pc.shell.commands.DumpInstrumentsCommand;
 import org.aswinmp.lejos.ev3.bandofrobots.pc.shell.commands.QuitCommand;
 import org.aswinmp.lejos.ev3.bandofrobots.pc.shell.commands.SelectSongCommand;
 import org.aswinmp.lejos.ev3.bandofrobots.pc.shell.commands.ShellCommand;
@@ -19,7 +20,6 @@ import PC.BoRController;
  * An input process for the interactive BoR shell.
  * 
  * @author mpscholz
- * 
  */
 public class CommandProcessor {
 
@@ -32,17 +32,8 @@ public class CommandProcessor {
 		// set default synthesizer
 		boRController.setSynthesizer(MidiSystem.getSynthesizer()
 				.getDeviceInfo());
-		// TODO populate command map dynamically by reflection on commands
-		// package
-		final QuitCommand quitCommand = new QuitCommand(boRController);
-		commandMap.put(quitCommand.getClass().getAnnotation(ShellCommand.class)
-				.label(), quitCommand);
-		final SelectSongCommand displayMidiChannelsCommand = new SelectSongCommand(
-				boRController);
-		commandMap.put(
-				displayMidiChannelsCommand.getClass()
-						.getAnnotation(ShellCommand.class).label(),
-				displayMidiChannelsCommand);
+		// populate commands map
+		populateCommandsMap();
 	}
 
 	/**
@@ -61,7 +52,7 @@ public class CommandProcessor {
 		final String[] parameters = new String[inputParts.length - 1];
 		System.arraycopy(inputParts, 1, parameters, 0, inputParts.length - 1);
 		// retrieve matching command
-		final Object command = commandMap.get(commandLabel);
+		final Object command = commandMap.get(commandLabel.trim());
 		if (command == null) {
 			// show help
 			displayHelp();
@@ -99,5 +90,24 @@ public class CommandProcessor {
 				method.invoke(shellCommand, parameters);
 			}
 		}
+	}
+
+	private void populateCommandsMap() {
+		// TODO populate command map dynamically by reflection on commands
+		// package
+		final QuitCommand quitCommand = new QuitCommand(boRController);
+		commandMap.put(quitCommand.getClass().getAnnotation(ShellCommand.class)
+				.label(), quitCommand);
+		final SelectSongCommand selectSongCommand = new SelectSongCommand(
+				boRController);
+		commandMap.put(
+				selectSongCommand.getClass().getAnnotation(ShellCommand.class)
+						.label(), selectSongCommand);
+		final DumpInstrumentsCommand dumpInstrumentsCommand = new DumpInstrumentsCommand(
+				boRController);
+		commandMap.put(
+				dumpInstrumentsCommand.getClass()
+						.getAnnotation(ShellCommand.class).label(),
+				dumpInstrumentsCommand);
 	}
 }
