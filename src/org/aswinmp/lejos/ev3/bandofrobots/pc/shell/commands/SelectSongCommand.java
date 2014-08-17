@@ -1,6 +1,9 @@
 package org.aswinmp.lejos.ev3.bandofrobots.pc.shell.commands;
 
 import java.io.File;
+import java.io.IOException;
+
+import javax.sound.midi.InvalidMidiDataException;
 
 import PC.BoRController;
 import PC.Song;
@@ -17,8 +20,12 @@ public class SelectSongCommand {
 	@ShellExecute
 	public void selectSong(final String filePath) {
 		final Song song = new Song();
-		song.setSong(new File(filePath));
-		boRController.setSong(song);
-		System.out.println("Set song to " + song.getFileName());
+		try {
+			song.setSong(new File(filePath));
+			boRController.setSong(song);
+			System.out.println("Set song to " + song.getFileName());
+		} catch (final InvalidMidiDataException | IOException exc) {
+			System.err.println("Could not set song: " + exc);
+		}
 	}
 }

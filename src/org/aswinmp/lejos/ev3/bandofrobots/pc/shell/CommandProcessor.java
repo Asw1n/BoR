@@ -9,6 +9,7 @@ import javax.sound.midi.MidiSystem;
 import javax.sound.midi.MidiUnavailableException;
 
 import org.aswinmp.lejos.ev3.bandofrobots.pc.shell.commands.DumpInstrumentsCommand;
+import org.aswinmp.lejos.ev3.bandofrobots.pc.shell.commands.PlayCommand;
 import org.aswinmp.lejos.ev3.bandofrobots.pc.shell.commands.QuitCommand;
 import org.aswinmp.lejos.ev3.bandofrobots.pc.shell.commands.SelectSongCommand;
 import org.aswinmp.lejos.ev3.bandofrobots.pc.shell.commands.ShellCommand;
@@ -109,5 +110,8 @@ public class CommandProcessor {
 				dumpInstrumentsCommand.getClass()
 						.getAnnotation(ShellCommand.class).label(),
 				dumpInstrumentsCommand);
+		final PlayCommand playCommand = new PlayCommand(boRController);
+		commandMap.put(playCommand.getClass().getAnnotation(ShellCommand.class)
+				.label(), playCommand);
 	}
 }
