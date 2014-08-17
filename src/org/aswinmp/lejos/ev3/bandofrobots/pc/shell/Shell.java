@@ -1,33 +1,43 @@
 package org.aswinmp.lejos.ev3.bandofrobots.pc.shell;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.lang.reflect.InvocationTargetException;
-import java.util.Scanner;
+
+import javax.sound.midi.MidiUnavailableException;
 
 /**
  * Interactive command shell to trigger client side interaction with the
  * musicians on the brick.
  * 
  * @author mpscholz
- * 
+ * @todo use Log4J for logging
  */
 public class Shell {
 
 	public static void main(final String[] args)
-			throws InvocationTargetException, IllegalAccessException {
+			throws InvocationTargetException, IllegalAccessException,
+			IOException, MidiUnavailableException {
 		// start shell
 		System.out.println("Band of Robots Interactive Shell");
 		// instantiate input processor
-		final InputProcessor inputProcessor = new InputProcessor();
+		final CommandProcessor inputProcessor = new CommandProcessor();
 		// read input from console until user quits
-		try (final Scanner inputScanner = new Scanner(System.in)) {
-			boolean quit = false;
+		final BufferedReader inputReader = new BufferedReader(
+				new InputStreamReader(System.in));
+		boolean quit = false;
+		try {
 			while (!quit) {
+				System.out.print("> ");
 				// process user input
-				quit = inputProcessor.process(inputScanner.next());
+				quit = inputProcessor.process(inputReader.readLine());
 			}
-			// bye
-			System.out.println("Bye!");
+		} finally {
+			inputReader.close();
 		}
-	}
 
+		// bye
+		System.out.println("Bye!");
+	}
 }

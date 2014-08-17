@@ -24,6 +24,8 @@ public @interface ShellCommand {
 	 */
 	String label();
 
+	String parameters();
+
 	/**
 	 * @return a description of the command.
 	 */
