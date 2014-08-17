@@ -55,6 +55,10 @@ public class BoRController {
 		}
 	}
 
+	public Song getSong() {
+		return song;
+	}
+
 	public void open() {
 		try {
 			System.out.println("Binding resources.");
