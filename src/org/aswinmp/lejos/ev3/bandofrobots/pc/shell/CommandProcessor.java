@@ -14,6 +14,7 @@ import org.aswinmp.lejos.ev3.bandofrobots.pc.shell.commands.QuitCommand;
 import org.aswinmp.lejos.ev3.bandofrobots.pc.shell.commands.SelectSongCommand;
 import org.aswinmp.lejos.ev3.bandofrobots.pc.shell.commands.ShellCommand;
 import org.aswinmp.lejos.ev3.bandofrobots.pc.shell.commands.ShellExecute;
+import org.aswinmp.lejos.ev3.bandofrobots.pc.shell.commands.StopCommand;
 
 import PC.BoRController;
 
@@ -113,5 +114,10 @@ public class CommandProcessor {
 		final PlayCommand playCommand = new PlayCommand(boRController);
 		commandMap.put(playCommand.getClass().getAnnotation(ShellCommand.class)
 				.label(), playCommand);
+		final StopCommand stopCommand = new StopCommand(boRController);
+		commandMap.put(stopCommand.getClass().getAnnotation(ShellCommand.class)
+				.label(), stopCommand);
+
 	}
+
 }
