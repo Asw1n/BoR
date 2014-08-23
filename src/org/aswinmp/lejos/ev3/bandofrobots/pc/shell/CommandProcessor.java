@@ -8,6 +8,8 @@ import java.util.Map;
 import javax.sound.midi.MidiSystem;
 import javax.sound.midi.MidiUnavailableException;
 
+import org.aswinmp.lejos.ev3.bandofrobots.pc.shell.commands.AssignBrickCommand;
+import org.aswinmp.lejos.ev3.bandofrobots.pc.shell.commands.DumpBricksCommand;
 import org.aswinmp.lejos.ev3.bandofrobots.pc.shell.commands.DumpInstrumentsCommand;
 import org.aswinmp.lejos.ev3.bandofrobots.pc.shell.commands.PlayCommand;
 import org.aswinmp.lejos.ev3.bandofrobots.pc.shell.commands.QuitCommand;
@@ -117,7 +119,15 @@ public class CommandProcessor {
 		final StopCommand stopCommand = new StopCommand(boRController);
 		commandMap.put(stopCommand.getClass().getAnnotation(ShellCommand.class)
 				.label(), stopCommand);
-
+		final DumpBricksCommand dumpBricksCommand = new DumpBricksCommand();
+		commandMap.put(
+				dumpBricksCommand.getClass().getAnnotation(ShellCommand.class)
+						.label(), dumpBricksCommand);
+		final AssignBrickCommand assignBrickCommand = new AssignBrickCommand(
+				boRController);
+		commandMap.put(
+				assignBrickCommand.getClass().getAnnotation(ShellCommand.class)
+						.label(), assignBrickCommand);
 	}
 
 }
