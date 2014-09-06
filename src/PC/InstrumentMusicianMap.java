@@ -16,7 +16,7 @@ public class InstrumentMusicianMap {
 	int lowestNote = 127;
 
 	/**
-	 * Contructor
+	 * Constructor
 	 * 
 	 * @param file
 	 *            Name of the Midi file for which the mapping is intended

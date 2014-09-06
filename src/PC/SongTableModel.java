@@ -15,9 +15,6 @@ import javax.swing.table.AbstractTableModel;
  * 
  */
 public class SongTableModel extends AbstractTableModel {
-	/**
-   * 
-   */
 	private static final long serialVersionUID = -5686596864300068524L;
 	List<InstrumentMusicianMap> instruments = new ArrayList<InstrumentMusicianMap>();
 	Song thisSong = new Song();
@@ -45,7 +42,7 @@ public class SongTableModel extends AbstractTableModel {
 	}
 
 	@Override
-	public Class getColumnClass(final int columnIndex) {
+	public Class<?> getColumnClass(final int columnIndex) {
 		if (columnIndex == 2)
 			return BrickHub.class;
 		return Integer.class;

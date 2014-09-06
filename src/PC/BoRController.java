@@ -15,12 +15,20 @@ import javax.sound.midi.Synthesizer;
  * 
  */
 public class BoRController {
+
 	Sequencer sequencer;
 	Synthesizer synthesizer;
 	Song song;
 	// File midiFile;
 	// List<InstrumentMusicianMap> map;
 	BoRConductor conductor = new BoRConductor();
+	TimeBuffer timeBuffer;
+
+	public BoRController() {
+		timeBuffer = new TimeBuffer(100);
+		timeBuffer.setDaemon(true);
+		timeBuffer.start();
+	}
 
 	public Sequencer getSequencer() {
 		return sequencer;
@@ -67,7 +75,8 @@ public class BoRController {
 			conductor.setMap(song.getMapping());
 			connect();
 			conductor.open();
-			sequencer.getTransmitter().setReceiver(synthesizer.getReceiver());
+			timeBuffer.setReceiver(synthesizer.getReceiver());
+			sequencer.getTransmitter().setReceiver(timeBuffer);
 			sequencer.getTransmitter().setReceiver(conductor);
 			sequencer.setSequence(MidiSystem.getSequence(song.getFile()));
 			sequencer.addMetaEventListener(conductor);
