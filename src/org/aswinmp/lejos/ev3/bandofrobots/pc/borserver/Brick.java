@@ -1,4 +1,4 @@
-package BoRServer;
+package org.aswinmp.lejos.ev3.bandofrobots.pc.borserver;
 
 import java.rmi.Remote;
 import java.rmi.RemoteException;
@@ -7,7 +7,7 @@ import java.rmi.registry.Registry;
 
 import javax.sound.midi.ShortMessage;
 
-import BoRBrick.Musician;
+import org.aswinmp.lejos.ev3.bandofrobots.musicians.borbrick.Musician;
 
 /**
  * Represents a remote EV3 brick. 

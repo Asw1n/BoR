@@ -2,19 +2,20 @@ package org.aswinmp.lejos.ev3.bandofrobots.pc.shell.commands;
 
 import java.io.IOException;
 
+import org.aswinmp.lejos.ev3.bandofrobots.pc.borserver.BoRController;
+import org.aswinmp.lejos.ev3.bandofrobots.pc.borserver.Brick;
+import org.aswinmp.lejos.ev3.bandofrobots.pc.borserver.Channels;
+import org.aswinmp.lejos.ev3.bandofrobots.pc.borserver.Song;
+
 import lejos.hardware.BrickFinder;
 import lejos.hardware.BrickInfo;
-import BoRServer.BoRController;
-import BoRServer.Brick;
-import BoRServer.Channels;
-import BoRServer.Song;
 
 @ShellCommand(label = "assign", parameters = "brick_name channel", description = "assigns a connected brick to channel of the selected song")
-public class AssignBrickCommand {
+public class AssignCommand {
 
   private final BoRController boRController;
 
-  public AssignBrickCommand(final BoRController boRController) {
+  public AssignCommand(final BoRController boRController) {
     this.boRController = boRController;
   }
 

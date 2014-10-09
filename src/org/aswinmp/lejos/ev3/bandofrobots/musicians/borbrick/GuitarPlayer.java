@@ -1,13 +1,19 @@
-package BoRBrick;
+package org.aswinmp.lejos.ev3.bandofrobots.musicians.borbrick;
 
 import java.rmi.RemoteException;
 
+import lejos.hardware.BrickFinder;
+import lejos.hardware.Button;
 import lejos.hardware.LED;
 import lejos.hardware.Sound;
 import lejos.hardware.ev3.LocalEV3;
+import lejos.hardware.lcd.LCD;
 import lejos.hardware.motor.EV3MediumRegulatedMotor;
 import lejos.hardware.port.MotorPort;
+import lejos.hardware.port.Port;
+import lejos.hardware.sensor.EV3UltrasonicSensor;
 import lejos.robotics.RegulatedMotor;
+import lejos.robotics.SampleProvider;
 import lejos.utility.Delay;
 
 public class GuitarPlayer extends BaseMusician {
@@ -20,6 +26,7 @@ public class GuitarPlayer extends BaseMusician {
   LED        led    = LocalEV3.get().getLED();
   boolean    footup = false;
   int        pos    = 1;
+  private Heartbeat heartbeat;
 
   public static void main(String[] args) {
     GuitarPlayer jimi = new GuitarPlayer();
@@ -27,23 +34,29 @@ public class GuitarPlayer extends BaseMusician {
 
   public GuitarPlayer() {
     super();
-    rightHand = new Limb(new EV3MediumRegulatedMotor(MotorPort.A), -10);
-    leftHand = new Limb(new EV3MediumRegulatedMotor(MotorPort.B), -160);
-    foot = new Limb(new EV3MediumRegulatedMotor(MotorPort.C), -20);
-    head = new Limb(new EV3MediumRegulatedMotor(MotorPort.D), -30);
+    rightHand = new Limb(new EV3MediumRegulatedMotor(MotorPort.A), -50);
+    leftHand = new Limb(new EV3MediumRegulatedMotor(MotorPort.B), -150);
+    foot = new Limb(new EV3MediumRegulatedMotor(MotorPort.C), -30);
+    head = new Limb(new EV3MediumRegulatedMotor(MotorPort.D), -45);
+    head.setLogicRange(0, 1);
+    rightHand.setLogicRange(-1, 1);
+    setBeatPulseDevider(DIV);
+    LCD.clear();
+
 
     head.calibrate(5, 1, -15, 0.2f);
-    head.setLogicRange(0, 1);
-    head.setSpeed(0.3f);
+    rightHand.calibrate(5, 1, -10, 0.2f);
+    leftHand.calibrate(10, -1, 170, 0.2f);
+    foot.calibrate(7, 1, -60, 0.2f);
 
-    rightHand.calibrate(5, 1, -30, 0.2f);
-    rightHand.setLogicRange(-1, 1);
-
-    leftHand.calibrate(10, -1, 180, 0.2f);
-
-    foot.calibrate(7, 1, -70, 0.2f);
-    setBeatPulseDevider(DIV);
-
+    head.testRange();
+    foot.testRange();
+    leftHand.testRange();
+    rightHand.testRange();
+    
+    heartbeat = new Heartbeat();
+    heartbeat.setDaemon(true);
+    heartbeat.start();
   }
 
   @Override
@@ -80,6 +93,7 @@ public class GuitarPlayer extends BaseMusician {
 
   public void stop() {
     super.stop();
+    head.setSpeed(0.2f);
     head.moveToMax();
     led.setPattern(0);
     leftHand.setSpeed(0.2f);
@@ -88,7 +102,7 @@ public class GuitarPlayer extends BaseMusician {
     rightHand.moveToMin();
     foot.setSpeed(0.1f);
     foot.moveToMin();
-    Delay.msDelay(700);
+    Delay.msDelay(1200);
     head.moveToMin();
     leftHand.rest();
     rightHand.rest();
@@ -151,6 +165,12 @@ public class GuitarPlayer extends BaseMusician {
 
     }
 
+    /**
+     * @param stallDetectionSpeed
+     * @param stallDirection
+     * @param stallToRest
+     * @param speedFactor
+     */
     public void calibrate(int stallDetectionSpeed, int stallDirection,
         int stallToRest, float speedFactor) {
       boolean stalled = false;
@@ -189,6 +209,19 @@ public class GuitarPlayer extends BaseMusician {
     public void moveToMax() {
       motor.rotateTo(range, true);
     }
+    
+    public void testRange() {
+      moveToMin();
+      while(motor.isMoving());
+      moveToMax();
+      while(motor.isMoving());
+      moveToMin();
+      while(motor.isMoving());
+      moveToMax();
+      while(motor.isMoving());
+      moveToMin();
+      while(motor.isMoving());
+    }
 
     public void setLogicRange(int min, int max) {
       this.min = min;
@@ -196,7 +229,7 @@ public class GuitarPlayer extends BaseMusician {
       this.tickFactor = range / (double) (max - min);
     }
 
-    private int toTick(int value) {
+    private int toTick(float value) {
       return (int) ((value - min) * tickFactor);
     }
 
@@ -204,7 +237,7 @@ public class GuitarPlayer extends BaseMusician {
       return (int) (min + motor.getTachoCount() / tickFactor);
     }
 
-    public void moveToPosition(int value) {
+    public void moveToPosition(float value) {
       if (tickFactor != 0)
         motor.rotateTo(toTick(value), true);
     }
@@ -215,6 +248,24 @@ public class GuitarPlayer extends BaseMusician {
       motor.flt();
     }
 
+  }
+  
+  private class Heartbeat extends Thread {
+
+    
+    public void run() {
+      while(true) {
+        head.setSpeed(0.1f);
+        head.moveToPosition(0.5f);
+        Delay.msDelay(800);
+        head.setSpeed(0.1f);
+        head.moveToPosition(0f);
+        Delay.msDelay(1700);
+      }
+      
+      
+    }
+    
   }
 
 }

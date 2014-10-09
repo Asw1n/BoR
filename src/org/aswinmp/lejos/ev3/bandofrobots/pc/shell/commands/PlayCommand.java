@@ -1,6 +1,6 @@
 package org.aswinmp.lejos.ev3.bandofrobots.pc.shell.commands;
 
-import BoRServer.BoRController;
+import org.aswinmp.lejos.ev3.bandofrobots.pc.borserver.BoRController;
 
 @ShellCommand(label = "play", parameters = "", description = "plays the selected song")
 public class PlayCommand {

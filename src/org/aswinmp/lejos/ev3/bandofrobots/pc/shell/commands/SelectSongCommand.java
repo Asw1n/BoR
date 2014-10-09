@@ -5,7 +5,7 @@ import java.io.IOException;
 
 import javax.sound.midi.InvalidMidiDataException;
 
-import BoRServer.BoRController;
+import org.aswinmp.lejos.ev3.bandofrobots.pc.borserver.BoRController;
 
 @ShellCommand(label = "song", parameters = "path_to_MIDI_file", description = "selects a song serialized in a MIDI file")
 public class SelectSongCommand {

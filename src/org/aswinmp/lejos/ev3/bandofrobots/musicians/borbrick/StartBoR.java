@@ -1,4 +1,4 @@
-package BoRBrick;
+package org.aswinmp.lejos.ev3.bandofrobots.musicians.borbrick;
 
 import java.net.InetAddress;
 import java.net.NetworkInterface;

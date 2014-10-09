@@ -8,7 +8,8 @@ import java.util.Map;
 import javax.sound.midi.MidiSystem;
 import javax.sound.midi.MidiUnavailableException;
 
-import org.aswinmp.lejos.ev3.bandofrobots.pc.shell.commands.AssignBrickCommand;
+import org.aswinmp.lejos.ev3.bandofrobots.pc.borserver.BoRController;
+import org.aswinmp.lejos.ev3.bandofrobots.pc.shell.commands.AssignCommand;
 import org.aswinmp.lejos.ev3.bandofrobots.pc.shell.commands.DumpBricksCommand;
 import org.aswinmp.lejos.ev3.bandofrobots.pc.shell.commands.DumpChannelsCommand;
 import org.aswinmp.lejos.ev3.bandofrobots.pc.shell.commands.PlayCommand;
@@ -17,8 +18,6 @@ import org.aswinmp.lejos.ev3.bandofrobots.pc.shell.commands.SelectSongCommand;
 import org.aswinmp.lejos.ev3.bandofrobots.pc.shell.commands.ShellCommand;
 import org.aswinmp.lejos.ev3.bandofrobots.pc.shell.commands.ShellExecute;
 import org.aswinmp.lejos.ev3.bandofrobots.pc.shell.commands.StopCommand;
-
-import BoRServer.BoRController;
 
 /**
  * An input process for the interactive BoR shell.
@@ -123,7 +122,7 @@ public class CommandProcessor {
 		commandMap.put(
 				dumpBricksCommand.getClass().getAnnotation(ShellCommand.class)
 						.label(), dumpBricksCommand);
-		final AssignBrickCommand assignBrickCommand = new AssignBrickCommand(
+		final AssignCommand assignBrickCommand = new AssignCommand(
 				boRController);
 		commandMap.put(
 				assignBrickCommand.getClass().getAnnotation(ShellCommand.class)

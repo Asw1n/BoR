@@ -1,6 +1,6 @@
 package org.aswinmp.lejos.ev3.bandofrobots.pc.shell.commands;
 
-import BoRServer.BoRController;
+import org.aswinmp.lejos.ev3.bandofrobots.pc.borserver.BoRController;
 
 @ShellCommand(label = "channels", parameters = "", description = "dumps the channels mappings for the selected song")
 public class DumpChannelsCommand {

@@ -1,4 +1,4 @@
-package BoRServer;
+package org.aswinmp.lejos.ev3.bandofrobots.pc.borserver;
 
 import javax.sound.midi.MetaEventListener;
 import javax.sound.midi.MetaMessage;
@@ -6,7 +6,6 @@ import javax.sound.midi.MidiMessage;
 import javax.sound.midi.Receiver;
 import javax.sound.midi.ShortMessage;
 
-import lejos.utility.EndianTools;
 
 /** The conductor receives midi events from a sequencer and passes these on to the appropriate bricks.
  * @author Aswin

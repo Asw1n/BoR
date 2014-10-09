@@ -1,4 +1,4 @@
-package BoRServer;
+package org.aswinmp.lejos.ev3.bandofrobots.pc.borserver;
 
 import java.io.IOException;
 
