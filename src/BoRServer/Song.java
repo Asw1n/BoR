@@ -19,19 +19,24 @@ import javax.sound.midi.Track;
 public class Song {
     protected File     song;
     protected Channels channels = new Channels();
+    private boolean isSet;
 
     /** Sets a midi song by its pathname
      * @param fileName
+     * @throws IOException 
+     * @throws InvalidMidiDataException 
      */
-    public void setSongFile(String fileName) {
+    public void setFilePath(String fileName) throws InvalidMidiDataException, IOException {
         setSong(new File(fileName));
 
     }
 
     /** Sets a midi song using a File
      * @param song
+     * @throws IOException 
+     * @throws InvalidMidiDataException 
      */
-    public void setSong(File song) {
+    protected void setSong(File song) throws InvalidMidiDataException, IOException {
         this.song = song;
         channels.clear();
         scanSong();
@@ -40,29 +45,35 @@ public class Song {
     /** Returns the pathname of a midi song
      * @return
      */
-    public String getSongFile() {
+    public String getFilePath() {
         return song.getAbsolutePath();
     }
 
     /** Returns the file object of a midi song
      * @return
      */
-    public File getSong() {
+    protected File getSong() {
         return song;
     }
     
     /** Returns the Channels used in the midi song
      * @return
      */
-    protected Channels getChannels() {
+    public Channels getChannels() {
         return channels;
+    }
+    
+    public void dumpChannels() {
+      channels.dump();
     }
 
     /**
      * Scans the song to determine the instrument used on each of the 16 channels and the highest and lowest note played on each channel. 
+     * @throws IOException 
+     * @throws InvalidMidiDataException 
      */
-    protected void scanSong() {
-        try {
+    protected void scanSong() throws InvalidMidiDataException, IOException {
+            setSet(false);
             Sequence seq = MidiSystem.getSequence(song);
             Track[] tracks = seq.getTracks();
             for (Track track : tracks) {
@@ -89,14 +100,16 @@ public class Song {
                     }
                 }
             }
-        }
-        catch (InvalidMidiDataException e) {
-            e.printStackTrace();
-        }
-        catch (IOException e) {
-            e.printStackTrace();
-        }
+            setSet(true);
 
+    }
+
+    public boolean isSet() {
+      return isSet;
+    }
+
+    private void setSet(boolean isSet) {
+      this.isSet = isSet;
     }
 
 }

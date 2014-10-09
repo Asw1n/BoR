@@ -6,15 +6,22 @@ import javax.sound.midi.MidiMessage;
 import javax.sound.midi.Receiver;
 import javax.sound.midi.ShortMessage;
 
+import lejos.utility.EndianTools;
+
 /** The conductor receives midi events from a sequencer and passes these on to the appropriate bricks.
  * @author Aswin
  *
  */
 public class Conductor implements Receiver, MetaEventListener {
     private Channels channels;
+    private BoRController boRController;
 
     public void setSong(Song song) {
         channels = song.getChannels();
+    }
+    
+    public Conductor (BoRController controller) {
+      boRController=controller;
     }
 
     /* 
@@ -22,22 +29,30 @@ public class Conductor implements Receiver, MetaEventListener {
      */
     @Override
     public void meta(MetaMessage metaMessage) {
-        if (metaMessage.getMessage()[1] == 81) {
-            // calculate tempo from meta message
-            int tempo = 0;
-            for (int p = 2; p >= 0; p--) {
-                tempo += ((int) (metaMessage.getMessage()[5 - p] & 0xFF)) * Math.pow(255, p);
-            }
-            tempo = Math.round(4 * tempo / 1000f);
-            System.out.println("Set tempo: " + tempo);
-            
-            // Send tempo to all musicians
-            for (int channel = 0; channel < Channels.CHANNELCOUNT; channel++) {
-                for (Brick brick : channels.getBricks(channel)) {
-                    brick.setTempo(tempo);
-                }
-            }
+      switch(metaMessage.getMessage()[1]) {
+      case 81: 
+        // calculate tempo from meta message
+        int tempo = 0;
+        for (int p = 2; p >= 0; p--) {
+            tempo += ((int) (metaMessage.getMessage()[5 - p] & 0xFF)) * Math.pow(255, p);
         }
+        byte[] b=metaMessage.getMessage();
+        tempo =  (((b[3] & 0xFF) << 16)  | ((b[ 4] & 0xFF) << 8) | (b[5] & 0xFF))/1000;
+        System.out.println("Set tempo: " + tempo);
+        
+        // Send tempo to all musicians
+            for (Brick brick : channels.getBricks()) {
+                brick.setTempo(tempo);
+            }
+        
+      break;
+      
+      case 47:
+        // TODO: What happens if a tracks ends before the others?
+        boRController.stop();
+        break;
+      }
+
     }
 
     @Override
@@ -50,7 +65,7 @@ public class Conductor implements Receiver, MetaEventListener {
             ShortMessage message = (ShortMessage) arg0;
             int channel = message.getChannel();
             int command = message.getCommand();
-            if (command == ShortMessage.NOTE_ON || command == ShortMessage.NOTE_OFF) {
+            if (command == ShortMessage.NOTE_ON /* || command == ShortMessage.NOTE_OFF */) {
                 for (Brick brick : channels.getBricks(channel)) {
                     brick.sendEvent(message);
                 }

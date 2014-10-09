@@ -40,7 +40,7 @@ public class StartBoR {
 		System.out.println("Starting RMI registry using port 1098");
 		try {
 			// Musician obj = new BaseMusician();
-			final Musician obj = new Guitarist();
+			final Musician obj = new GuitarPlayer();
 			final Musician stub = (Musician) UnicastRemoteObject.exportObject(
 					obj, 0);
 

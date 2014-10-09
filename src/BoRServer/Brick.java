@@ -31,11 +31,7 @@ public class Brick extends lejos.hardware.BrickInfo  {
   static public boolean bufferedMode=true;
   
   
-  public boolean equals(Brick brick) {
-      if (brick.getName() == getName()) return true;
-      return false;
-  }
-  
+ 
   
   public static boolean isBufferedMode() {
     return bufferedMode;
@@ -90,8 +86,7 @@ public class Brick extends lejos.hardware.BrickInfo  {
         }
       }
       catch (Exception e) {
-         System.err.println("Client exception: " + e.toString());
-        e.printStackTrace();
+         System.err.println("Connection refused. Check if musician is running on the brick.");
         hub = null;
       }
     }
@@ -103,12 +98,11 @@ public class Brick extends lejos.hardware.BrickInfo  {
    * disconnect from the remote brick
    */
   public void disconnect() {
-    hub = null;
     if (buffer != null) {
       buffer.halt();
       buffer = null;
     }
-
+    hub = null;
   }
 
   private void noteOff(int tone) {
@@ -187,14 +181,15 @@ public class Brick extends lejos.hardware.BrickInfo  {
 
     public void run() {
       while (!pleaseStop) {
+        //System.out.print(".");
         if (event == null) {
-          //Thread.yield();
+          Thread.yield();
         }
         else {
           ShortMessage event2=event;
           event = null;
           processEvent(event2);
-          //Thread.yield();
+          Thread.yield();
         }
       }
     }

@@ -38,7 +38,7 @@ public class Guitarist extends BaseMusician {
 	}
 
 	@Override
-	protected void beatPulse() {
+	protected void beatPulse(int BeatNo) {
 	}
 
 	private void pick() {

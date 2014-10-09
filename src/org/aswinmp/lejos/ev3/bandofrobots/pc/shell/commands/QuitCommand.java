@@ -1,6 +1,6 @@
 package org.aswinmp.lejos.ev3.bandofrobots.pc.shell.commands;
 
-import PC.BoRController;
+import BoRServer.BoRController;
 
 @ShellCommand(label = "quit", parameters = "", description = "quits the shell")
 public class QuitCommand {

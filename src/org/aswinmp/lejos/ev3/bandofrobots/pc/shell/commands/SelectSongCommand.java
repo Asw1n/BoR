@@ -5,8 +5,7 @@ import java.io.IOException;
 
 import javax.sound.midi.InvalidMidiDataException;
 
-import PC.BoRController;
-import PC.Song;
+import BoRServer.BoRController;
 
 @ShellCommand(label = "song", parameters = "path_to_MIDI_file", description = "selects a song serialized in a MIDI file")
 public class SelectSongCommand {
@@ -19,11 +18,9 @@ public class SelectSongCommand {
 
 	@ShellExecute
 	public void selectSong(final String filePath) {
-		final Song song = new Song();
 		try {
-			song.setSong(new File(filePath));
-			boRController.setSong(song);
-			System.out.println("Set song to " + song.getFileName());
+			boRController.getSong().setFilePath(filePath);
+			System.out.println("Set song to " + boRController.getSong().getFilePath());
 		} catch (final InvalidMidiDataException | IOException exc) {
 			System.err.println("Could not set song: " + exc);
 		}

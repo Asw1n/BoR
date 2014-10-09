@@ -9,11 +9,11 @@ import java.util.List;
  *
  */
 public class Channels {
-    static final int CHANNELCOUNT=16;
+    public static final int CHANNELCOUNT=16;
     private List<ChannelInfo> channels ;
     
     public Channels() {
-        channels = new ArrayList<ChannelInfo>(16);
+        channels = new ArrayList<ChannelInfo>(CHANNELCOUNT);
         for (int channelNo=0; channelNo<CHANNELCOUNT;channelNo++) {
            channels.add(channelNo, new ChannelInfo());
         }
@@ -31,12 +31,22 @@ public class Channels {
      * @param instrument
      * instrument, standard General MIDI Level 1 instruments (0 = undefined)
      */
-    public void setIntrument(int channelNo, int instrument) {
+    public void setIntrument(int channelNo, Integer instrument) {
         ChannelInfo channel = channels.get(channelNo);
-        channel.instrument=instrument;
+        if (!channel.instruments.contains(instrument)) {
+          channel.instruments.add(instrument);
+        }
         channel.highestNote=0;
         channel.lowestNote=127;
     }
+    
+    public void setBrick(Brick brick, Integer channelNo) {
+      ChannelInfo channel = channels.get(channelNo);
+      if (!channel.bricks.contains(brick)) {
+        channel.bricks.add(brick);
+      }
+    }
+    
     
   
     
@@ -55,14 +65,11 @@ public class Channels {
      * @param channel
      * @return
      */
-    public int getInstrument(int channel) {
-       return channels.get(channel).instrument; 
+    public List<Integer> getInstruments(int channel) {
+       return channels.get(channel).instruments; 
     }
     
-    public String getInstrumentName(int channel) {
-        if (getInstrument(channel)==0) return "";
-        else return Instrument.values()[getInstrument(channel)].toString();
-    }
+ 
         
 
     /** returns the highest note for this channel/instrument
@@ -89,6 +96,21 @@ public class Channels {
         return channels.get(channelNo).bricks;
     }
     
+    /** Returns a list of bricks assigned to any of the channels
+     * @param channelNo
+     * @return
+     */
+    public List<Brick> getBricks() {
+      List<Brick> bricks = new ArrayList<Brick>();
+      for (int channel = 0; channel < Channels.CHANNELCOUNT; channel++) {
+        for (Brick brick : getBricks(channel)) {
+          if (! bricks.contains(brick))
+            bricks.add(brick);
+        }
+      }
+      return bricks;
+    }
+    
     public String getBrickNames(int channelNo) {
         String names= "";
         List<Brick> bricks = getBricks(channelNo);
@@ -107,7 +129,7 @@ public class Channels {
      * @return
      */
     public boolean hasInstrument(int channelNo) {
-        if (channels.get(channelNo).instrument==0) return false;
+        if (channels.get(channelNo).instruments.isEmpty()) return false;
         return true;
     }
 
@@ -119,6 +141,20 @@ public class Channels {
         if (channels.get(channelNo).bricks.size()==0) return false;
         return true;
     }
+    
+    public void dump() {
+      for (int channelNo=0; channelNo<CHANNELCOUNT;channelNo++) {
+        dump(channelNo);
+     }
+    }
+    
+    public void dump(int channelNo) {
+      if (hasInstrument(channelNo)) {
+        System.out.println("Channel: " + channelNo); 
+      channels.get(channelNo).dump();
+      System.out.println(); 
+       }
+    }
 
     
    
@@ -127,13 +163,30 @@ public class Channels {
      *
      */
     private class ChannelInfo {
-        private int instrument= 0;
+      private List<Integer> instruments ;
         private int highestNote=0;
         private int lowestNote=127;
         private List<Brick> bricks ;
         
         private ChannelInfo() {
             bricks = new ArrayList<Brick>();
+            instruments = new ArrayList<Integer>();
+        }
+        
+        public void dump() {
+          System.out.println("  Instruments: ");
+          for (Integer instrument : instruments) {
+            System.out.println("    " + instrument + " " +  Instrument.values()[instrument].toString());
+          }
+          System.out.println("  Lowest note: "+ lowestNote);
+          System.out.println("  Highest note: "+ highestNote);
+          System.out.println("  Bricks assigned: ");
+          for (Brick brick : bricks) {
+            System.out.println(String.format("    %s (%s)", brick.getName(),
+                brick.getIPAddress()));
+          }
+          
+          
         }
     }
 

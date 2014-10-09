@@ -10,7 +10,7 @@ import javax.sound.midi.MidiUnavailableException;
 
 import org.aswinmp.lejos.ev3.bandofrobots.pc.shell.commands.AssignBrickCommand;
 import org.aswinmp.lejos.ev3.bandofrobots.pc.shell.commands.DumpBricksCommand;
-import org.aswinmp.lejos.ev3.bandofrobots.pc.shell.commands.DumpInstrumentsCommand;
+import org.aswinmp.lejos.ev3.bandofrobots.pc.shell.commands.DumpChannelsCommand;
 import org.aswinmp.lejos.ev3.bandofrobots.pc.shell.commands.PlayCommand;
 import org.aswinmp.lejos.ev3.bandofrobots.pc.shell.commands.QuitCommand;
 import org.aswinmp.lejos.ev3.bandofrobots.pc.shell.commands.SelectSongCommand;
@@ -18,7 +18,7 @@ import org.aswinmp.lejos.ev3.bandofrobots.pc.shell.commands.ShellCommand;
 import org.aswinmp.lejos.ev3.bandofrobots.pc.shell.commands.ShellExecute;
 import org.aswinmp.lejos.ev3.bandofrobots.pc.shell.commands.StopCommand;
 
-import PC.BoRController;
+import BoRServer.BoRController;
 
 /**
  * An input process for the interactive BoR shell.
@@ -107,12 +107,12 @@ public class CommandProcessor {
 		commandMap.put(
 				selectSongCommand.getClass().getAnnotation(ShellCommand.class)
 						.label(), selectSongCommand);
-		final DumpInstrumentsCommand dumpInstrumentsCommand = new DumpInstrumentsCommand(
+		final DumpChannelsCommand dumpChannelsCommand = new DumpChannelsCommand(
 				boRController);
 		commandMap.put(
-				dumpInstrumentsCommand.getClass()
+				dumpChannelsCommand.getClass()
 						.getAnnotation(ShellCommand.class).label(),
-				dumpInstrumentsCommand);
+				dumpChannelsCommand);
 		final PlayCommand playCommand = new PlayCommand(boRController);
 		commandMap.put(playCommand.getClass().getAnnotation(ShellCommand.class)
 				.label(), playCommand);

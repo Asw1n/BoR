@@ -1,6 +1,6 @@
 package org.aswinmp.lejos.ev3.bandofrobots.pc.shell.commands;
 
-import PC.BoRController;
+import BoRServer.BoRController;
 
 @ShellCommand(label = "stop", parameters = "", description = "stops the song that is played currently")
 public class StopCommand {
