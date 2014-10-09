@@ -108,7 +108,7 @@ public class Brick extends lejos.hardware.BrickInfo  {
   private void noteOff(int tone) {
     if (hub != null) {
       try {
-        System.out.println(this.toString() + " Tone off: " + tone);
+//        System.out.println(this.toString() + " Tone off: " + tone);
         hub.noteOff(tone);
       }
       catch (RemoteException e) {
@@ -116,12 +116,12 @@ public class Brick extends lejos.hardware.BrickInfo  {
       }
     }
   }
-
-  private void noteOn(int tone) {
+  
+  private void voiceOff(int tone) {
     if (hub != null) {
       try {
-        System.out.println(this.toString() + " Tone on: " + tone);
-        hub.noteOn(tone);
+//        System.out.println(this.toString() + " Tone off: " + tone);
+        hub.voiceOff(tone);
       }
       catch (RemoteException e) {
         e.printStackTrace();
@@ -129,26 +129,64 @@ public class Brick extends lejos.hardware.BrickInfo  {
     }
   }
 
-  /** Sends a midi event to the brick.
-   * @param event
-   */
-  public void sendEvent(ShortMessage event) {
-    if (buffer != null) {
-      buffer.addEvent(event);
+  private void noteOn(int tone, int intensity) {
+    if (hub != null) {
+      try {
+//        System.out.print(this.toString());
+//        System.out.println(String.format("Tone on: %d, %d ", tone, intensity));
+        hub.noteOn(tone, intensity);
+      }
+      catch (RemoteException e) {
+        e.printStackTrace();
+      }
     }
-    else {
-      processEvent(event);
+  }
+
+  private void voiceOn(int tone, int intensity) {
+    if (hub != null) {
+      try {
+//        System.out.print(this.toString());
+//        System.out.println(String.format("Tone on: %d, %d ", tone, intensity));
+        hub.voiceOn(tone, intensity);
+      }
+      catch (RemoteException e) {
+        e.printStackTrace();
+      }
     }
   }
   
+  /** Sends a midi event to the brick.
+   * @param event
+   */
+  public void sendInstrumentEvent(ShortMessage event) {
+    if (buffer != null) {
+      buffer.addInstrumentEvent(event);
+    }
+    else {
+      processInstrumentEvent(event);
+    }
+  }
   
-  private void processEvent(ShortMessage event) {
+  /** Sends a midi event to the brick.
+   * @param event
+   */
+  public void sendVoiceEvent(ShortMessage event) {
+    if (buffer != null) {
+      buffer.addVoiceEvent(event);
+    }
+    else {
+      processVoiceEvent(event);
+    }
+  } 
+  
+  
+  private void processInstrumentEvent(ShortMessage event) {
     switch (event.getCommand()) {
       case ShortMessage.NOTE_ON: {
         if (event.getData2()==0)
           noteOff(event.getData1());
         else
-          noteOn(event.getData1());
+          noteOn(event.getData1(), event.getData2());
         break;
       }
       case ShortMessage.NOTE_OFF: {
@@ -158,6 +196,24 @@ public class Brick extends lejos.hardware.BrickInfo  {
       default:
     }
   }
+  
+  private void processVoiceEvent(ShortMessage event) {
+    switch (event.getCommand()) {
+      case ShortMessage.NOTE_ON: {
+        if (event.getData2()==0)
+         voiceOff(event.getData1());
+        else
+          voiceOn(event.getData1(), event.getData2());
+        break;
+      }
+      case ShortMessage.NOTE_OFF: {
+          voiceOff(event.getData1());
+      }
+        break;
+      default:
+    }
+  }
+  
 
   /**
    * A buffer for sending Midi events to the remote brick
@@ -165,31 +221,41 @@ public class Brick extends lejos.hardware.BrickInfo  {
    *
    */
   private class Buffer extends Thread {
-    private ShortMessage event      = null;
+    private ShortMessage instrumentEvent      = null;
+    private ShortMessage voiceEvent      = null;
     private boolean      pleaseStop = false;
 
     public void halt() {
       pleaseStop = true;
     }
 
-    public void addEvent(ShortMessage event) {
-      if (this.event != null) {
-        System.out.println("Midi event discarded");
-      }
-      this.event = event;
+    public void addInstrumentEvent(ShortMessage event) {
+      this.instrumentEvent = event;
+    }
+
+    public void addVoiceEvent(ShortMessage event) {
+      this.voiceEvent = event;
     }
 
     public void run() {
       while (!pleaseStop) {
         //System.out.print(".");
-        if (event == null) {
+        if (instrumentEvent == null && voiceEvent == null) {
           Thread.yield();
         }
         else {
-          ShortMessage event2=event;
-          event = null;
-          processEvent(event2);
-          Thread.yield();
+          if (voiceEvent != null) {
+            ShortMessage event2=voiceEvent;
+            voiceEvent = null;
+            processVoiceEvent(event2);
+            
+          }
+          else {
+            ShortMessage event2=instrumentEvent;
+            instrumentEvent = null;
+            processInstrumentEvent(event2);
+            Thread.yield();
+          }
         }
       }
     }

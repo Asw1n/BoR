@@ -30,9 +30,11 @@ public interface Musician extends Remote {
   /** Indicates the start of a tone
    * @param tone
    * The tone expressed in ?
+   * @param intensity
+   * The intensity of the tone
    * @throws RemoteException
    */
-  public void noteOn(int tone) throws RemoteException;
+  public void noteOn(int tone, int intensity) throws RemoteException;
   
   /** Indicates the end of a tone
    * @param tone
@@ -40,6 +42,24 @@ public interface Musician extends Remote {
    * @throws RemoteException
    */
   public void noteOff(int tone) throws RemoteException;
+  
+  /** Indicates the start of a voice
+   * @param tone
+   * The tone expressed in ?
+   * @param intensity
+   * The intensity of the tone
+   * @throws RemoteException
+   */
+  public void voiceOn(int tone, int intensity) throws RemoteException;
+  
+  /** Indicates the end of a voice
+   * @param tone
+   * The tone expressed in ?
+   * @throws RemoteException
+   */
+  public void voiceOff(int tone) throws RemoteException;
+  
+  
 
   /** Communicates the dynamic range of the instrument to the musician
    * @param lowestNote

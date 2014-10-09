@@ -91,12 +91,12 @@ public class BoRController {
     
     private void connect() {
         System.out.println("Connecting to bricks.");
-        for (Brick brick : song.getChannels().getBricks()) {
+        for (Brick brick : song.getChannels().getAllBricks()) {
           brick.connect();
         }
         //TODO: aggregate dynamic range per brick (instead of per channel)
         for (int channel = 0; channel < Channels.CHANNELCOUNT; channel++) {
-            for (Brick brick : song.getChannels().getBricks(channel)) {
+            for (Brick brick : song.getChannels().getInstrumentBricks(channel)) {
                 brick.sendDynamicRange(song.getChannels().getLowestNote(channel), song.getChannels().getHighestNote(channel));
             }
         }
@@ -104,7 +104,7 @@ public class BoRController {
     
     private void disconnect() {
         System.out.println("Disconnecting from bricks.");
-            for (Brick brick : song.getChannels().getBricks()) {
+            for (Brick brick : song.getChannels().getAllBricks()) {
                 brick.disconnect();
             }
     }
@@ -116,7 +116,7 @@ public class BoRController {
         connect();
         System.out.println("Start song.");
         sequencer.setTickPosition(0);
-        for (Brick brick : song.getChannels().getBricks()) {
+        for (Brick brick : song.getChannels().getAllBricks()) {
           brick.sendStart();
         }
         sequencer.start();
@@ -125,7 +125,7 @@ public class BoRController {
     public void stop() {
         System.out.println("Stop song.");
         sequencer.stop();
-        for (Brick brick : song.getChannels().getBricks()) {
+        for (Brick brick : song.getChannels().getAllBricks()) {
           brick.sendStop();
         }
         disconnect();

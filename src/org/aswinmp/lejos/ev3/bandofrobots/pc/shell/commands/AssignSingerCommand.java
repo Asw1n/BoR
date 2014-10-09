@@ -10,17 +10,17 @@ import org.aswinmp.lejos.ev3.bandofrobots.pc.borserver.Song;
 import lejos.hardware.BrickFinder;
 import lejos.hardware.BrickInfo;
 
-@ShellCommand(label = "assign", parameters = "brick_name channel", description = "assigns a connected brick to channel of the selected song")
-public class AssignCommand {
+@ShellCommand(label = "singer", parameters = "brick_name channel", description = "assigns a brick to sing a channel of the selected song")
+public class AssignSingerCommand {
 
   private final BoRController boRController;
 
-  public AssignCommand(final BoRController boRController) {
+  public AssignSingerCommand(final BoRController boRController) {
     this.boRController = boRController;
   }
 
   @ShellExecute
-  public void assignBrick(final String brickName,
+  public void assignVoice(final String brickName,
       final String instrumentChannelText) {
     final Song song = boRController.getSong();
     if (!song.isSet()) {
@@ -42,7 +42,7 @@ public class AssignCommand {
               System.out.println(String.format(
                   "No brick connected matching '%s'", brickName));
             } else {
-              channels.setBrick(new Brick(brickInfo), channelNo);
+              channels.setVoiceBrick(new Brick(brickInfo), channelNo);
               System.out.println(String.format(
                   "Brick '%s' assigned to channel %d", brickName, channelNo));
             }

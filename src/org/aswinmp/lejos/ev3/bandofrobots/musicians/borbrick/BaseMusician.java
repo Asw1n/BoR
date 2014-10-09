@@ -30,8 +30,19 @@ public class BaseMusician implements Musician {
     private boolean generateBeatPulse=true;
     Runner runner;
     private int beatPulseDevider=1;
+    protected boolean verbose=false;
     
     
+
+    
+    public boolean isVerbose() {
+      return verbose;
+    }
+
+    public void setVerbose(boolean verbose) {
+      this.verbose = verbose;
+    }
+
     public static void main(final String[] args) throws RemoteException {
       Registry registry;
       final List<String> ips = getIPAddresses();
@@ -101,7 +112,7 @@ public class BaseMusician implements Musician {
  
 
   public BaseMusician() {
-  System.out.println("Musician "+this.getClass().getName()+ " loaded.");
+  if (verbose)  System.out.println("Musician "+this.getClass().getName()+ " loaded.");
   runner = new Runner();
   runner.setDaemon(true);
   runner.start();
@@ -109,36 +120,46 @@ public class BaseMusician implements Musician {
 
   @Override
   public void start() {
-    System.out.println("Start song");
+    if (verbose) System.out.println("Start song");
     nextBeat=System.currentTimeMillis();
     running=true;
   }
 
   @Override
   public void stop() {
-    System.out.println("End song");
+    if (verbose) System.out.println("End song");
     running=false;
   }
 
   @Override
   public void setTempo(int tempo) {
-    System.out.println("Set tempo: " + tempo);
+    if (verbose) System.out.println("Set tempo: " + tempo);
     this.tempo=tempo;
   }
 
   @Override
-  public void noteOn(int tone) {
-    System.out.println("Tone on: " + tone);
+  public void noteOn(int tone, int intensity) {
+    if (verbose) System.out.println(String.format("Tone on: %d, %d ", tone, intensity));
   }
 
   @Override
   public void noteOff(int tone) {
-    System.out.println("Tone off: " + tone);
+    if (verbose) System.out.println("Tone off: " + tone);
+  }
+  
+  @Override
+  public void voiceOn(int tone, int intensity) {
+    if (verbose) System.out.println(String.format("Voice on: %d, %d ", tone, intensity));
+  }
+
+  @Override
+  public void voiceOff(int tone) {
+    if (verbose) System.out.println("Voice off: " + tone);
   }
 
   @Override
   public void setDynamicRange(int lowestNote, int highestNote) throws RemoteException {
-    System.out.println("Dynamic range: " + lowestNote + " to " + highestNote );
+    if (verbose) System.out.println("Dynamic range: " + lowestNote + " to " + highestNote );
   }
   
   public void generateBeatPulse(boolean v) {
@@ -154,7 +175,7 @@ public class BaseMusician implements Musician {
   }
   
   protected void beatPulse(int beatNo) {
-      System.out.println("Beat" );
+    if (verbose) System.out.println("Beat" );
   }
   
   private class Runner extends Thread {

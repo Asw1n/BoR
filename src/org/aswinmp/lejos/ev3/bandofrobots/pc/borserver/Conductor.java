@@ -39,8 +39,8 @@ public class Conductor implements Receiver, MetaEventListener {
         tempo =  (((b[3] & 0xFF) << 16)  | ((b[ 4] & 0xFF) << 8) | (b[5] & 0xFF))/1000;
         System.out.println("Set tempo: " + tempo);
         
-        // Send tempo to all musicians
-            for (Brick brick : channels.getBricks()) {
+        // Send tempo to all musicians and singers
+            for (Brick brick : channels.getAllBricks()) {
                 brick.setTempo(tempo);
             }
         
@@ -65,10 +65,15 @@ public class Conductor implements Receiver, MetaEventListener {
             int channel = message.getChannel();
             int command = message.getCommand();
             if (command == ShortMessage.NOTE_ON /* || command == ShortMessage.NOTE_OFF */) {
-                for (Brick brick : channels.getBricks(channel)) {
-                    brick.sendEvent(message);
+                for (Brick brick : channels.getInstrumentBricks(channel)) {
+                    brick.sendInstrumentEvent(message);
                 }
             }
+            if (command == ShortMessage.NOTE_ON || command == ShortMessage.NOTE_OFF ) {
+              for (Brick brick : channels.getVoiceBricks(channel)) {
+                  brick.sendVoiceEvent(message);
+              }
+          }
         }
     }
 

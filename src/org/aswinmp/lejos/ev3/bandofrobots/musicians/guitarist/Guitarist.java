@@ -19,7 +19,7 @@ public class Guitarist extends BaseMusician {
 	}
 
 	@Override
-	public void noteOn(final int tone) {
+	public void noteOn(final int tone, final int intensity) {
 		moveRightHand(computeRightHandPosition(tone));
 		pick();
 	}

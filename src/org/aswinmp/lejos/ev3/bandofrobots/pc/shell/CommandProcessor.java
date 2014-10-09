@@ -9,7 +9,8 @@ import javax.sound.midi.MidiSystem;
 import javax.sound.midi.MidiUnavailableException;
 
 import org.aswinmp.lejos.ev3.bandofrobots.pc.borserver.BoRController;
-import org.aswinmp.lejos.ev3.bandofrobots.pc.shell.commands.AssignCommand;
+import org.aswinmp.lejos.ev3.bandofrobots.pc.shell.commands.AssignMusicianCommand;
+import org.aswinmp.lejos.ev3.bandofrobots.pc.shell.commands.AssignSingerCommand;
 import org.aswinmp.lejos.ev3.bandofrobots.pc.shell.commands.DumpBricksCommand;
 import org.aswinmp.lejos.ev3.bandofrobots.pc.shell.commands.DumpChannelsCommand;
 import org.aswinmp.lejos.ev3.bandofrobots.pc.shell.commands.PlayCommand;
@@ -122,11 +123,16 @@ public class CommandProcessor {
 		commandMap.put(
 				dumpBricksCommand.getClass().getAnnotation(ShellCommand.class)
 						.label(), dumpBricksCommand);
-		final AssignCommand assignBrickCommand = new AssignCommand(
+		final AssignMusicianCommand assignMusicianCommand = new AssignMusicianCommand(
 				boRController);
 		commandMap.put(
-				assignBrickCommand.getClass().getAnnotation(ShellCommand.class)
-						.label(), assignBrickCommand);
+				assignMusicianCommand.getClass().getAnnotation(ShellCommand.class)
+						.label(), assignMusicianCommand);
+    final AssignSingerCommand assignSingerCommand = new AssignSingerCommand(
+        boRController);
+    commandMap.put(
+        assignSingerCommand.getClass().getAnnotation(ShellCommand.class)
+            .label(), assignSingerCommand);
 	}
 
 }
