@@ -42,7 +42,7 @@ public class AssignSingerCommand {
               System.out.println(String.format(
                   "No brick connected matching '%s'", brickName));
             } else {
-              channels.setVoiceBrick(new Brick(brickInfo), channelNo);
+              channels.setVoiceBrick(Brick.get(brickInfo), channelNo);
               System.out.println(String.format(
                   "Brick '%s' assigned to channel %d", brickName, channelNo));
             }

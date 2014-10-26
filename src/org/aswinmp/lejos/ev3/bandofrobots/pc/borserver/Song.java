@@ -19,7 +19,13 @@ import javax.sound.midi.Track;
 public class Song {
     protected File     song;
     protected Channels channels = new Channels();
-    private boolean isSet;
+    protected boolean isSet;
+    protected int metronomeChannel =0;
+    protected boolean metronomeIsSet=false;
+
+    public boolean isMetronomeIsSet() {
+      return metronomeIsSet;
+    }
 
     /** Sets a midi song by its pathname
      * @param fileName
@@ -87,7 +93,7 @@ public class Song {
                         //int data2 = message.getData2();
                         switch (command) {
                             case ShortMessage.PROGRAM_CHANGE: {
-                                channels.setIntrument(channel, data1);
+                                channels.setIntrument(channel, data1+1);
                                 break;
                             }
                             case ShortMessage.NOTE_ON: {
@@ -110,6 +116,11 @@ public class Song {
 
     private void setSet(boolean isSet) {
       this.isSet = isSet;
+    }
+
+    public void setMetronomeChannel(int channelNo) {
+      metronomeIsSet=true;
+      metronomeChannel=channelNo;
     }
 
 }

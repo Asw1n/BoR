@@ -3,14 +3,14 @@ package org.aswinmp.lejos.ev3.bandofrobots.musicians.borbrick;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
 
-/** Interface that defines the remote EV3 Hub
+/** Interface that defines the BoR musicians
  * @author Aswin
  *
  */
 public interface Musician extends Remote {
   static final long serialVersionUID = 43L;
 
-  /** The start() method indicates that a song starts
+  /** The start() method is called by the BoR server to indicate the start of a song
    * @throws RemoteException
    */
   public void start() throws RemoteException;
@@ -68,5 +68,10 @@ public interface Musician extends Remote {
    * The lowest note found in the song
    */
   public void setDynamicRange(int lowestNote, int highestNote) throws RemoteException;
+  
+  /** Indicates the start of a metronome tick
+   * @throws RemoteException
+   */
+  public void Beat() throws RemoteException;
 
 }

@@ -4,8 +4,12 @@ import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.sound.midi.ShortMessage;
+
+import lejos.hardware.BrickInfo;
 
 import org.aswinmp.lejos.ev3.bandofrobots.musicians.borbrick.Musician;
 
@@ -29,6 +33,7 @@ public class Brick extends lejos.hardware.BrickInfo  {
   private Musician hub;
   private Buffer   buffer;
   static public boolean bufferedMode=true;
+  static private List<Brick> bricks = new ArrayList<Brick>();
   
   
  
@@ -44,13 +49,28 @@ public class Brick extends lejos.hardware.BrickInfo  {
   public static void setBufferedMode(boolean bufferedMode) {
     Brick.bufferedMode = bufferedMode;
   }
+  
+  public static Brick get(lejos.hardware.BrickInfo info) {
+    for ( Brick existing : bricks) {
+      if (existing.isEqual(info)) {
+        return existing;
+      }
+    }
+    Brick newBrick=new Brick(info);
+    bricks.add(newBrick);
+    return newBrick;
+    }
+    
+  private boolean isEqual(BrickInfo info) {
+    if (this.getIPAddress().equals(info.getIPAddress())) return true;
+    return false;
+  }
 
-
-  public Brick(String name, String ipAddress, String type) {
+  private Brick(String name, String ipAddress, String type) {
     super(name, ipAddress, type);
   }
 
-  public Brick(lejos.hardware.BrickInfo info) {
+  private Brick(lejos.hardware.BrickInfo info) {
     this(info.getName(), info.getIPAddress(), info.getType());
   }
 
@@ -301,6 +321,15 @@ public void sendStop() {
       catch (RemoteException e) {
         e.printStackTrace();
       }
+}
+
+public void sendBeat(ShortMessage message) {
+  try {
+    hub.Beat();
+  } catch (RemoteException e) {
+    e.printStackTrace();
+  }
+  
 }
 
 }

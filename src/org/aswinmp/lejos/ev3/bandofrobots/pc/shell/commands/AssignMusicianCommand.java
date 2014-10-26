@@ -42,7 +42,7 @@ public class AssignMusicianCommand {
               System.out.println(String.format(
                   "No brick connected matching '%s'", brickName));
             } else {
-              channels.setInstrumentBrick(new Brick(brickInfo), channelNo);
+              channels.setInstrumentBrick(Brick.get(brickInfo), channelNo);
               System.out.println(String.format(
                   "Brick '%s' assigned to channel %d", brickName, channelNo));
             }

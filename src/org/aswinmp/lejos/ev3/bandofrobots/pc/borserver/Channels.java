@@ -11,6 +11,10 @@ import java.util.List;
 public class Channels {
     public static final int CHANNELCOUNT=16;
     private List<ChannelInfo> channels ;
+    protected List<Brick> instrumentBricks = new ArrayList<Brick>();
+    protected List<Brick> voiceBricks = new ArrayList<Brick>();
+    protected List<Brick> allBricks = new ArrayList<Brick>();
+    
     
     public Channels() {
         channels = new ArrayList<ChannelInfo>(CHANNELCOUNT);
@@ -44,13 +48,30 @@ public class Channels {
       ChannelInfo channel = channels.get(channelNo);
       if (!channel.instrumentBricks.contains(brick)) {
         channel.instrumentBricks.add(brick);
+        addInstrumentBrick(brick);
       }
     }
+    
+    private void addInstrumentBrick(Brick brick) {
+      if (!instrumentBricks.contains(brick))
+        instrumentBricks.add(brick);
+      if (!allBricks.contains(brick))
+        allBricks.add(brick);
+    }
+ 
+    private void addvoiceBrick(Brick brick) {
+      if (!voiceBricks.contains(brick))
+        voiceBricks.add(brick);
+      if (!allBricks.contains(brick))
+        allBricks.add(brick);
+    }
+ 
     
     public void setVoiceBrick(Brick brick, int channelNo) {
       ChannelInfo channel = channels.get(channelNo);
       if (!channel.voiceBricks.contains(brick)) {
         channel.voiceBricks.add(brick);
+        addvoiceBrick(brick);
       }
     }
     
@@ -116,46 +137,21 @@ public class Channels {
      * @return
      */
     public List<Brick> getInstrumentBricks() {
-      List<Brick> bricks = new ArrayList<Brick>();
-      for (int channel = 0; channel < Channels.CHANNELCOUNT; channel++) {
-        for (Brick brick : getInstrumentBricks(channel)) {
-          if (! bricks.contains(brick))
-            bricks.add(brick);
-        }
-      }
-      return bricks;
+      return instrumentBricks;
     }
 
     /** Returns a list of bricks assigned to any of the channels for singing
      * @return
      */
     public List<Brick> getVoiceBricks() {
-      List<Brick> bricks = new ArrayList<Brick>();
-      for (int channel = 0; channel < Channels.CHANNELCOUNT; channel++) {
-        for (Brick brick : getVoiceBricks(channel)) {
-          if (! bricks.contains(brick))
-            bricks.add(brick);
-        }
-      }
-      return bricks;
+      return voiceBricks;
     }
 
     /** Returns a list of bricks assigned to any of the channels for singing or playing
      * @return
      */
     public List<Brick> getAllBricks() {
-      List<Brick> bricks = new ArrayList<Brick>();
-      for (int channel = 0; channel < Channels.CHANNELCOUNT; channel++) {
-        for (Brick brick : getInstrumentBricks(channel)) {
-          if (! bricks.contains(brick))
-            bricks.add(brick);
-        }
-        for (Brick brick : getVoiceBricks(channel)) {
-          if (! bricks.contains(brick))
-            bricks.add(brick);
-        }
-      }
-      return bricks;
+      return allBricks;
     }
     
     

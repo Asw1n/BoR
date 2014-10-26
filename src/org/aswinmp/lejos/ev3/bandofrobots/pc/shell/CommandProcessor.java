@@ -16,6 +16,7 @@ import org.aswinmp.lejos.ev3.bandofrobots.pc.shell.commands.DumpChannelsCommand;
 import org.aswinmp.lejos.ev3.bandofrobots.pc.shell.commands.PlayCommand;
 import org.aswinmp.lejos.ev3.bandofrobots.pc.shell.commands.QuitCommand;
 import org.aswinmp.lejos.ev3.bandofrobots.pc.shell.commands.SelectSongCommand;
+import org.aswinmp.lejos.ev3.bandofrobots.pc.shell.commands.SetMetronomeCommand;
 import org.aswinmp.lejos.ev3.bandofrobots.pc.shell.commands.ShellCommand;
 import org.aswinmp.lejos.ev3.bandofrobots.pc.shell.commands.ShellExecute;
 import org.aswinmp.lejos.ev3.bandofrobots.pc.shell.commands.StopCommand;
@@ -133,6 +134,11 @@ public class CommandProcessor {
     commandMap.put(
         assignSingerCommand.getClass().getAnnotation(ShellCommand.class)
             .label(), assignSingerCommand);
+    final SetMetronomeCommand setMetronomeCommand = new SetMetronomeCommand(
+        boRController);
+    commandMap.put(
+        setMetronomeCommand.getClass().getAnnotation(ShellCommand.class)
+            .label(), setMetronomeCommand);
 	}
 
 }

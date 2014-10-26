@@ -1,10 +1,13 @@
-package org.aswinmp.lejos.ev3.bandofrobots.musicians.borbrick;
+package org.aswinmp.lejos.ev3.bandofrobots.musicians.blu3s;
 
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.List;
+
+import org.aswinmp.lejos.ev3.bandofrobots.musicians.borbrick.BaseMusician;
+import org.aswinmp.lejos.ev3.bandofrobots.musicians.borbrick.Musician;
 
 import lejos.hardware.BrickFinder;
 import lejos.hardware.LED;
@@ -18,16 +21,15 @@ import lejos.hardware.sensor.EV3UltrasonicSensor;
 import lejos.robotics.RegulatedMotor;
 import lejos.utility.Delay;
 
-public class GuitarPlayer extends BaseMusician {
-  Limb       rightHand, leftHand, foot, head;
-  boolean    isUp   = true;
-  boolean    isSet  = false;
-  static int DIV    = 2;
-  int countDown=0;
+public class Blu3s extends BaseMusician {
+  Limb                        rightHand, leftHand, foot, head;
+  boolean                     isUp      = true;
+  boolean                     isSet     = false;
+  int                         countDown = 0;
 
-  static LED        led    = LocalEV3.get().getLED();
-  boolean    footup = false;
-  int        pos    = 1;
+  static LED                  led       = LocalEV3.get().getLED();
+  boolean                     footup    = false;
+  int                         pos       = 1;
   private EV3UltrasonicSensor eyes;
 
   public static void main(String[] args) {
@@ -37,61 +39,59 @@ public class GuitarPlayer extends BaseMusician {
     String lastIp = null;
     for (final String ip : ips) {
       lastIp = ip;
-//      System.out.println(ip);
+      // System.out.println(ip);
     }
-//    System.out.println("Setting java.rmi.server.hostname to " + lastIp);
-//    System.setProperty("java.rmi.server.hostname", lastIp);
-//
-//    System.out.println("Starting RMI registry using port 1098");
+    // System.out.println("Setting java.rmi.server.hostname to " + lastIp);
+    // System.setProperty("java.rmi.server.hostname", lastIp);
+    //
+    // System.out.println("Starting RMI registry using port 1098");
     try {
       // Musician obj = new BaseMusician();
-      final Musician obj = new GuitarPlayer();
-      final Musician stub = (Musician) UnicastRemoteObject.exportObject(
-          obj, 0);
+      final Musician obj = new Blu3s();
+      final Musician stub = (Musician) UnicastRemoteObject.exportObject(obj, 0);
 
       // Bind the remote object's stub in the registry
       registry = LocateRegistry.createRegistry(1098);
       registry.bind("Musician", stub);
       final TextLCD lcd = LocalEV3.get().getTextLCD();
       lcd.clear();
-//      lcd.drawString("Musician waiting for conductor to connect", 0, 0);
-//      System.err.println("Musician ready");
+      // lcd.drawString("Musician waiting for conductor to connect", 0, 0);
+      // System.err.println("Musician ready");
       led.setPattern(1);
     } catch (final Exception e) {
-//      System.err.println("Musician exception: " + e.toString());
+      // System.err.println("Musician exception: " + e.toString());
       e.printStackTrace();
-    }   
+    }
   }
-  
 
-  public GuitarPlayer() {
+  public Blu3s() {
     super();
-    rightHand = new Limb(new EV3MediumRegulatedMotor(MotorPort.A), -40);
+    setBeatPulseDevider(2);
+    rightHand = new Limb(new EV3MediumRegulatedMotor(MotorPort.A), -20);
     leftHand = new Limb(new EV3MediumRegulatedMotor(MotorPort.B), -150);
-    foot = new Limb(new EV3MediumRegulatedMotor(MotorPort.C), -30);
+    foot = new Limb(new EV3MediumRegulatedMotor(MotorPort.C), -15);
     head = new Limb(new EV3MediumRegulatedMotor(MotorPort.D), -45);
     head.setLogicRange(0, 127);
     rightHand.setLogicRange(-1, 1);
-    setBeatPulseDevider(DIV);
     LCD.clear();
 
+//    head.calibrate(5, 1, -15, 0.2f);
+//    rightHand.calibrate(5, 1, -5, 0.2f);
+//    leftHand.calibrate(10, -1, 170, 0.2f);
+//    foot.calibrate(7, 1, -60, 0.2f);
 
-    head.calibrate(5, 1, -15, 0.2f);
-    rightHand.calibrate(5, 1, -5, 0.2f);
-    leftHand.calibrate(10, -1, 170, 0.2f);
-    foot.calibrate(7, 1, -60, 0.2f);
+    leftHand.setSpeed(1);
+    rightHand.setSpeed(1);
 
     head.testRange();
     foot.testRange();
     leftHand.testRange();
     rightHand.testRange();
-    
+
     eyes = new EV3UltrasonicSensor(BrickFinder.getDefault().getPort("S2"));
     eyes.disable();
-    
 
   }
-  
 
   @Override
   public void setDynamicRange(int lowestNote, int highestNote)
@@ -101,9 +101,9 @@ public class GuitarPlayer extends BaseMusician {
 
   @Override
   public void noteOn(int tone, int intensity) {
-     super.noteOn(tone, intensity);
+    super.noteOn(tone, intensity);
     if (!isSet) {
-      rightHand.setSpeed(127f/intensity);
+      rightHand.setSpeed(127f / intensity);
       // rightHand.setSpeed(1);
       if (isUp) {
         rightHand.moveToMin();
@@ -116,37 +116,32 @@ public class GuitarPlayer extends BaseMusician {
     leftHand.setSpeed(1);
     leftHand.moveToPosition(tone);
   }
-  
+
   @Override
   public void voiceOn(int tone, int intensity) {
-     super.voiceOn(tone, intensity);
-     head.moveToPosition(intensity);
+    super.voiceOn(tone, intensity);
+    head.moveToPosition(intensity);
 
   }
-  
+
   @Override
   public void voiceOff(int tone) {
-     super.voiceOff(tone);
-     head.moveToMin();
+    super.voiceOff(tone);
+    head.moveToMin();
   }
-  
 
-
-  
-public void start() {
-  super.start();
-  eyes.enable();
-  led.setPattern(3);
-}
-
+  public void start() {
+    super.start();
+    eyes.enable();
+    led.setPattern(3);
+  }
 
   public void stop() {
     super.stop();
     head.setSpeed(0.2f);
-    head.moveToMax();
     led.setPattern(1);
     leftHand.setSpeed(0.2f);
-    leftHand.moveToMax();
+    leftHand.moveToMin();
     rightHand.setSpeed(0.2f);
     rightHand.moveToMin();
     foot.setSpeed(0.1f);
@@ -158,44 +153,33 @@ public void start() {
     head.rest();
     foot.rest();
     eyes.disable();
-    countDown=0;
+    countDown = 0;
   }
 
   @Override
-  protected void beatPulse(int beatNo) {
-    isSet=false;
-    if (countDown< 4 *DIV+1) {
-      if (beatNo * 2 % DIV == 0) {
-        if (beatNo  % DIV == 0) {
-          head.moveToMax();
-        } else {
-          head.moveToMin();
-        }
-      }
-      countDown++;
-    }
-    
-    
-    
+  public void beatPulse(int beatNo, int pulseNo) {
+    super.beatPulse(beatNo, pulseNo);
+
     // The left arm may change direction every DIV * quarter note
     isSet = false;
 
-    // Leds go on on 1 and 3 and off at 2 and 4
-    if (beatNo % DIV == 0) {
-      if (beatNo / DIV % 2 == 0) {
+    // Have some LEDs at the start to synchronize video shots
+    if (countDown < 8) {
+      if (pulseNo % 2 == 0) {
         led.setPattern(2);
       } else {
         led.setPattern(0);
       }
+      countDown++;
     }
 
     // The leg goes up and down every quarter note
-    if (beatNo * 2 % DIV == 0) {
-      if (beatNo  % DIV == 0) {
-        foot.moveToMin();
-      } else {
-        foot.moveToMax();
-      }
+    if (pulseNo % 2 == 0) {
+      foot.setSpeed(1);
+      foot.moveToMin();
+    } else {
+      foot.setSpeed(0.1f);
+      foot.moveToMax();
     }
   }
 
@@ -204,7 +188,7 @@ public void start() {
     int            range;
     private int    min;
     private double tickFactor = 0;
-    private int max;
+    private int    max;
 
     protected Limb(RegulatedMotor motor, int range) {
       this.motor = motor;
@@ -259,18 +243,23 @@ public void start() {
     public void moveToMax() {
       motor.rotateTo(range, true);
     }
-    
+
     public void testRange() {
       moveToMin();
-      while(motor.isMoving());
+      while (motor.isMoving())
+        ;
       moveToMax();
-      while(motor.isMoving());
+      while (motor.isMoving())
+        ;
       moveToMin();
-      while(motor.isMoving());
+      while (motor.isMoving())
+        ;
       moveToMax();
-      while(motor.isMoving());
+      while (motor.isMoving())
+        ;
       moveToMin();
-      while(motor.isMoving());
+      while (motor.isMoving())
+        ;
     }
 
     public void setLogicRange(int min, int max) {
@@ -286,18 +275,18 @@ public void start() {
     private int getLogicPosition() {
       return (int) (min + motor.getTachoCount() / tickFactor);
     }
-    
+
     private float toCircular(float value) {
-      value = (value-min) / (max-min) / 2 -1;  // normalize to -1 to 1 
-      value = (float) Math.toDegrees(Math.acos(1/value) ) ;
+      value = (value - min) / (max - min) / 2 - 1; // normalize to -1 to 1
+      value = (float) Math.toDegrees(Math.acos(1 / value));
       return value;
     }
 
     public void moveToPosition(float value) {
       if (tickFactor != 0)
         motor.rotateTo(toTick(value), true);
-        LCD.drawInt((int) value,8, 0, 0);
-        LCD.drawInt((int) toCircular(value),8, 0, 1);
+      // LCD.drawInt((int) value,8, 0, 0);
+      // LCD.drawInt((int) toCircular(value),8, 0, 1);
     }
 
     public void rest() {
@@ -307,6 +296,5 @@ public void start() {
     }
 
   }
-  
- 
+
 }

@@ -14,9 +14,11 @@ import javax.sound.midi.ShortMessage;
 public class Conductor implements Receiver, MetaEventListener {
     private Channels channels;
     private BoRController boRController;
+    private Song song;
 
     public void setSong(Song song) {
         channels = song.getChannels();
+        this.song=song;
     }
     
     public Conductor (BoRController controller) {
@@ -64,6 +66,12 @@ public class Conductor implements Receiver, MetaEventListener {
             ShortMessage message = (ShortMessage) arg0;
             int channel = message.getChannel();
             int command = message.getCommand();
+            if (song.metronomeIsSet && channel==song.metronomeChannel && command == ShortMessage.NOTE_ON) {
+              for (Brick brick : channels.getAllBricks()) {
+                brick.sendBeat(message);
+            }
+              
+            }
             if (command == ShortMessage.NOTE_ON /* || command == ShortMessage.NOTE_OFF */) {
                 for (Brick brick : channels.getInstrumentBricks(channel)) {
                     brick.sendInstrumentEvent(message);

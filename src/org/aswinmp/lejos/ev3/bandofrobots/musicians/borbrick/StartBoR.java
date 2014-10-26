@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
 
+import org.aswinmp.lejos.ev3.bandofrobots.musicians.blu3s.Blu3s;
 import org.aswinmp.lejos.ev3.bandofrobots.musicians.guitarist.Guitarist;
 
 import lejos.hardware.ev3.LocalEV3;
@@ -40,7 +41,7 @@ public class StartBoR {
 		System.out.println("Starting RMI registry using port 1098");
 		try {
 			// Musician obj = new BaseMusician();
-			final Musician obj = new GuitarPlayer();
+			final Musician obj = new Blu3s();
 			final Musician stub = (Musician) UnicastRemoteObject.exportObject(
 					obj, 0);
 
