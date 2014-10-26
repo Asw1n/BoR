@@ -8,6 +8,10 @@ import lejos.robotics.RegulatedMotor;
 import lejos.utility.Delay;
 import lejos.utility.TextMenu;
 
+/** Utility class to find the maximum range of each limb
+ * @author Aswin Bouwmeester
+ *
+ */
 public class FindRange {
   int[] lowest = new int[4];
   int[] highest = new int[4];

@@ -10,12 +10,12 @@ import java.rmi.RemoteException;
 public interface Musician extends Remote {
   static final long serialVersionUID = 43L;
 
-  /** The start() method is called by the BoR server to indicate the start of a song
+  /** The start() method is called at the start of a song 
    * @throws RemoteException
    */
   public void start() throws RemoteException;
   
-  /** The end() method indicates that a song ends
+  /** The stop method indicates that a song ends
    * @throws RemoteException
    */
   public void stop() throws RemoteException;
@@ -29,7 +29,7 @@ public interface Musician extends Remote {
   
   /** Indicates the start of a tone
    * @param tone
-   * The tone expressed in ?
+   * The tone expressed in see midi spec
    * @param intensity
    * The intensity of the tone
    * @throws RemoteException
@@ -45,7 +45,7 @@ public interface Musician extends Remote {
   
   /** Indicates the start of a voice
    * @param tone
-   * The tone expressed in ?
+   * The tone expressed in see midi spec
    * @param intensity
    * The intensity of the tone
    * @throws RemoteException
@@ -54,7 +54,7 @@ public interface Musician extends Remote {
   
   /** Indicates the end of a voice
    * @param tone
-   * The tone expressed in ?
+   * The tone expressed in see midi spec 
    * @throws RemoteException
    */
   public void voiceOff(int tone) throws RemoteException;
@@ -69,7 +69,7 @@ public interface Musician extends Remote {
    */
   public void setDynamicRange(int lowestNote, int highestNote) throws RemoteException;
   
-  /** Indicates the start of a metronome tick
+  /** Indicates the start of a quarter note. This method is only executed when a metronome channel is set on BoR server.
    * @throws RemoteException
    */
   public void Beat() throws RemoteException;

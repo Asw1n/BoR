@@ -7,6 +7,7 @@ import java.rmi.server.UnicastRemoteObject;
 import java.util.List;
 
 import org.aswinmp.lejos.ev3.bandofrobots.musicians.borbrick.BaseMusician;
+import org.aswinmp.lejos.ev3.bandofrobots.musicians.borbrick.Limb;
 import org.aswinmp.lejos.ev3.bandofrobots.musicians.borbrick.Musician;
 
 import lejos.hardware.BrickFinder;
@@ -96,15 +97,16 @@ public class Blu3s extends BaseMusician {
   @Override
   public void setDynamicRange(int lowestNote, int highestNote)
       throws RemoteException {
+    super.setDynamicRange(lowestNote, highestNote);
     leftHand.setLogicRange(lowestNote, highestNote);
   }
 
   @Override
   public void noteOn(int tone, int intensity) {
     super.noteOn(tone, intensity);
+    // the right hand moves up or down on a note. It changes direction every quarter note.
     if (!isSet) {
       rightHand.setSpeed(127f / intensity);
-      // rightHand.setSpeed(1);
       if (isUp) {
         rightHand.moveToMin();
       } else {
@@ -113,15 +115,16 @@ public class Blu3s extends BaseMusician {
       isUp = !isUp;
       isSet = true;
     }
+    // The left hand moves full speed to the position 
     leftHand.setSpeed(1);
-    leftHand.moveToPosition(tone);
+    leftHand.moveTo(tone);
   }
 
   @Override
   public void voiceOn(int tone, int intensity) {
     super.voiceOn(tone, intensity);
-    head.moveToPosition(intensity);
-
+    // The mouth opens when singing according to intensity of the note.
+    head.moveTo(intensity);
   }
 
   @Override
@@ -130,13 +133,16 @@ public class Blu3s extends BaseMusician {
     head.moveToMin();
   }
 
+  @Override
   public void start() {
     super.start();
     eyes.enable();
     led.setPattern(3);
   }
 
+  @Override
   public void stop() {
+    // Let every limb go to default position and put to rest;
     super.stop();
     head.setSpeed(0.2f);
     led.setPattern(1);
@@ -183,118 +189,5 @@ public class Blu3s extends BaseMusician {
     }
   }
 
-  private class Limb {
-    RegulatedMotor motor;
-    int            range;
-    private int    min;
-    private double tickFactor = 0;
-    private int    max;
-
-    protected Limb(RegulatedMotor motor, int range) {
-      this.motor = motor;
-      this.range = range;
-    }
-
-    public void setSpeed(float speedFactor) {
-      motor.setSpeed((int) (motor.getMaxSpeed() * speedFactor));
-
-    }
-
-    /**
-     * @param stallDetectionSpeed
-     * @param stallDirection
-     * @param stallToRest
-     * @param speedFactor
-     */
-    public void calibrate(int stallDetectionSpeed, int stallDirection,
-        int stallToRest, float speedFactor) {
-      boolean stalled = false;
-      int pos = motor.getTachoCount();
-      int newPos;
-      long start = System.currentTimeMillis();
-      motor.setSpeed(stallDetectionSpeed);
-      if (stallDirection > 0)
-        motor.forward();
-      else
-        motor.backward();
-      while (!stalled) {
-        newPos = motor.getTachoCount();
-        if (pos != newPos) {
-          start = System.currentTimeMillis();
-          pos = newPos;
-        } else {
-          if (System.currentTimeMillis() - start > 1000)
-            stalled = true;
-        }
-        Delay.msDelay(10);
-      }
-      motor.stop();
-      motor.resetTachoCount();
-      motor.setSpeed((int) (motor.getMaxSpeed() * speedFactor));
-      motor.rotateTo(stallToRest);
-      motor.resetTachoCount();
-
-    }
-
-    public void moveToMin() {
-      motor.rotateTo(0, true);
-    }
-
-    public void moveToMax() {
-      motor.rotateTo(range, true);
-    }
-
-    public void testRange() {
-      moveToMin();
-      while (motor.isMoving())
-        ;
-      moveToMax();
-      while (motor.isMoving())
-        ;
-      moveToMin();
-      while (motor.isMoving())
-        ;
-      moveToMax();
-      while (motor.isMoving())
-        ;
-      moveToMin();
-      while (motor.isMoving())
-        ;
-    }
-
-    public void setLogicRange(int min, int max) {
-      this.min = min;
-      this.max = max;
-      this.tickFactor = range / (double) (max - min);
-    }
-
-    private int toTick(float value) {
-      return (int) ((value - min) * tickFactor);
-    }
-
-    private int getLogicPosition() {
-      return (int) (min + motor.getTachoCount() / tickFactor);
-    }
-
-    private float toCircular(float value) {
-      value = (value - min) / (max - min) / 2 - 1; // normalize to -1 to 1
-      value = (float) Math.toDegrees(Math.acos(1 / value));
-      return value;
-    }
-
-    public void moveToPosition(float value) {
-      if (tickFactor != 0)
-        motor.rotateTo(toTick(value), true);
-      // LCD.drawInt((int) value,8, 0, 0);
-      // LCD.drawInt((int) toCircular(value),8, 0, 1);
-    }
-
-    public void rest() {
-      while (motor.isMoving())
-        Thread.yield();
-      motor.flt();
-    }
-
-  }
 
 }
