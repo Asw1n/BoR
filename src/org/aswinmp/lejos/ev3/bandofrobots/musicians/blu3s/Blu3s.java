@@ -43,7 +43,7 @@ public class Blu3s extends BaseMusician {
       // System.out.println(ip);
     }
     // System.out.println("Setting java.rmi.server.hostname to " + lastIp);
-    // System.setProperty("java.rmi.server.hostname", lastIp);
+    System.setProperty("java.rmi.server.hostname", lastIp);
     //
     // System.out.println("Starting RMI registry using port 1098");
     try {

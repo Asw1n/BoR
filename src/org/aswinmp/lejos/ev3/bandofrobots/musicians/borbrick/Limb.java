@@ -17,6 +17,7 @@ public class Limb {
   private int    min;
   private double tickFactor = 0;
   private int    max;
+  private int    target=0;
 
   /** Constructor of the limb class 
    * @param motor
@@ -84,35 +85,24 @@ public class Limb {
    * 
    */
   public void moveToMin() {
-    motor.rotateTo(0, true);
+    moveTo(min);
   }
 
   /** Rotates the limb to its maximum position
    * 
    */
   public void moveToMax() {
-    motor.rotateTo(range, true);
+    moveTo(max);
   }
 
   /** Moves the limb from minimum to maximum and back twice
    * 
    */
   public void testRange() {
-    moveToMin();
-    while (motor.isMoving())
-      ;
-    moveToMax();
-    while (motor.isMoving())
-      ;
-    moveToMin();
-    while (motor.isMoving())
-      ;
-    moveToMax();
-    while (motor.isMoving())
-      ;
-    moveToMin();
-    while (motor.isMoving())
-      ;
+    motor.rotateTo(0, false);
+    motor.rotateTo(range, false);
+    motor.rotateTo(0, false);
+    motor.rotateTo(range, false);
   }
 
   /** Sets a logical range for the limb. The logical range is used to hide the tacho range of the motor.   
@@ -159,10 +149,10 @@ public class Limb {
    * Value is not tested for out of range condition
    */
   public void moveTo(float value) {
-    if (tickFactor != 0)
-      motor.rotateTo(toTick(value), true);
-    // LCD.drawInt((int) value,8, 0, 0);
-    // LCD.drawInt((int) toCircular(value),8, 0, 1);
+    if (tickFactor != 0) {
+      target=(int) value;
+      motor.rotateTo(toTick(target), true);
+    }
   }
 
   /**
@@ -172,6 +162,18 @@ public class Limb {
     while (motor.isMoving())
       Thread.yield();
     motor.flt();
+  }
+
+  public int getMaximum() {
+    return max;
+  }
+
+  public int getMinimum() {
+    return min;
+  }
+
+  public int getTarget() {
+    return target;
   }
 
 }

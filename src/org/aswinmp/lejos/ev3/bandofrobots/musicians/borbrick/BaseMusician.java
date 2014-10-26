@@ -181,7 +181,7 @@ public class BaseMusician implements Musician {
   }
 
   protected void beatPulse(int beatNo, int pulseNo) {
-    if (true || verbose)
+    if ( verbose)
       System.out.println(String.format("BeatPulse: %d, %d", beatNo, pulseNo));
   }
 
