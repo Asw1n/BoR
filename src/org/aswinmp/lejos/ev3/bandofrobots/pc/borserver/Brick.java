@@ -11,7 +11,7 @@ import javax.sound.midi.ShortMessage;
 
 import lejos.hardware.BrickInfo;
 
-import org.aswinmp.lejos.ev3.bandofrobots.musicians.borbrick.Musician;
+import org.aswinmp.lejos.ev3.bandofrobots.musicians.Musician;
 
 /**
  * Represents a remote EV3 brick. 

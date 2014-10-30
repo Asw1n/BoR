@@ -1,4 +1,4 @@
-package org.aswinmp.lejos.ev3.bandofrobots.musicians.borbrick;
+package org.aswinmp.lejos.ev3.bandofrobots.musicians;
 
 import java.rmi.Remote;
 import java.rmi.RemoteException;

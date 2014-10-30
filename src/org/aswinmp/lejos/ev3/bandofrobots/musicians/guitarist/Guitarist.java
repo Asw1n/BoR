@@ -2,11 +2,11 @@ package org.aswinmp.lejos.ev3.bandofrobots.musicians.guitarist;
 
 import java.rmi.RemoteException;
 
-import org.aswinmp.lejos.ev3.bandofrobots.musicians.borbrick.BaseMusician;
+import org.aswinmp.lejos.ev3.bandofrobots.musicians.AbstractMusician;
 
 import lejos.hardware.motor.Motor;
 
-public class Guitarist extends BaseMusician {
+public class Guitarist extends AbstractMusician {
 
 	private int lowestNote = 0;
 	private int toneRange = 0;

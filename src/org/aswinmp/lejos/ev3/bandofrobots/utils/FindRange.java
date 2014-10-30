@@ -1,4 +1,4 @@
-package org.aswinmp.lejos.ev3.bandofrobots.musicians.borbrick;
+package org.aswinmp.lejos.ev3.bandofrobots.utils;
 
 import lejos.hardware.Button;
 import lejos.hardware.lcd.LCD;
