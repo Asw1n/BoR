@@ -49,9 +49,8 @@ public class Limb2 {
 	 * @param logicalMax
 	 *            the logical maximum value of the range the {@link Limb} is
 	 *            able to move in.
-	 * @param physicalMin
-	 *            the physical minimum value of the range the {@link Limb} is
-	 *            able to move in.
+	 * @param physicalRange
+	 *            the physical range that the {@link Limb} is able to move.
 	 * @param physicalMax
 	 *            the physical maximum value of the range the {@link Limb} is
 	 *            able to move in.
