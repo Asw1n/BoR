@@ -35,7 +35,7 @@ public class Limb2 {
 		 * In case no physical limb range is provided, we assume it to be the
 		 * same as the logical one. This can be reset by calibrating the limb.
 		 */
-		recomputeTickFactor(logicalLimbRange);
+		recomputeTickFactor(logicalLimbRange.getRange());
 	}
 
 	/**
@@ -51,15 +51,12 @@ public class Limb2 {
 	 *            able to move in.
 	 * @param physicalRange
 	 *            the physical range that the {@link Limb} is able to move.
-	 * @param physicalMax
-	 *            the physical maximum value of the range the {@link Limb} is
-	 *            able to move in.
 	 */
 	public Limb2(final RegulatedMotor motor, final int logicalMin,
 			final int logicalMax, final int physicalRange) {
 		this.motor = motor;
 		this.logicalLimbRange = new LimbRange(logicalMin, logicalMax);
-		recomputeTickFactor(new LimbRange(0, physicalRange));
+		recomputeTickFactor(physicalRange);
 	}
 
 	/**
@@ -95,11 +92,8 @@ public class Limb2 {
 		}
 		motor.stop();
 		final int physicalMin = motor.getTachoCount();
-		// set physical limb range
-		final LimbRange physicalLimbRange = new LimbRange(0, physicalMax
-				- physicalMin);
 		// recompute tick factor
-		recomputeTickFactor(physicalLimbRange);
+		recomputeTickFactor(physicalMax - physicalMin);
 		// position limb in the logical middle
 		motor.resetTachoCount();
 		moveTo(logicalLimbRange.getMiddle(), false);
@@ -158,9 +152,8 @@ public class Limb2 {
 		motor.flt();
 	}
 
-	private void recomputeTickFactor(final LimbRange physicalLimbRange) {
-		tickFactor = physicalLimbRange.getRange()
-				/ (double) logicalLimbRange.getRange();
+	private void recomputeTickFactor(final int physicalLimbRange) {
+		tickFactor = physicalLimbRange / (double) logicalLimbRange.getRange();
 	}
 
 	private int toTick(final float value) {
