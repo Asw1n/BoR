@@ -5,7 +5,9 @@ import lejos.hardware.motor.EV3MediumRegulatedMotor;
 import lejos.hardware.port.MotorPort;
 import lejos.hardware.port.Port;
 
-import org.aswinmp.lejos.ev3.bandofrobots.musicians.Limb2;
+import org.aswinmp.lejos.ev3.bandofrobots.musicians.DualBoundaryCalibration;
+import org.aswinmp.lejos.ev3.bandofrobots.musicians.Limb;
+import org.aswinmp.lejos.ev3.bandofrobots.musicians.LineairLimb;
 
 public class Drumm3r {
 
@@ -14,21 +16,20 @@ public class Drumm3r {
 	private static Port RIGHT_FOOT_MOTOR_PORT = MotorPort.A;
 	private static Port TORSO_MOTOR_PORT = MotorPort.D;
 
-	private final Limb2 leftHand;
-	private final Limb2 rightHand;
+	private final Limb leftHand;
+	private final Limb rightHand;
 	// TODO this should be a Limb also once it supports circular movements
 	private final EV3MediumRegulatedMotor rightFoot;
-	private final Limb2 torso;
+	private final Limb torso;
 
 	public Drumm3r() {
 		// create and configure limbs
-		leftHand = new Limb2(new EV3LargeRegulatedMotor(LEFT_HAND_MOTOR_PORT),
-				0, 100);
+		leftHand = new LineairLimb(new EV3LargeRegulatedMotor(LEFT_HAND_MOTOR_PORT), new DualBoundaryCalibration(5),0, 100);
 		leftHand.setSpeed(1.0f);
-		rightHand = new Limb2(
-				new EV3LargeRegulatedMotor(RIGHT_HAND_MOTOR_PORT), 0, 100);
+		rightHand = new LineairLimb(
+				new EV3LargeRegulatedMotor(RIGHT_HAND_MOTOR_PORT),new DualBoundaryCalibration(5), 0, 100);
 		rightHand.setSpeed(1.0f);
-		torso = new Limb2(new EV3LargeRegulatedMotor(TORSO_MOTOR_PORT), -100,
+		torso = new LineairLimb(new EV3LargeRegulatedMotor(TORSO_MOTOR_PORT), new DualBoundaryCalibration(5),-100,
 				100);
 		torso.setSpeed(1.0f);
 		rightFoot = new EV3MediumRegulatedMotor(RIGHT_FOOT_MOTOR_PORT);
