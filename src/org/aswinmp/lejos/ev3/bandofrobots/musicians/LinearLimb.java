@@ -6,38 +6,50 @@ import lejos.robotics.RegulatedMotor;
 
 /**
  * Represents a limb where a limb is driven by a rod. In other words, the motor
- * movement is transferred into a liner motion before moving the limb.
+ * movement is transferred into a linear motion before moving the limb.
  * 
  * @author Aswin Bouwmeester, Matthias Paul Scholz
  *
  */
-public class LineairLimb implements Limb {
+public class LinearLimb implements Limb {
 
   private float                logicalMaximum = 1;
   private float                logicalMinimum = 0;
   private final RegulatedMotor motor;
   private CalibrationStrategy  calibrater;
   private LimbRange            range;
+  private Boolean              reverse = false;
+  
 
   /** Constructor. Logical range defaults to 0-1 and can be modified later.
-   * @param motor
+  * @param motor
+   * A regulated motor
+   * @param reverse
+   * Set to true if motor is reversed to limb direction
    * @param calibrater
+   * Calibration strategy to align limb
    */
-  public LineairLimb(final RegulatedMotor motor, CalibrationStrategy calibrater) {
+  public LinearLimb(final RegulatedMotor motor, boolean reverse,  CalibrationStrategy calibrater) {
     this.motor = motor;
     this.calibrater = calibrater;
+    this.reverse=reverse;
   }
 
-  /** Constructor that sets logical range of the limb.
+  /** Constructor that sets dynamic range of the limb.
    * @param motor
+   * A regulated motor
+   * @param reverse
+   * Set to true if motor is reversed to limb direction
    * @param calibrater
+   * Calibration strategy to align limb
    * @param logicalMin
+   * User assigned minimum value of a limbs dynamic range
    * @param logicalMax
+   * User assigned maximum value of a limbs dynamic range
    */
-  public LineairLimb(final RegulatedMotor motor,
+  public LinearLimb(final RegulatedMotor motor,  boolean reverse,
       CalibrationStrategy calibrater, final int logicalMin, final int logicalMax) {
-    this.motor = motor;
-    this.calibrater = calibrater;
+    this(motor, reverse, calibrater);
     this.setMinimum(logicalMin);
     this.setMaximum(logicalMax);
   }
@@ -61,21 +73,30 @@ public class LineairLimb implements Limb {
   }
 
 
-  /** gives the scaling factor between logical range and tacho range 
+  /** gives the scaling factor between limbs dynamic range and tacho's range 
    * @return
    */
   protected float getFactor() {
     if (range==null) throw new NullPointerException("Range not specified");
-    return (range.getMax() - range.getMin()) / (logicalMaximum - logicalMinimum);
+    if (!reverse)
+      return ((float)range.getRange()) / (logicalMaximum - logicalMinimum);
+    else 
+      return -((float)range.getRange()) / (logicalMaximum - logicalMinimum);
   }
 
   protected int toEncoder(float position) {
     if (range==null) throw new NullPointerException("Range not specified");
-    return (int) (range.getMin() + (position - logicalMinimum) * getFactor());
+    if (!reverse)
+    return (int) ((float)range.getMin() + (position - logicalMinimum) * getFactor());
+    else
+      return (int) ((float)range.getMin() + (position - logicalMaximum) * getFactor());
   }
 
   protected float toPosition(int tacho) {
-    return logicalMinimum + (tacho - range.getMin()) / getFactor();
+    if (!reverse)
+      return logicalMinimum + (tacho - range.getMin()) / getFactor();
+    else 
+      return logicalMaximum + (tacho - range.getMin()) / getFactor();
   }
 
   @Override
@@ -142,7 +163,6 @@ public class LineairLimb implements Limb {
   public void setRange(float minimum, float maximum) {
     logicalMinimum=minimum;
     logicalMaximum=maximum;
-    
   }
 
 }

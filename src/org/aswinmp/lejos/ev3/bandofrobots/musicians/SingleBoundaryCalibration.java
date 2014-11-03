@@ -79,6 +79,7 @@ public class SingleBoundaryCalibration implements CalibrationStrategy {
   public LimbRange calibrate(RegulatedMotor motor) {
     int minimum;
     int maximum;
+    int oldSpeed=motor.getSpeed();
 
     motor.setSpeed(speed);
     if (forward) {
@@ -91,18 +92,15 @@ public class SingleBoundaryCalibration implements CalibrationStrategy {
     motor.stop();
     if (forward) {
       maximum=motor.getTachoCount()-strechZone;
+      motor.rotateTo(maximum);
       minimum = maximum - range;
-      if (strechZone !=0) {
-        motor.rotateTo(maximum);
-      }
     }
     else {
       minimum=motor.getTachoCount()+strechZone;
+      motor.rotateTo(minimum);
       maximum = minimum + range;
-      if (strechZone !=0) {
-        motor.rotateTo(maximum);
-      }
     }
+    motor.setSpeed(oldSpeed);
     return new LimbRange(minimum, maximum);
   }
   

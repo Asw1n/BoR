@@ -3,6 +3,10 @@ package org.aswinmp.lejos.ev3.bandofrobots.musicians.blu3s;
 import java.rmi.AlreadyBoundException;
 import java.rmi.RemoteException;
 
+import lejos.hardware.Button;
+import lejos.hardware.lcd.LCD;
+import lejos.utility.Delay;
+
 import org.aswinmp.lejos.ev3.bandofrobots.musicians.AbstractMusician;
 
 public class Blu3sMusician extends AbstractMusician {
@@ -13,8 +17,9 @@ public class Blu3sMusician extends AbstractMusician {
       final Blu3sMusician blu3sMusician = new Blu3sMusician();
       // register
       blu3sMusician.register();
-      blu3sMusician.setBeatPulseDevider(2);
+      blu3sMusician.blu3s.openEyes();
       blu3sMusician.blu3s.calibrateLimbs();
+      blu3sMusician.blu3s.closeEyes();
       blu3sMusician.setBeatPulseDevider(2);
     } catch (RemoteException | AlreadyBoundException exc) {
       System.err.println(exc.getMessage());
@@ -44,7 +49,7 @@ public class Blu3sMusician extends AbstractMusician {
 
   @Override
   public void voiceOn(int tone, int intensity) {
-    blu3s.openMouth(intensity/127f);
+    blu3s.openMouth(intensity);
   }
 
   @Override
@@ -62,7 +67,7 @@ public class Blu3sMusician extends AbstractMusician {
     blu3s.prepareRightHand();
 
     // The leg goes up and down every quarter note
-    if (pulseNo % 2 == 0) {
+    if (pulseNo % 4 == 3) {
       blu3s.tapFoot();
     } else {
       blu3s.raiseFoot();

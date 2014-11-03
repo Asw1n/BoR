@@ -10,7 +10,7 @@ import lejos.hardware.port.MotorPort;
 import lejos.hardware.sensor.EV3UltrasonicSensor;
 
 import org.aswinmp.lejos.ev3.bandofrobots.musicians.Limb;
-import org.aswinmp.lejos.ev3.bandofrobots.musicians.LineairLimb;
+import org.aswinmp.lejos.ev3.bandofrobots.musicians.LinearLimb;
 import org.aswinmp.lejos.ev3.bandofrobots.musicians.SingleBoundaryCalibration;
 
 public class Blu3s  {
@@ -26,30 +26,27 @@ public class Blu3s  {
 
 	public Blu3s() {
 		super();
-		rightHand = new LineairLimb(new EV3MediumRegulatedMotor(MotorPort.A), new SingleBoundaryCalibration(true, 5, 50, 10));
-		leftHand = new LineairLimb(new EV3MediumRegulatedMotor(MotorPort.B), new SingleBoundaryCalibration(true, 5, 170, 10));
-		foot = new LineairLimb(new EV3MediumRegulatedMotor(MotorPort.C), new SingleBoundaryCalibration(true, 5, 60, 10));
-		head = new LineairLimb(new EV3MediumRegulatedMotor(MotorPort.D), new SingleBoundaryCalibration(true, 5, 45, 10));
-		limbs = new Limb[]{rightHand, leftHand, head, foot};
+		rightHand = new LinearLimb(new EV3MediumRegulatedMotor(MotorPort.A), true, new SingleBoundaryCalibration(true, 15, 40, 10));
+    rightHand.setRange(-1, 1);
+    rightHand.setSpeed(1);
+
+    leftHand = new LinearLimb(new EV3MediumRegulatedMotor(MotorPort.B), true, new SingleBoundaryCalibration(false, 15, 140, 20));
+    rightHand.setRange(0, 1);
+    leftHand.setSpeed(1);
+
+    foot = new LinearLimb(new EV3MediumRegulatedMotor(MotorPort.C), false, new SingleBoundaryCalibration(true, 10, 55, 10));
+    foot.setRange(0, 1);
+    foot.setSpeed(1);
+
+		head = new LinearLimb(new EV3MediumRegulatedMotor(MotorPort.D), true, new SingleBoundaryCalibration(true, 10, 40, 15));
 		head.setRange(0, 127);
-		rightHand.setRange(-1, 1);
-		LCD.clear();
-		head.calibrate();
-		rightHand.calibrate();
-		leftHand.calibrate();
-		foot.calibrate();
+		head.setSpeed(1);
 
-		// head.calibrate(5, 1, -15, 0.2f);
-		// rightHand.calibrate(5, 1, -5, 0.2f);
-		// leftHand.calibrate(10, -1, 170, 0.2f);
-		// foot.calibrate(7, 1, -60, 0.2f);
 
-		leftHand.setSpeed(1);
-		rightHand.setSpeed(1);
 
+    limbs = new Limb[]{rightHand, leftHand, head, foot};
 
 		eyes = new EV3UltrasonicSensor(BrickFinder.getDefault().getPort("S2"));
-		eyes.disable();
 
 	}
 
@@ -78,16 +75,15 @@ public class Blu3s  {
 
 	public void openMouth(final float f) {
 		// The mouth opens when singing according to intensity of the note.
+	  head.setSpeed(0.3f);
 		head.moveTo(f, true);
 	}
 	
 	public void closeMouth() {
+    head.setSpeed(0.1f);
 	  head.moveTo(0, true);
 	}
 
-	public void voiceOff(final int tone) {
-		head.moveToMin(true);
-	}
 
 
   public void openEyes() {
@@ -104,6 +100,8 @@ public class Blu3s  {
       limb.moveToMin(false);
       limb.rest();
     }
+    leftHand.moveToMax(false);
+    leftHand.rest();
   }
 
   public void closeEyes() {
@@ -116,7 +114,7 @@ public class Blu3s  {
   }
 
   public void tapFoot() {
-    foot.setSpeed(1);
+    foot.setSpeed(0.3f);
     foot.moveToMin(true);
     
   }
@@ -135,7 +133,7 @@ public class Blu3s  {
   public void calibrateLimbs() {
     for (Limb limb : limbs) {
       limb.calibrate();
-      limb.moveToMin(true);
+      limb.moveToMin(false);
     }
   }
 

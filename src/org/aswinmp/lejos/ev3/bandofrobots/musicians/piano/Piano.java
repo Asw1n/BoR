@@ -17,7 +17,7 @@ import lejos.utility.Delay;
 import org.aswinmp.lejos.ev3.bandofrobots.musicians.AbstractMusician;
 import org.aswinmp.lejos.ev3.bandofrobots.musicians.DualBoundaryCalibration;
 import org.aswinmp.lejos.ev3.bandofrobots.musicians.Limb;
-import org.aswinmp.lejos.ev3.bandofrobots.musicians.LineairLimb;
+import org.aswinmp.lejos.ev3.bandofrobots.musicians.LinearLimb;
 import org.aswinmp.lejos.ev3.bandofrobots.musicians.Musician;
 import org.aswinmp.lejos.ev3.bandofrobots.musicians.SingleBoundaryCalibration;
 import org.aswinmp.lejos.ev3.bandofrobots.musicians.blu3s.Blu3sMusician;
@@ -44,11 +44,11 @@ public class Piano extends AbstractMusician {
   }
 
   private Piano() {
-    leftHand = new LineairLimb(new EV3MediumRegulatedMotor(MotorPort.A), new DualBoundaryCalibration(20,10,10));
+    leftHand = new LinearLimb(new EV3MediumRegulatedMotor(MotorPort.A), false, new DualBoundaryCalibration(20,10,10));
     leftHand.calibrate();
     leftHand.setSpeed(1);
     leftHand.moveToMin(true);
-    rightHand = new LineairLimb(new EV3MediumRegulatedMotor(MotorPort.B), new DualBoundaryCalibration(20,10,10));
+    rightHand = new LinearLimb(new EV3MediumRegulatedMotor(MotorPort.B),false, new DualBoundaryCalibration(20,10,10));
     rightHand.calibrate();
     rightHand.setSpeed(1);
     rightHand.moveToMax(false);

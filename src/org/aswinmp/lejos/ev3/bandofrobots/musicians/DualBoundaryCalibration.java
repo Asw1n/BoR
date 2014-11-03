@@ -68,6 +68,7 @@ public class DualBoundaryCalibration implements CalibrationStrategy {
   public LimbRange calibrate(RegulatedMotor motor) {
     int minimum;
     int maximum;
+    int oldSpeed=motor.getSpeed();
 
     motor.setSpeed(speed);
     motor.forward();
@@ -82,6 +83,7 @@ public class DualBoundaryCalibration implements CalibrationStrategy {
     if (lowerStrechZone !=0) {
         motor.rotateTo(minimum);
       }
+    motor.setSpeed(oldSpeed);
     return new LimbRange(minimum, maximum);
   }
   
