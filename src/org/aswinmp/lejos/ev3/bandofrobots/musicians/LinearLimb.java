@@ -17,7 +17,7 @@ public class LinearLimb implements Limb {
   private float                logicalMinimum = 0;
   private final RegulatedMotor motor;
   private CalibrationStrategy  calibrater;
-  private LimbRange            range;
+  private LimbRange            range = new LimbRange(0,1);
   private Boolean              reverse = false;
   
 
@@ -53,6 +53,30 @@ public class LinearLimb implements Limb {
     this.setMinimum(logicalMin);
     this.setMaximum(logicalMax);
   }
+  
+  
+  /** Constructor that sets dynamic range of the limb.
+   * @param motor
+   * A regulated motor
+   * @param reverse
+   * Set to true if motor is reversed to limb direction
+   * @param calibrater
+   * Calibration strategy to align limb
+   * @param logicalMin
+   * User assigned minimum value of a limbs dynamic range
+   * @param logicalMax
+   * User assigned maximum value of a limbs dynamic range
+   * @param tachoMin
+   * Minimum value for the motor tacho to prevent over stretching of the limb
+   * @param tachoMax
+   * Maximum value for the motor tacho to prevent over stretching of the limb
+   */
+  public LinearLimb(final RegulatedMotor motor,  boolean reverse,
+      CalibrationStrategy calibrater, final int logicalMin, final int logicalMax, final int tachoMin, final int tachoMax) {
+    this(motor, reverse, calibrater, logicalMin, logicalMax);
+    range = new LimbRange(tachoMin,tachoMax);
+  }
+
 
   @Override
   public void setMinimum(float logicalMin) {
@@ -77,7 +101,6 @@ public class LinearLimb implements Limb {
    * @return
    */
   protected float getFactor() {
-    if (range==null) throw new NullPointerException("Range not specified");
     if (!reverse)
       return ((float)range.getRange()) / (logicalMaximum - logicalMinimum);
     else 
@@ -85,7 +108,6 @@ public class LinearLimb implements Limb {
   }
 
   protected int toEncoder(float position) {
-    if (range==null) throw new NullPointerException("Range not specified");
     if (!reverse)
     return (int) ((float)range.getMin() + (position - logicalMinimum) * getFactor());
     else
