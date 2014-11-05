@@ -1,125 +1,179 @@
 package org.aswinmp.lejos.ev3.bandofrobots.musicians.piano;
 
-import java.rmi.AlreadyBoundException;
-import java.rmi.RemoteException;
-import java.rmi.registry.LocateRegistry;
-import java.rmi.registry.Registry;
-import java.rmi.server.UnicastRemoteObject;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import lejos.hardware.LED;
 import lejos.hardware.ev3.LocalEV3;
-import lejos.hardware.lcd.TextLCD;
 import lejos.hardware.motor.EV3MediumRegulatedMotor;
 import lejos.hardware.port.MotorPort;
+import lejos.hardware.port.SensorPort;
 import lejos.utility.Delay;
 
-import org.aswinmp.lejos.ev3.bandofrobots.musicians.AbstractMusician;
 import org.aswinmp.lejos.ev3.bandofrobots.musicians.DualBoundaryCalibration;
 import org.aswinmp.lejos.ev3.bandofrobots.musicians.Limb;
 import org.aswinmp.lejos.ev3.bandofrobots.musicians.LinearLimb;
-import org.aswinmp.lejos.ev3.bandofrobots.musicians.Musician;
 import org.aswinmp.lejos.ev3.bandofrobots.musicians.SingleBoundaryCalibration;
-import org.aswinmp.lejos.ev3.bandofrobots.musicians.blu3s.Blu3sMusician;
+import org.aswinmp.lejos.ev3.bandofrobots.musicians.TouchSensorCalibration;
 
-public class Piano extends AbstractMusician {
+public class Piano {
   static LED led = LocalEV3.get().getLED();
   Limb       leftHand;
   Limb       rightHand;
-  double handWidth = 3 / 19;
+  Limb       back;
+  Limb head;
+  double handWidth = 2.5 / 16;
   int lowestNote = 21;
   int highestNote = 108;
-
-
-
-  public static void main(String[] args) {
-    try {
-      final Piano piano = new Piano();
-      // register
-      piano.register();
-    } catch (RemoteException | AlreadyBoundException exc) {
-      System.err.println(exc.getMessage());
-      exc.printStackTrace();
-    }
-  }
-
-  private Piano() {
-    leftHand = new LinearLimb(new EV3MediumRegulatedMotor(MotorPort.A), false, new DualBoundaryCalibration(20,10,10));
-    leftHand.calibrate();
+  int rightRest=70;
+  int leftRest=60;
+  Limb[] limbs;
+  Mean statistic=new Mean();
+  
+  public Piano() {
+    leftHand = new LinearLimb(new EV3MediumRegulatedMotor(MotorPort.A), false, new SingleBoundaryCalibration(false,20,720,15));
     leftHand.setSpeed(1);
-    leftHand.moveToMin(true);
-    rightHand = new LinearLimb(new EV3MediumRegulatedMotor(MotorPort.B),false, new DualBoundaryCalibration(20,10,10));
-    rightHand.calibrate();
-    rightHand.setSpeed(1);
-    rightHand.moveToMax(false);
-    leftHand.calibrate();
-    leftHand.setSpeed(1);
-    leftHand.moveToMin(true);
     leftHand.setRange(lowestNote, (int) (highestNote * (1 - handWidth)));
-    rightHand.setRange((int) (lowestNote * (1 + handWidth)), highestNote);
-    rightHand.moveToCenter(true);
-    leftHand.moveToCenter(true);
-  }
-
-
-  @Override
-  public void start() {
-    super.start();
-    led.setPattern(3);
-    leftHand.setSpeed(1);
-    rightHand.setSpeed(1);
     
+    rightHand = new LinearLimb(new EV3MediumRegulatedMotor(MotorPort.B), false, new SingleBoundaryCalibration(true,20,720,15));
+    rightHand.setSpeed(1);
+    rightHand.setRange((int) (lowestNote * (1 + handWidth)), highestNote);
+    
+    back = new LinearLimb(new EV3MediumRegulatedMotor(MotorPort.C), true, new TouchSensorCalibration(SensorPort.S1, true, 10, 50));
+    back.setSpeed(0.1f);
+    back.setRange(lowestNote * 2f ,highestNote/2f);
+    
+    head = new LinearLimb(new EV3MediumRegulatedMotor(MotorPort.D), false, new SingleBoundaryCalibration(false, 10, 75, 65));
+    head.setRange(0, 127);
+    head.setSpeed(0.2f);
+
+    
+
+    limbs = new Limb[]{leftHand, rightHand, back};
+  }
+  
+  public void calibrate() {
+    rightHand.calibrate();
+    leftHand.calibrate();
+    centerHands();
+    back.calibrate();
+    back.moveToCenter(false);
+    head.calibrate();
+  }
+  
+  public void centerHands() {
+    rightHand.moveTo(rightRest,true);
+    leftHand.moveTo(leftRest,true);
+  }
+  
+  public void spreadHands() {
+    leftHand.moveToMin(false);
+    rightHand.moveToMax(false);
+  }
+  
+  public void playWithRightHand(int tone) {
+    rightHand.moveTo(tone, true);
   }
 
-  @Override
-  public void stop() {
-    // Let every limb go to default position and put to rest;
-    super.stop();
-    led.setPattern(1);
-    leftHand.setSpeed(0.2f);
-    leftHand.moveToMin(true);
-    rightHand.setSpeed(0.2f);
-    rightHand.moveToMax(true);
-    rightHand.moveTo(70,true);
-    leftHand.moveTo(60,true);
+  public void playWithLeftHand(int tone) {
+    leftHand.moveTo(tone, true);
   }
-
-  @Override
-  public void noteOn(int tone, int intensity) {
+  
+  public void playWithAnyHand(int tone) {
     Limb hand;
-    // System.out.println(String.format("Tone %d", tone));
-    // System.out.println(String.format("Left  %d, %d", leftHand.getTarget(), leftHand.getPosition()));
-    // System.out.println(String.format("Right %d, %d", rightHand.getTarget(), rightHand.getPosition()));
-    super.noteOn(tone, intensity);
-    // decide which hand plays the note;
-    // Out of range for one of the hands?
-    if (tone >= leftHand.getMaximum()) {
+    int middle =statistic.getNewStatistic(tone);
+   if (tone >= leftHand.getMaximum()) {
       hand = rightHand;
-      // System.out.println("Out of reach for left hand");
       }
     else if (tone <= rightHand.getMinimum()) {
       hand = leftHand;
-      // System.out.println("Out of reach for right hand");
     }
-    // Would it collide ?
     else if (tone >= rightHand.getTarget()) {
       hand = rightHand;
-      // System.out.println("Left hand would collide");
     } 
     else if (tone <= leftHand.getTarget()) {
       hand = leftHand;
-      // System.out.println("Right hand would collide");
     }
-    // Which hand is closest?
-    else if (Math.abs(leftHand.getPosition() - tone) >= Math.abs(rightHand.getPosition() - tone)) {
-      hand = rightHand;
-      // System.out.println("Right hand is closer");
-    } 
+    else if (tone<middle) {
+      hand=leftHand;
+    }
     else {
-      hand = leftHand;
-      // System.out.println("Left hand is closer");
+      hand=rightHand;
     }
     hand.moveTo(tone,true);
+    
+    setBack();
+  }
+  
+  public void setBack() {
+    back.moveTo((rightHand.getTarget()+leftHand.getTarget())/2, true);
+  }
+  
+  private class Median {
+    private int size=10;
+    private List<Integer> lastNotes= new ArrayList<Integer>();
+    
+    public int getNewStatistic(int note) {
+      lastNotes.add(note);
+      if (lastNotes.size()>size)
+        lastNotes.remove(0);
+      int[] notes = new int[lastNotes.size()];
+      Arrays.sort(notes);
+      return notes[lastNotes.size()];
+    }
+  }
+  
+  private class Mean {
+    private int size=10;
+    private List<Integer> lastNotes= new ArrayList<Integer>();
+    private int sum;
+    
+    public int getNewStatistic(int note) {
+      lastNotes.add(note);
+      sum+=note;
+      if (lastNotes.size()>size) {
+        sum -=lastNotes.remove(0);
+      }
+      return sum / lastNotes.size();
+    }
+  }
+
+  public void restLimbs() {
+    for (Limb limb : limbs) {
+      limb.rest();
+    }
+    
+  }
+  
+  public void test() {
+    leftHand.moveTo(lowestNote, true);
+    rightHand.moveTo(highestNote, true);
+    setBack();
+    Delay.msDelay(5000);
+    leftHand.moveTo(highestNote *16/19, true);
+    setBack();
+    Delay.msDelay(5000);
+    leftHand.moveTo(lowestNote, true);
+    setBack();
+    Delay.msDelay(5000);
+    rightHand.moveTo(lowestNote*22/19, true);
+    setBack();
+    Delay.msDelay(5000);
+    spreadHands();
+    setBack();
+    Delay.msDelay(5000);
+    
+    
+  }
+  
+  public void testHead() {
+    head.moveTo(127, false);
+    head.moveTo(0, false);
+    Delay.msDelay(5000);
+    head.moveToMax(false);
+    head.moveToMin(false);
+    Delay.msDelay(5000);
   }
 
 }
