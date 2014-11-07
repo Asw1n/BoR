@@ -5,9 +5,9 @@ import lejos.hardware.motor.EV3MediumRegulatedMotor;
 import lejos.hardware.port.MotorPort;
 import lejos.hardware.port.Port;
 
-import org.aswinmp.lejos.ev3.bandofrobots.musicians.DualBoundaryCalibration;
 import org.aswinmp.lejos.ev3.bandofrobots.musicians.Limb;
 import org.aswinmp.lejos.ev3.bandofrobots.musicians.LinearLimb;
+import org.aswinmp.lejos.ev3.bandofrobots.musicians.calibration.DualBoundaryCalibration;
 
 public class Drumm3r {
 

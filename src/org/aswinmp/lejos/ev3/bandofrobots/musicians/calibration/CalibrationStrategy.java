@@ -1,4 +1,4 @@
-package org.aswinmp.lejos.ev3.bandofrobots.musicians;
+package org.aswinmp.lejos.ev3.bandofrobots.musicians.calibration;
 
 import lejos.robotics.RegulatedMotor;
 

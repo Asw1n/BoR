@@ -11,7 +11,7 @@ import lejos.hardware.sensor.EV3UltrasonicSensor;
 
 import org.aswinmp.lejos.ev3.bandofrobots.musicians.Limb;
 import org.aswinmp.lejos.ev3.bandofrobots.musicians.LinearLimb;
-import org.aswinmp.lejos.ev3.bandofrobots.musicians.SingleBoundaryCalibration;
+import org.aswinmp.lejos.ev3.bandofrobots.musicians.calibration.SingleBoundaryCalibration;
 
 public class Blu3s  {
 	Limb rightHand, leftHand, foot, head;

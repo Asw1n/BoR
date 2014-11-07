@@ -1,5 +1,7 @@
 package org.aswinmp.lejos.ev3.bandofrobots.musicians;
 
+import org.aswinmp.lejos.ev3.bandofrobots.musicians.calibration.CalibrationStrategy;
+
 /** Represents a limb with a single motor driven joint. 
  * 
  * @author Aswin Bouwmeester

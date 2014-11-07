@@ -1,6 +1,7 @@
 package org.aswinmp.lejos.ev3.bandofrobots.musicians;
 
-import org.aswinmp.lejos.ev3.bandofrobots.musicians.CalibrationStrategy.LimbRange;
+import org.aswinmp.lejos.ev3.bandofrobots.musicians.calibration.CalibrationStrategy;
+import org.aswinmp.lejos.ev3.bandofrobots.musicians.calibration.CalibrationStrategy.LimbRange;
 
 import lejos.robotics.RegulatedMotor;
 

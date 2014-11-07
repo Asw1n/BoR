@@ -15,12 +15,12 @@ import lejos.hardware.port.MotorPort;
 import lejos.utility.Delay;
 
 import org.aswinmp.lejos.ev3.bandofrobots.musicians.AbstractMusician;
-import org.aswinmp.lejos.ev3.bandofrobots.musicians.DualBoundaryCalibration;
 import org.aswinmp.lejos.ev3.bandofrobots.musicians.Limb;
 import org.aswinmp.lejos.ev3.bandofrobots.musicians.LinearLimb;
 import org.aswinmp.lejos.ev3.bandofrobots.musicians.Musician;
-import org.aswinmp.lejos.ev3.bandofrobots.musicians.SingleBoundaryCalibration;
 import org.aswinmp.lejos.ev3.bandofrobots.musicians.blu3s.Blu3sMusician;
+import org.aswinmp.lejos.ev3.bandofrobots.musicians.calibration.DualBoundaryCalibration;
+import org.aswinmp.lejos.ev3.bandofrobots.musicians.calibration.SingleBoundaryCalibration;
 
 public class PianoMusician extends AbstractMusician {
   final Piano piano = new Piano();

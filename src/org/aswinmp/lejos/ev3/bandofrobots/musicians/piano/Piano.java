@@ -11,11 +11,11 @@ import lejos.hardware.port.MotorPort;
 import lejos.hardware.port.SensorPort;
 import lejos.utility.Delay;
 
-import org.aswinmp.lejos.ev3.bandofrobots.musicians.DualBoundaryCalibration;
 import org.aswinmp.lejos.ev3.bandofrobots.musicians.Limb;
 import org.aswinmp.lejos.ev3.bandofrobots.musicians.LinearLimb;
-import org.aswinmp.lejos.ev3.bandofrobots.musicians.SingleBoundaryCalibration;
-import org.aswinmp.lejos.ev3.bandofrobots.musicians.TouchSensorCalibration;
+import org.aswinmp.lejos.ev3.bandofrobots.musicians.calibration.DualBoundaryCalibration;
+import org.aswinmp.lejos.ev3.bandofrobots.musicians.calibration.SingleBoundaryCalibration;
+import org.aswinmp.lejos.ev3.bandofrobots.musicians.calibration.TouchSensorCalibration;
 
 public class Piano {
   static LED led = LocalEV3.get().getLED();
