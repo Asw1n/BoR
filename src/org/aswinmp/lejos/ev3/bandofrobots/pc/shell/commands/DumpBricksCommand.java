@@ -4,11 +4,13 @@ import java.io.IOException;
 
 import lejos.hardware.BrickFinder;
 
+import org.aswinmp.lejos.ev3.bandofrobots.pc.shell.BoRCommandException;
+
 @ShellCommand(label = "bricks", parameters = "", description = "dumps the connected bricks")
 public class DumpBricksCommand {
 
 	@ShellExecute
-	public void dumpBricks() {
+	public void dumpBricks() throws BoRCommandException {
 		System.out.println("Connected bricks:");
 		try {
 			for (final lejos.hardware.BrickInfo info : BrickFinder.discover()) {
@@ -16,7 +18,7 @@ public class DumpBricksCommand {
 						info.getIPAddress()));
 			}
 		} catch (final IOException ioe) {
-			System.err.println(ioe);
+			throw new BoRCommandException(ioe);
 		}
 	}
 }

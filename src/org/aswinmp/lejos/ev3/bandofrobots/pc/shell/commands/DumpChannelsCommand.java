@@ -1,6 +1,7 @@
 package org.aswinmp.lejos.ev3.bandofrobots.pc.shell.commands;
 
 import org.aswinmp.lejos.ev3.bandofrobots.pc.borserver.BoRController;
+import org.aswinmp.lejos.ev3.bandofrobots.pc.shell.BoRCommandException;
 
 @ShellCommand(label = "channels", parameters = "", description = "dumps the channels mappings for the selected song")
 public class DumpChannelsCommand {
@@ -12,11 +13,11 @@ public class DumpChannelsCommand {
 	}
 
 	@ShellExecute
-	public void dumpInstruments() {
-		if (! boRController.getSong().isSet()) {
-			System.out.println("No song selected");
-		} else {
-		  boRController.getSong().dumpChannels();
+	public void dumpInstruments() throws BoRCommandException {
+		if (!boRController.getSong().isSet()) {
+			throw new BoRCommandException("No song selected");
 		}
+		boRController.getSong().dumpChannels();
+
 	}
 }

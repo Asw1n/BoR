@@ -92,7 +92,11 @@ public class CommandProcessor {
 			final ShellExecute shellExecute = method
 					.getAnnotation(ShellExecute.class);
 			if (shellExecute != null) {
-				method.invoke(shellCommand, parameters);
+				try {
+					method.invoke(shellCommand, parameters);
+				} catch (final Exception exc) {
+					exc.printStackTrace();
+				}
 			}
 		}
 	}
@@ -127,18 +131,21 @@ public class CommandProcessor {
 		final AssignMusicianCommand assignMusicianCommand = new AssignMusicianCommand(
 				boRController);
 		commandMap.put(
-				assignMusicianCommand.getClass().getAnnotation(ShellCommand.class)
-						.label(), assignMusicianCommand);
-    final AssignSingerCommand assignSingerCommand = new AssignSingerCommand(
-        boRController);
-    commandMap.put(
-        assignSingerCommand.getClass().getAnnotation(ShellCommand.class)
-            .label(), assignSingerCommand);
-    final SetMetronomeCommand setMetronomeCommand = new SetMetronomeCommand(
-        boRController);
-    commandMap.put(
-        setMetronomeCommand.getClass().getAnnotation(ShellCommand.class)
-            .label(), setMetronomeCommand);
+				assignMusicianCommand.getClass()
+						.getAnnotation(ShellCommand.class).label(),
+				assignMusicianCommand);
+		final AssignSingerCommand assignSingerCommand = new AssignSingerCommand(
+				boRController);
+		commandMap.put(
+				assignSingerCommand.getClass()
+						.getAnnotation(ShellCommand.class).label(),
+				assignSingerCommand);
+		final SetMetronomeCommand setMetronomeCommand = new SetMetronomeCommand(
+				boRController);
+		commandMap.put(
+				setMetronomeCommand.getClass()
+						.getAnnotation(ShellCommand.class).label(),
+				setMetronomeCommand);
 	}
 
 }
