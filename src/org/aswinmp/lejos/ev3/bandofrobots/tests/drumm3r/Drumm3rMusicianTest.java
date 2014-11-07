@@ -1,6 +1,8 @@
 package org.aswinmp.lejos.ev3.bandofrobots.tests.drumm3r;
 
 import java.io.IOException;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import javax.sound.midi.InvalidMidiDataException;
 import javax.sound.midi.MidiSystem;
@@ -8,8 +10,10 @@ import javax.sound.midi.MidiUnavailableException;
 
 import org.aswinmp.lejos.ev3.bandofrobots.pc.borserver.BoRController;
 import org.aswinmp.lejos.ev3.bandofrobots.pc.shell.BoRCommandException;
+import org.aswinmp.lejos.ev3.bandofrobots.pc.shell.commands.AssignMusicianCommand;
 import org.aswinmp.lejos.ev3.bandofrobots.pc.shell.commands.PlayCommand;
 import org.aswinmp.lejos.ev3.bandofrobots.pc.shell.commands.SelectSongCommand;
+import org.aswinmp.lejos.ev3.bandofrobots.pc.shell.commands.StopCommand;
 
 public class Drumm3rMusicianTest {
 
@@ -24,13 +28,20 @@ public class Drumm3rMusicianTest {
 			// set song
 			final String filePath = createTestFilePath();
 			new SelectSongCommand(boRController).selectSong(filePath);
-			// TODO assign brick
-			// play song
+			// assign brick
+			new AssignMusicianCommand(boRController).assignBrick("Drumm3rHead",
+					"9");
+			// play song for some time
 			new PlayCommand(boRController).play();
-			Thread.sleep(2000);
+			final Timer timer = new Timer();
+			timer.schedule(new TimerTask() {
+				@Override
+				public void run() {
+					new StopCommand(boRController).stop();
+				}
+			}, 10000);
 		} catch (final IOException | InvalidMidiDataException
-				| BoRCommandException | MidiUnavailableException
-				| InterruptedException exc) {
+				| BoRCommandException | MidiUnavailableException exc) {
 			exc.printStackTrace();
 		}
 	}

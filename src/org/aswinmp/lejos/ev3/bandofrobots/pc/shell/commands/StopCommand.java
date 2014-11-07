@@ -12,7 +12,7 @@ public class StopCommand {
 	}
 
 	@ShellExecute
-	public void play() {
+	public void stop() {
 		boRController.stop();
 	}
 }

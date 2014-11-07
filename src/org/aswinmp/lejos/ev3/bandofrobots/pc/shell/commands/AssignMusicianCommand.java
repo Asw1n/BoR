@@ -27,7 +27,12 @@ public class AssignMusicianCommand {
 		if (!song.isSet()) {
 			throw new BoRCommandException("No song selected");
 		}
-		final int channelNo = Integer.parseInt(instrumentChannelText);
+		int channelNo = -1;
+		try {
+			channelNo = Integer.parseInt(instrumentChannelText);
+		} catch (final NumberFormatException nfe) {
+			throw new BoRCommandException(nfe);
+		}
 		final Channels channels = song.getChannels();
 
 		if (channelNo < 0 || channelNo >= Channels.CHANNELCOUNT) {
