@@ -23,16 +23,22 @@ public class AssignMusicianCommand {
 	@ShellExecute
 	public void assignBrick(final String brickName,
 			final String instrumentChannelText) throws BoRCommandException {
-		final Song song = boRController.getSong();
-		if (!song.isSet()) {
-			throw new BoRCommandException("No song selected");
-		}
 		int channelNo = -1;
 		try {
 			channelNo = Integer.parseInt(instrumentChannelText);
 		} catch (final NumberFormatException nfe) {
 			throw new BoRCommandException(nfe);
 		}
+		assignBrick(brickName, channelNo);
+	}
+
+	public void assignBrick(final String brickName, final int channelNo)
+			throws BoRCommandException {
+		final Song song = boRController.getSong();
+		if (!song.isSet()) {
+			throw new BoRCommandException("No song selected");
+		}
+
 		final Channels channels = song.getChannels();
 
 		if (channelNo < 0 || channelNo >= Channels.CHANNELCOUNT) {
