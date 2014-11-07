@@ -1,12 +1,7 @@
-package org.aswinmp.lejos.ev3.bandofrobots.musicians.drumm3r.test;
-
+package org.aswinmp.lejos.ev3.bandofrobots.tests.drumm3r;
 
 public class RandomlyDelayedActionExecutor extends
 		AbstractRandomlyDelayedExecutor {
-
-	interface Drumm3rAction {
-		void execute();
-	}
 
 	private final Drumm3rAction drumm3rAction;
 

@@ -1,9 +1,8 @@
-package org.aswinmp.lejos.ev3.bandofrobots.musicians.drumm3r.test;
+package org.aswinmp.lejos.ev3.bandofrobots.tests.drumm3r;
 
 import lejos.hardware.Button;
 
 import org.aswinmp.lejos.ev3.bandofrobots.musicians.drumm3r.Drumm3r;
-import org.aswinmp.lejos.ev3.bandofrobots.musicians.drumm3r.test.RandomlyDelayedActionExecutor.Drumm3rAction;
 
 public class Drumm3rTest {
 
