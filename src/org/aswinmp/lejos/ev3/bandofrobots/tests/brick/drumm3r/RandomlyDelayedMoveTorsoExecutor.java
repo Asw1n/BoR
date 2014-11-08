@@ -13,7 +13,9 @@ public class RandomlyDelayedMoveTorsoExecutor extends
 	private final TorsoLocation[] availableTorsoLocations = TorsoLocation
 			.values();
 
-	public RandomlyDelayedMoveTorsoExecutor(final Drumm3r drumm3r) {
+	public RandomlyDelayedMoveTorsoExecutor(final int randomMax,
+			final Drumm3r drumm3r) {
+		super(randomMax);
 		this.drumm3r = drumm3r;
 	}
 

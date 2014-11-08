@@ -10,7 +10,6 @@ import org.aswinmp.lejos.ev3.bandofrobots.musicians.AbstractMusician;
 public class Drumm3rMusician extends AbstractMusician {
 
 	private final Drumm3r drumm3r;
-	private LAST_DRUM_SIDE lastDrumSide = LAST_DRUM_SIDE.LEFT;
 
 	public static void main(final String[] args) {
 		try {
@@ -33,18 +32,16 @@ public class Drumm3rMusician extends AbstractMusician {
 	}
 
 	@Override
+	public void start() {
+		super.start();
+		drumm3r.enableLEDPattern(true);
+		drumm3r.openEyes();
+	}
+
+	@Override
 	public void noteOn(final int tone, final int intensity) {
 		super.noteOn(tone, intensity);
-		switch (lastDrumSide) {
-		case RIGHT:
-			drumm3r.drumLeft();
-			lastDrumSide = LAST_DRUM_SIDE.LEFT;
-			break;
-		default:
-			drumm3r.drumRight();
-			lastDrumSide = LAST_DRUM_SIDE.RIGHT;
-		}
-
+		drumm3r.drum(true);
 	}
 
 	@Override
@@ -53,8 +50,12 @@ public class Drumm3rMusician extends AbstractMusician {
 		drumm3r.reset();
 	}
 
-	enum LAST_DRUM_SIDE {
-		LEFT, RIGHT
+	@Override
+	protected void beatPulse(final int beatNo, final int pulseNo) {
+		super.beatPulse(beatNo, pulseNo);
+		if (beatNo % 2 == 0) {
+			drumm3r.tap();
+		}
 	}
 
 }
