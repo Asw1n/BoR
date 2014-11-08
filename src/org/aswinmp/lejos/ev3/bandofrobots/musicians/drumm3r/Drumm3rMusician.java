@@ -35,7 +35,6 @@ public class Drumm3rMusician extends AbstractMusician {
 	public void start() {
 		super.start();
 		drumm3r.enableLEDPattern(true);
-		drumm3r.openEyes();
 	}
 
 	@Override

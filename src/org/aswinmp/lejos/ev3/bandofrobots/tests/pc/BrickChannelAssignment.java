@@ -1,4 +1,4 @@
-package org.aswinmp.lejos.ev3.bandofrobots.tests.pc.drumm3r;
+package org.aswinmp.lejos.ev3.bandofrobots.tests.pc;
 
 public class BrickChannelAssignment {
 

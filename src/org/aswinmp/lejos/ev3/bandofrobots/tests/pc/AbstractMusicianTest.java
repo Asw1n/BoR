@@ -15,7 +15,6 @@ import org.aswinmp.lejos.ev3.bandofrobots.pc.shell.commands.PlayCommand;
 import org.aswinmp.lejos.ev3.bandofrobots.pc.shell.commands.QuitCommand;
 import org.aswinmp.lejos.ev3.bandofrobots.pc.shell.commands.SelectSongCommand;
 import org.aswinmp.lejos.ev3.bandofrobots.pc.shell.commands.StopCommand;
-import org.aswinmp.lejos.ev3.bandofrobots.tests.pc.drumm3r.BrickChannelAssignment;
 
 public abstract class AbstractMusicianTest {
 
@@ -57,4 +56,11 @@ public abstract class AbstractMusicianTest {
 		}, playTimeInMilliseconds);
 	}
 
+	// TODO find a better way to inject MIDI file
+	protected static String createTestFilePath(final String midiTestFileName) {
+		final String fileSeparator = System.getProperty("file.separator");
+		final String executionDir = System.getProperty("user.dir");
+		return String.format("%s%sMIDI%s%s", executionDir, fileSeparator,
+				fileSeparator, midiTestFileName);
+	}
 }
