@@ -16,29 +16,28 @@ public class Drumm3r {
 	private static Port RIGHT_FOOT_MOTOR_PORT = MotorPort.A;
 	private static Port TORSO_MOTOR_PORT = MotorPort.D;
 
+	private static final int TORSO_MIN = -2880;
+	private static final int TORSO_MAX = 2880;
+
 	private final Limb leftHand;
 	private final Limb rightHand;
 	// TODO this should be a Limb also once it supports circular movements
 	private final EV3MediumRegulatedMotor rightFoot;
-	private final Limb torso;
+	// TODO this should be a Limb once un-calibrated limbs are supported
+	private final EV3LargeRegulatedMotor torso;
 
 	public Drumm3r() {
 		// create and configure limbs
-		leftHand = new LinearLimb(
-		    new EV3LargeRegulatedMotor(LEFT_HAND_MOTOR_PORT), 
-		    false, 
-		    new DualBoundaryCalibration(5),0, 100);
+		leftHand = new LinearLimb(new EV3LargeRegulatedMotor(
+				LEFT_HAND_MOTOR_PORT), false, new DualBoundaryCalibration(50),
+				0, 100);
 		leftHand.setSpeed(1.0f);
-		rightHand = new LinearLimb(
-				new EV3LargeRegulatedMotor(RIGHT_HAND_MOTOR_PORT),
-				false,
-				new DualBoundaryCalibration(5), 0, 100);
+		rightHand = new LinearLimb(new EV3LargeRegulatedMotor(
+				RIGHT_HAND_MOTOR_PORT), false, new DualBoundaryCalibration(50),
+				0, 100);
 		rightHand.setSpeed(1.0f);
-		torso = new LinearLimb(
-		    new EV3LargeRegulatedMotor(TORSO_MOTOR_PORT), 
-		    false,
-		    new DualBoundaryCalibration(5),-100, 100);
-		torso.setSpeed(1.0f);
+		torso = new EV3LargeRegulatedMotor(TORSO_MOTOR_PORT);
+		torso.setSpeed(torso.getMaxSpeed());
 		rightFoot = new EV3MediumRegulatedMotor(RIGHT_FOOT_MOTOR_PORT);
 		rightFoot.setSpeed(rightFoot.getMaxSpeed());
 
@@ -50,13 +49,13 @@ public class Drumm3r {
 	}
 
 	public void drumLeft() {
-		leftHand.moveToMax(false);
-		leftHand.moveToMin(false);
+		leftHand.moveToCenter(false);
+		leftHand.moveToMax(true);
 	}
 
 	public void drumRight() {
-		rightHand.moveToMax(false);
-		rightHand.moveToMin(false);
+		rightHand.moveToCenter(false);
+		rightHand.moveToMax(true);
 	}
 
 	public void tap() {
@@ -66,15 +65,20 @@ public class Drumm3r {
 	public void moveTorsoTo(final TorsoLocation location) {
 		switch (location) {
 		case LEFT:
-			torso.moveToMin(false);
+			torso.rotateTo(TORSO_MIN);
 			break;
 		case RIGHT:
-			torso.moveToMax(false);
+			torso.rotateTo(TORSO_MAX);
 			break;
 		default:
-			torso.moveTo(0, false);
+			torso.rotateTo(0);
 		}
 
+	}
+
+	public void reset() {
+		rightHand.moveToCenter(false);
+		leftHand.moveToCenter(false);
 	}
 
 	public enum TorsoLocation {

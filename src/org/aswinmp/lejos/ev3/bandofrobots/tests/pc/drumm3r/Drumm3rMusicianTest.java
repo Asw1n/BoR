@@ -1,4 +1,4 @@
-package org.aswinmp.lejos.ev3.bandofrobots.tests.drumm3r;
+package org.aswinmp.lejos.ev3.bandofrobots.tests.pc.drumm3r;
 
 import java.io.IOException;
 
@@ -6,8 +6,7 @@ import javax.sound.midi.InvalidMidiDataException;
 import javax.sound.midi.MidiUnavailableException;
 
 import org.aswinmp.lejos.ev3.bandofrobots.pc.shell.BoRCommandException;
-import org.aswinmp.lejos.ev3.bandofrobots.tests.AbstractMusicianTest;
-import org.aswinmp.lejos.ev3.bandofrobots.tests.BrickChannelAssignment;
+import org.aswinmp.lejos.ev3.bandofrobots.tests.pc.AbstractMusicianTest;
 
 /**
  * 
@@ -15,6 +14,8 @@ import org.aswinmp.lejos.ev3.bandofrobots.tests.BrickChannelAssignment;
  * @todo Convert this to a JUnit test
  */
 public class Drumm3rMusicianTest extends AbstractMusicianTest {
+
+	private static final String MIDI_FILE = "dire_straits-sultans_of_swing.mid";
 
 	public Drumm3rMusicianTest(final String testMIDIFile,
 			final BrickChannelAssignment... brickChannelAssignments) {
@@ -24,8 +25,7 @@ public class Drumm3rMusicianTest extends AbstractMusicianTest {
 	public static void main(final String[] args) {
 		try {
 			new Drumm3rMusicianTest(createTestFilePath(),
-					new BrickChannelAssignment("Drumm3rHead", 9))
-					.runTest(10000);
+					new BrickChannelAssignment("Drumm3r", 9)).runTest(10000);
 		} catch (final IOException | InvalidMidiDataException
 				| BoRCommandException | MidiUnavailableException exc) {
 			exc.printStackTrace();
@@ -36,7 +36,7 @@ public class Drumm3rMusicianTest extends AbstractMusicianTest {
 	private static String createTestFilePath() {
 		final String fileSeparator = System.getProperty("file.separator");
 		final String executionDir = System.getProperty("user.dir");
-		return String.format("%s%sMIDI%sdire_straits-sultans_of_swing.mid",
-				executionDir, fileSeparator, fileSeparator);
+		return String.format("%s%sMIDI%s%s", executionDir, fileSeparator,
+				fileSeparator, MIDI_FILE);
 	}
 }
