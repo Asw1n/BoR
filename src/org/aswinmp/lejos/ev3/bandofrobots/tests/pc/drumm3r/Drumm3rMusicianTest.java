@@ -24,11 +24,9 @@ public class Drumm3rMusicianTest extends AbstractMusicianTest {
 
 	public static void main(final String[] args) {
 		try {
-			// new Drumm3rMusicianTest(new MusicianConfiguration(
-			// createMidiFile(MIDI_FILE_NAME), "Drumm3r", 9))
-			// .runTest(10000);
-			new Drumm3rMusicianTest(new MusicianConfiguration(null, "Drumm3r",
-					9)).runTest(10000);
+			new Drumm3rMusicianTest(new MusicianConfiguration(
+					createMidiFile(MIDI_FILE_NAME), "Drumm3r", 9))
+					.runTest(10000);
 		} catch (final IOException | InvalidMidiDataException
 				| BoRCommandException | MidiUnavailableException exc) {
 			exc.printStackTrace();

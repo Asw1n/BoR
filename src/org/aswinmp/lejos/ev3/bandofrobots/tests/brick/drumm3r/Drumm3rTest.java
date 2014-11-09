@@ -9,14 +9,15 @@ import org.aswinmp.lejos.ev3.bandofrobots.musicians.drumm3r.Drumm3r.TorsoLocatio
 import org.aswinmp.lejos.ev3.bandofrobots.tests.brick.AbstractRandomlyDelayedExecutor;
 import org.aswinmp.lejos.ev3.bandofrobots.tests.brick.RandomlyDelayedActionExecutor;
 import org.aswinmp.lejos.ev3.bandofrobots.tests.brick.RobotAction;
+import org.aswinmp.lejos.ev3.bandofrobots.utils.BrickLogger;
 
 public class Drumm3rTest {
 
 	public static void main(final String[] args) {
 		final Drumm3r drumm3r = new Drumm3r();
-		System.out.println("Calibrating");
+		BrickLogger.info("Calibrating");
 		drumm3r.calibrate();
-		System.out.println("Drumming");
+		BrickLogger.info("Drumming");
 		final RandomlyDelayedActionExecutor drum = new RandomlyDelayedActionExecutor(
 				1000, new RobotAction() {
 					@Override

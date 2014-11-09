@@ -43,4 +43,8 @@ public class Drumm3rHeadMusician extends AbstractMusician {
 		drumm3rHead.reset();
 	}
 
+	@Override
+	public String toString() {
+		return "Drumm3rHeadMusician";
+	}
 }

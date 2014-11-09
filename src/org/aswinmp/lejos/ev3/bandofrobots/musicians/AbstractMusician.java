@@ -12,8 +12,7 @@ import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
 
-import lejos.hardware.ev3.LocalEV3;
-import lejos.hardware.lcd.TextLCD;
+import org.aswinmp.lejos.ev3.bandofrobots.utils.BrickLogger;
 
 /**
  * Base class for musicians. Implements Musician. <br>
@@ -32,6 +31,10 @@ public abstract class AbstractMusician implements Musician {
 	private boolean generateBeatPulse = true;
 	Runner runner;
 	private int beatPulseDevider = 1;
+	/*
+	 * TODO verbosity should be handled by a configuring the logger instance,
+	 * not by configuring the Musician
+	 */
 	protected boolean verbose = false;
 	private boolean synchroniseBeat = false;
 
@@ -44,8 +47,7 @@ public abstract class AbstractMusician implements Musician {
 	}
 
 	protected void register() throws RemoteException, AlreadyBoundException {
-		// TODO use some simple name for the instance here
-		System.out.println("Registering " + this);
+		BrickLogger.info("Registering %s", this);
 		Registry registry;
 		final List<String> ips = getIPAddresses();
 		// Use last IP address, which will be Wifi, it it exists
@@ -54,20 +56,19 @@ public abstract class AbstractMusician implements Musician {
 			lastIp = ip;
 			System.out.println(ip);
 		}
-		System.out.println("Setting java.rmi.server.hostname to " + lastIp);
+		BrickLogger.info("Setting java.rmi.server.hostname to %s", lastIp);
 		System.setProperty("java.rmi.server.hostname", lastIp);
 
-		System.out.println("Starting RMI registry using port 1098");
+		final int registryPort = 1098;
+		BrickLogger.info("Starting RMI registry using port %d", registryPort);
 		final Musician stub = (Musician) UnicastRemoteObject.exportObject(this,
 				0);
 
 		// Bind the remote object's stub in the registry
-		registry = LocateRegistry.createRegistry(1098);
+		registry = LocateRegistry.createRegistry(registryPort);
 		registry.bind("Musician", stub);
-		final TextLCD lcd = LocalEV3.get().getTextLCD();
-		lcd.clear();
-		lcd.drawString("Musician waiting for conductor to connect", 0, 0);
-		System.out.println("Musician " + this + " ready");
+		BrickLogger.info("Musician waiting for conductor to connect");
+		BrickLogger.info("Musician %s ready", this);
 	}
 
 	/**
@@ -78,8 +79,8 @@ public abstract class AbstractMusician implements Musician {
 		Enumeration<NetworkInterface> interfaces;
 		try {
 			interfaces = NetworkInterface.getNetworkInterfaces();
-		} catch (final SocketException e) {
-			System.err.println("Failed to get network interfaces: " + e);
+		} catch (final SocketException soExc) {
+			BrickLogger.error("Failed to get network interfaces", soExc);
 			return null;
 		}
 		while (interfaces.hasMoreElements()) {
@@ -88,8 +89,8 @@ public abstract class AbstractMusician implements Musician {
 				if (!current.isUp() || current.isLoopback()
 						|| current.isVirtual())
 					continue;
-			} catch (final SocketException e) {
-				System.err.println("Failed to get network properties: " + e);
+			} catch (final SocketException soExc) {
+				BrickLogger.error("Failed to get network properties", soExc);
 			}
 			final Enumeration<InetAddress> addresses = current
 					.getInetAddresses();
@@ -105,8 +106,7 @@ public abstract class AbstractMusician implements Musician {
 
 	public AbstractMusician() {
 		if (verbose)
-			System.out.println("Musician " + this.getClass().getName()
-					+ " loaded.");
+			BrickLogger.info("Musician %s loaded", this);
 		runner = new Runner();
 		runner.setDaemon(true);
 		runner.start();
@@ -115,7 +115,7 @@ public abstract class AbstractMusician implements Musician {
 	@Override
 	public void start() {
 		if (verbose)
-			System.out.println("Start song");
+			BrickLogger.info("Starting song");
 		nextBeat = System.currentTimeMillis();
 		running = true;
 	}
@@ -123,49 +123,47 @@ public abstract class AbstractMusician implements Musician {
 	@Override
 	public void stop() {
 		if (verbose)
-			System.out.println("End song");
+			BrickLogger.info("Ending song");
 		running = false;
 	}
 
 	@Override
 	public void setTempo(final int tempo) {
 		if (verbose)
-			System.out.println("Set tempo: " + tempo);
+			BrickLogger.info("Set tempo to %d", tempo);
 		this.tempo = tempo;
 	}
 
 	@Override
 	public void noteOn(final int tone, final int intensity) {
 		if (verbose)
-			System.out.println(String.format("Tone on: %d, %d ", tone,
-					intensity));
+			BrickLogger.info("Tone %d, %d on", tone, intensity);
 	}
 
 	@Override
 	public void noteOff(final int tone) {
 		if (verbose)
-			System.out.println("Tone off: " + tone);
+			BrickLogger.info("Tone %s off", tone);
 	}
 
 	@Override
 	public void voiceOn(final int tone, final int intensity) {
 		if (verbose)
-			System.out.println(String.format("Voice on: %d, %d ", tone,
-					intensity));
+			BrickLogger.info("Voice %d, %d on", tone, intensity);
 	}
 
 	@Override
 	public void voiceOff(final int tone) {
 		if (verbose)
-			System.out.println("Voice off: " + tone);
+			BrickLogger.info("Voice %d off", tone);
 	}
 
 	@Override
 	public void setDynamicRange(final int lowestNote, final int highestNote)
 			throws RemoteException {
 		if (verbose)
-			System.out.println("Dynamic range: " + lowestNote + " to "
-					+ highestNote);
+			BrickLogger
+					.info("Dynamic range: %d to %d", lowestNote, highestNote);
 	}
 
 	public void generateBeatPulse(final boolean v) {
@@ -183,15 +181,14 @@ public abstract class AbstractMusician implements Musician {
 
 	protected void beatPulse(final int beatNo, final int pulseNo) {
 		if (verbose)
-			System.out.println(String.format("BeatPulse: %d, %d", beatNo,
-					pulseNo));
+			BrickLogger.info("BeatPulse %d, %d", beatNo, pulseNo);
 	}
 
 	private class Runner extends Thread {
 		@Override
 		public void run() {
 			if (verbose)
-				System.out.println("Beat provider started ");
+				BrickLogger.info("Beat provider started");
 			while (true) {
 				final long time = System.currentTimeMillis();
 				if (running) {

@@ -7,12 +7,13 @@ import lejos.hardware.Button;
 import org.aswinmp.lejos.ev3.bandofrobots.musicians.drumm3r.Drumm3rHead;
 import org.aswinmp.lejos.ev3.bandofrobots.musicians.drumm3r.Drumm3rHead.HeadLocation;
 import org.aswinmp.lejos.ev3.bandofrobots.tests.brick.AbstractRandomlyDelayedExecutor;
+import org.aswinmp.lejos.ev3.bandofrobots.utils.BrickLogger;
 
 public class Drumm3rHeadTest {
 
 	public static void main(final String[] args) {
 		final Drumm3rHead drumm3rHead = new Drumm3rHead();
-		System.out.println("Moving head");
+		BrickLogger.info("Moving head");
 		final RandomlyDelayedMoveHeadExecutor moveHead = new RandomlyDelayedMoveHeadExecutor(
 				2000, drumm3rHead);
 		drumm3rHead.openEyes();

@@ -57,4 +57,9 @@ public class Drumm3rMusician extends AbstractMusician {
 		}
 	}
 
+	@Override
+	public String toString() {
+		return "Drumm3rMusician";
+	}
+
 }
