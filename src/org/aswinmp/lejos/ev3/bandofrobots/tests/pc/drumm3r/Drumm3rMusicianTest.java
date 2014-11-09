@@ -5,9 +5,9 @@ import java.io.IOException;
 import javax.sound.midi.InvalidMidiDataException;
 import javax.sound.midi.MidiUnavailableException;
 
+import org.aswinmp.lejos.ev3.bandofrobots.pc.configuration.MusicianConfiguration;
 import org.aswinmp.lejos.ev3.bandofrobots.pc.shell.BoRCommandException;
 import org.aswinmp.lejos.ev3.bandofrobots.tests.pc.AbstractMusicianTest;
-import org.aswinmp.lejos.ev3.bandofrobots.tests.pc.BrickChannelAssignment;
 
 /**
  * 
@@ -16,17 +16,19 @@ import org.aswinmp.lejos.ev3.bandofrobots.tests.pc.BrickChannelAssignment;
  */
 public class Drumm3rMusicianTest extends AbstractMusicianTest {
 
-	private static final String MIDI_FILE = "dire_straits-sultans_of_swing.mid";
+	private static final String MIDI_FILE_NAME = "dire_straits-sultans_of_swing.mid";
 
-	public Drumm3rMusicianTest(final String testMIDIFile,
-			final BrickChannelAssignment... brickChannelAssignments) {
-		super(testMIDIFile, brickChannelAssignments);
+	public Drumm3rMusicianTest(final MusicianConfiguration musicianConfiguration) {
+		super(musicianConfiguration);
 	}
 
 	public static void main(final String[] args) {
 		try {
-			new Drumm3rMusicianTest(createTestFilePath(MIDI_FILE),
-					new BrickChannelAssignment("Drumm3r", 9)).runTest(10000);
+			// new Drumm3rMusicianTest(new MusicianConfiguration(
+			// createMidiFile(MIDI_FILE_NAME), "Drumm3r", 9))
+			// .runTest(10000);
+			new Drumm3rMusicianTest(new MusicianConfiguration(null, "Drumm3r",
+					9)).runTest(10000);
 		} catch (final IOException | InvalidMidiDataException
 				| BoRCommandException | MidiUnavailableException exc) {
 			exc.printStackTrace();
