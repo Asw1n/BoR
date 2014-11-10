@@ -12,8 +12,8 @@ public class Drumm3rHead {
 	private static Port HEAD_MOTOR_PORT = MotorPort.A;
 	private static Port EYES_PORT = SensorPort.S1;
 
-	private static final int HEAD_MIN = -180;
-	private static final int HEAD_MAX = 180;
+	private static final int HEAD_MIN = -120;
+	private static final int HEAD_MAX = 120;
 
 	// TODO this should be a Limb once un-calibrated limbs are supported
 	private final EV3MediumRegulatedMotor head;

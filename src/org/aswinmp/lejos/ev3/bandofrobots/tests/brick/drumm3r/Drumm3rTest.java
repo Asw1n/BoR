@@ -17,6 +17,7 @@ public class Drumm3rTest {
 		final Drumm3r drumm3r = new Drumm3r();
 		BrickLogger.info("Calibrating");
 		drumm3r.calibrate();
+		drumm3r.reset();
 		BrickLogger.info("Drumming");
 		final RandomlyDelayedActionExecutor drum = new RandomlyDelayedActionExecutor(
 				1000, new RobotAction() {

@@ -15,7 +15,7 @@ import org.aswinmp.lejos.ev3.bandofrobots.musicians.Limb;
 import org.aswinmp.lejos.ev3.bandofrobots.musicians.LinearLimb;
 import org.aswinmp.lejos.ev3.bandofrobots.musicians.calibration.DualBoundaryCalibration;
 import org.aswinmp.lejos.ev3.bandofrobots.musicians.calibration.SingleBoundaryCalibration;
-import org.aswinmp.lejos.ev3.bandofrobots.musicians.calibration.TouchSensorCalibration;
+import org.aswinmp.lejos.ev3.bandofrobots.musicians.calibration.SingleTouchSensorCalibration;
 
 public class Piano {
   static LED led = LocalEV3.get().getLED();
@@ -40,7 +40,7 @@ public class Piano {
     rightHand.setSpeed(1);
     rightHand.setRange((int) (lowestNote * (1 + handWidth)), highestNote);
     
-    back = new LinearLimb(new EV3MediumRegulatedMotor(MotorPort.C), true, new TouchSensorCalibration(SensorPort.S1, true, 10, 50));
+    back = new LinearLimb(new EV3MediumRegulatedMotor(MotorPort.C), true, new SingleTouchSensorCalibration(SensorPort.S1, true, 10, 50));
     back.setSpeed(0.1f);
     back.setRange(lowestNote * 2f ,highestNote/2f);
     
