@@ -1,4 +1,4 @@
-package org.aswinmp.lejos.ev3.bandofrobots.musicians.piano;
+package org.aswinmp.lejos.ev3.bandofrobots.musicians.k3ys;
 
 import java.rmi.AlreadyBoundException;
 import java.rmi.RemoteException;
@@ -6,12 +6,13 @@ import java.rmi.RemoteException;
 import org.aswinmp.lejos.ev3.bandofrobots.musicians.AbstractMusician;
 import org.aswinmp.lejos.ev3.bandofrobots.utils.BrickLogger;
 
-public class PianoMusician extends AbstractMusician {
-	final Piano piano = new Piano();
+public class K3ysMusician extends AbstractMusician {
+	final K3ys piano = new K3ys();
 
 	public static void main(final String[] args) {
-		final PianoMusician pianoMusician = new PianoMusician();
+		final K3ysMusician pianoMusician = new K3ysMusician();
 		pianoMusician.piano.calibrate();
+		pianoMusician.piano.spreadHands();
 		pianoMusician.piano.restLimbs();
 
 		try {

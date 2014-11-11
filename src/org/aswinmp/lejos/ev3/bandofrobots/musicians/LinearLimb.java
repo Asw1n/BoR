@@ -145,7 +145,7 @@ public class LinearLimb implements Limb {
 
   @Override
   public void moveToCenter(boolean immediateReturn) {
-    moveTo((logicalMaximum - logicalMinimum) / 2f, immediateReturn);
+    moveTo(logicalMinimum+(logicalMaximum - logicalMinimum) / 2f, immediateReturn);
   }
 
   @Override
