@@ -69,4 +69,8 @@ public class TimeBuffer extends Thread implements Transmitter, Receiver{
         this.receiver=receiver;
     }
 
+    public long getDelay() {
+      return delay;
+    }
+
 }

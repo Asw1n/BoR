@@ -163,4 +163,8 @@ public class BoRController {
 	public void setSoundDelay(long delay) {
 	  timeBuffer.setDelay(delay);
 	}
+
+  public long getSoundDelay() {
+    return timeBuffer.getDelay();
+  }
 }
