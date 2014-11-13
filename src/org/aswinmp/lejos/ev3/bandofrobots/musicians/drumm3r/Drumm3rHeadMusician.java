@@ -44,6 +44,14 @@ public class Drumm3rHeadMusician extends AbstractMusician {
 	}
 
 	@Override
+	protected void beatPulse(final int beatNo, final int pulseNo) {
+		super.beatPulse(beatNo, pulseNo);
+		if (beatNo % 2 == 0) {
+			drumm3rHead.nod();
+		}
+	}
+
+	@Override
 	public String toString() {
 		return "Drumm3rHeadMusician";
 	}

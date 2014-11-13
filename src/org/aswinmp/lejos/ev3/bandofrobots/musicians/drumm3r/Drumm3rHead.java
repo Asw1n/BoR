@@ -1,7 +1,7 @@
 package org.aswinmp.lejos.ev3.bandofrobots.musicians.drumm3r;
 
 import lejos.hardware.ev3.LocalEV3;
-import lejos.hardware.motor.EV3MediumRegulatedMotor;
+import lejos.hardware.motor.EV3LargeRegulatedMotor;
 import lejos.hardware.port.MotorPort;
 import lejos.hardware.port.Port;
 import lejos.hardware.port.SensorPort;
@@ -12,17 +12,14 @@ public class Drumm3rHead {
 	private static Port HEAD_MOTOR_PORT = MotorPort.A;
 	private static Port EYES_PORT = SensorPort.S1;
 
-	private static final int HEAD_MIN = -120;
-	private static final int HEAD_MAX = 120;
-
 	// TODO this should be a Limb once un-calibrated limbs are supported
-	private final EV3MediumRegulatedMotor head;
+	private final EV3LargeRegulatedMotor head;
 	private final EV3UltrasonicSensor eyes;
 
 	public Drumm3rHead() {
 		// create and configure limbs
-		head = new EV3MediumRegulatedMotor(HEAD_MOTOR_PORT);
-		head.setSpeed(head.getMaxSpeed() / 2);
+		head = new EV3LargeRegulatedMotor(HEAD_MOTOR_PORT);
+		head.setSpeed(head.getMaxSpeed());
 		eyes = new EV3UltrasonicSensor(EYES_PORT);
 	}
 
@@ -34,22 +31,7 @@ public class Drumm3rHead {
 		eyes.disable();
 	}
 
-	public void moveHeadTo(final HeadLocation location) {
-		switch (location) {
-		case LEFT:
-			head.rotateTo(HEAD_MIN);
-			break;
-		case RIGHT:
-			head.rotateTo(HEAD_MAX);
-			break;
-		default:
-			head.rotateTo(0);
-		}
-
-	}
-
 	public void reset() {
-		head.rotateTo(0);
 		closeEyes();
 		enableLEDPattern(false);
 	}
@@ -59,8 +41,8 @@ public class Drumm3rHead {
 		LocalEV3.get().getLED().setPattern(pattern);
 	}
 
-	public enum HeadLocation {
-		LEFT, RIGHT, MIDDLE;
+	public void nod() {
+		head.rotate(360);
 	}
 
 }

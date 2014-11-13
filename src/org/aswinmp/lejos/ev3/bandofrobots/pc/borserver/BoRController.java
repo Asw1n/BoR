@@ -22,14 +22,14 @@ public class BoRController {
 	Synthesizer synthesizer;
 	Song song;
 	Conductor conductor;
-	TimeBuffer timeBuffer ;
+	TimeBuffer timeBuffer;
 
 	public BoRController() {
 		song = new Song();
 		conductor = new Conductor(this);
 		timeBuffer = new TimeBuffer(100);
-    timeBuffer.setDaemon(true);
-    timeBuffer.start();
+		timeBuffer.setDaemon(true);
+		timeBuffer.start();
 	}
 
 	public Song getSong() {
@@ -79,16 +79,17 @@ public class BoRController {
 			System.out.println("Binding Midi resources.");
 			sequencer.open();
 			synthesizer.open();
-			
-	    timeBuffer.setReceiver(synthesizer.getReceiver());
-	    sequencer.getTransmitter().setReceiver(timeBuffer);
-	    sequencer.getTransmitter().setReceiver(conductor);
-	 
-//			sequencer.getTransmitter().setReceiver(synthesizer.getReceiver());
-//			sequencer.getTransmitter().setReceiver(conductor);
-			
+
+			timeBuffer.setReceiver(synthesizer.getReceiver());
+			sequencer.getTransmitter().setReceiver(timeBuffer);
+			sequencer.getTransmitter().setReceiver(conductor);
+
+			// sequencer.getTransmitter().setReceiver(synthesizer.getReceiver());
+			// sequencer.getTransmitter().setReceiver(conductor);
+
 			sequencer.setSequence(MidiSystem.getSequence(song.getSong()));
-			// TODO: Meta events arenot delayed when sent to the Brick. Is this what is best or do they need a delay?
+			// TODO: Meta events are not delayed when sent to the Brick. Is this
+			// what is best or do they need a delay?
 			sequencer.addMetaEventListener(conductor);
 		} catch (final Exception e) {
 			e.printStackTrace();
@@ -155,16 +156,21 @@ public class BoRController {
 	public void dumpChannels() {
 		song.dumpChannels();
 	}
-	
-	/** Sets the delay of the audible music. The delay gives the musicians time to anticipate on notes.
+
+	/**
+	 * Sets the delay of the audible music. The delay gives the musicians time
+	 * to anticipate on notes.
+	 * 
 	 * @param delay
-	 * in milliseconds
+	 *            in milliseconds
 	 */
-	public void setSoundDelay(long delay) {
-	  timeBuffer.setDelay(delay);
+	public void setSoundDelay(final long delay) {
+		assert delay >= 0 : "Delay has to be a positive long value";
+		System.out.println("Setting delay to " + delay);
+		timeBuffer.setDelay(delay);
 	}
 
-  public long getSoundDelay() {
-    return timeBuffer.getDelay();
-  }
+	public long getSoundDelay() {
+		return timeBuffer.getDelay();
+	}
 }

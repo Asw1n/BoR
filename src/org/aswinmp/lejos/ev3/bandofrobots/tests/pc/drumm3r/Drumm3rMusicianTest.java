@@ -17,16 +17,18 @@ import org.aswinmp.lejos.ev3.bandofrobots.tests.pc.AbstractMusicianTest;
 public class Drumm3rMusicianTest extends AbstractMusicianTest {
 
 	private static final String MIDI_FILE_NAME = "dire_straits-sultans_of_swing.mid";
+	private static final long SERVER_DELAY = 900;
+	private static final long TEST_DURATION = 10000;
 
 	public Drumm3rMusicianTest(final MusicianConfiguration musicianConfiguration) {
-		super(musicianConfiguration);
+		super(musicianConfiguration, SERVER_DELAY);
 	}
 
 	public static void main(final String[] args) {
 		try {
 			new Drumm3rMusicianTest(new MusicianConfiguration(
 					createMidiFile(MIDI_FILE_NAME), "Drumm3r", 9))
-					.runTest(10000);
+					.runTest(TEST_DURATION);
 		} catch (final IOException | InvalidMidiDataException
 				| BoRCommandException | MidiUnavailableException exc) {
 			exc.printStackTrace();

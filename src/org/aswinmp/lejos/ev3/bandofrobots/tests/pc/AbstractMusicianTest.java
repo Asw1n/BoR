@@ -21,10 +21,17 @@ import org.aswinmp.lejos.ev3.bandofrobots.pc.shell.commands.StopCommand;
 public abstract class AbstractMusicianTest {
 
 	private final MusicianConfiguration musicianConfiguration;
+	private long delay = 0;
 
 	protected AbstractMusicianTest(
 			final MusicianConfiguration musicianConfiguration) {
 		this.musicianConfiguration = musicianConfiguration;
+	}
+
+	public AbstractMusicianTest(
+			final MusicianConfiguration musicianConfiguration, final long delay) {
+		this.musicianConfiguration = musicianConfiguration;
+		this.delay = delay;
 	}
 
 	protected void runTest(final long playTimeInMilliseconds)
@@ -32,6 +39,9 @@ public abstract class AbstractMusicianTest {
 			InvalidMidiDataException, BoRCommandException {
 		// instantiate and configure BoR controller
 		final BoRController boRController = new BoRController();
+		if (delay != 0) {
+			boRController.setSoundDelay(delay);
+		}
 		boRController.setSequencer(MidiSystem.getSequencer().getDeviceInfo());
 		boRController.setSynthesizer(MidiSystem.getSynthesizer()
 				.getDeviceInfo());

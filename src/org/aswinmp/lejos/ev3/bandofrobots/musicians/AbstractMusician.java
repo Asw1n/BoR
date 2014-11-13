@@ -12,6 +12,11 @@ import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
 
+import lejos.hardware.Button;
+import lejos.hardware.Key;
+import lejos.hardware.KeyListener;
+import lejos.hardware.Sound;
+
 import org.aswinmp.lejos.ev3.bandofrobots.utils.BrickLogger;
 
 /**
@@ -19,24 +24,58 @@ import org.aswinmp.lejos.ev3.bandofrobots.utils.BrickLogger;
  * Provides debug information for Musician methods. <br>
  * Provides some utility methods (in the future).
  * 
- * @author Aswin
+ * @author Aswin, Matthias Paul Scholz
  * 
  */
 public abstract class AbstractMusician implements Musician {
+
+	private static final String BINDING_NAME = "Musician";
+
 	protected int tempo = 500;
 	protected boolean running = false;
 	private long nextBeat = 0;
 	int beatNo = 0;
 	int pulseNo = 0;
 	private boolean generateBeatPulse = true;
-	Runner runner;
+	private Registry registry;
+	private Musician musician;
 	private int beatPulseDevider = 1;
+	private boolean synchroniseBeat = false;
 	/*
 	 * TODO verbosity should be handled by a configuring the logger instance,
 	 * not by configuring the Musician
 	 */
-	protected boolean verbose = false;
-	private boolean synchroniseBeat = false;
+	private boolean verbose = false;
+
+	public AbstractMusician() {
+		if (verbose)
+			BrickLogger.info("Musician %s loaded", this);
+
+		// start beat runner thread
+		final BeatRunner beatRunner = new BeatRunner();
+		final Thread runnerThread = new Thread(beatRunner);
+		runnerThread.setDaemon(true);
+		runnerThread.start();
+
+		// register shutdown listener
+		Button.ESCAPE.addKeyListener(new KeyListener() {
+			@Override
+			public void keyReleased(final Key k) {
+				// nothing to do
+			}
+
+			@Override
+			public void keyPressed(final Key k) {
+				Sound.beepSequence();
+				// stop beat runner
+				beatRunner.stop();
+				// unregister
+				unregister();
+				// exit
+				System.exit(0);
+			}
+		});
+	}
 
 	public boolean isVerbose() {
 		return verbose;
@@ -46,70 +85,40 @@ public abstract class AbstractMusician implements Musician {
 		this.verbose = verbose;
 	}
 
-	protected void register() throws RemoteException, AlreadyBoundException {
+	protected final void register() throws RemoteException,
+			AlreadyBoundException {
 		BrickLogger.info("Registering %s", this);
-		Registry registry;
+
 		final List<String> ips = getIPAddresses();
 		// Use last IP address, which will be Wifi, it it exists
 		String lastIp = null;
 		for (final String ip : ips) {
 			lastIp = ip;
-			System.out.println(ip);
+			BrickLogger.info(ip);
 		}
 		BrickLogger.info("Setting java.rmi.server.hostname to %s", lastIp);
 		System.setProperty("java.rmi.server.hostname", lastIp);
 
 		final int registryPort = 1098;
 		BrickLogger.info("Starting RMI registry using port %d", registryPort);
-		final Musician stub = (Musician) UnicastRemoteObject.exportObject(this,
-				0);
+		musician = (Musician) UnicastRemoteObject.exportObject(this, 0);
 
 		// Bind the remote object's stub in the registry
 		registry = LocateRegistry.createRegistry(registryPort);
-		registry.bind("Musician", stub);
+		registry.bind(BINDING_NAME, musician);
 		BrickLogger.info("Musician waiting for conductor to connect");
 		BrickLogger.info("Musician %s ready", this);
 	}
 
-	/**
-	 * Get all the IP addresses for the device
-	 */
-	public static List<String> getIPAddresses() {
-		final List<String> result = new ArrayList<String>();
-		Enumeration<NetworkInterface> interfaces;
+	protected final void unregister() {
+		// unregister from registry
 		try {
-			interfaces = NetworkInterface.getNetworkInterfaces();
-		} catch (final SocketException soExc) {
-			BrickLogger.error("Failed to get network interfaces", soExc);
-			return null;
+			registry.unbind(BINDING_NAME);
+			UnicastRemoteObject.unexportObject(this, true);
+		} catch (final Exception exc) {
+			BrickLogger.error("Could not unbind from registry", exc);
 		}
-		while (interfaces.hasMoreElements()) {
-			final NetworkInterface current = interfaces.nextElement();
-			try {
-				if (!current.isUp() || current.isLoopback()
-						|| current.isVirtual())
-					continue;
-			} catch (final SocketException soExc) {
-				BrickLogger.error("Failed to get network properties", soExc);
-			}
-			final Enumeration<InetAddress> addresses = current
-					.getInetAddresses();
-			while (addresses.hasMoreElements()) {
-				final InetAddress current_addr = addresses.nextElement();
-				if (current_addr.isLoopbackAddress())
-					continue;
-				result.add(current_addr.getHostAddress());
-			}
-		}
-		return result;
-	}
 
-	public AbstractMusician() {
-		if (verbose)
-			BrickLogger.info("Musician %s loaded", this);
-		runner = new Runner();
-		runner.setDaemon(true);
-		runner.start();
 	}
 
 	@Override
@@ -184,12 +193,53 @@ public abstract class AbstractMusician implements Musician {
 			BrickLogger.info("BeatPulse %d, %d", beatNo, pulseNo);
 	}
 
-	private class Runner extends Thread {
+	@Override
+	public void beat() throws RemoteException {
+		synchroniseBeat = true;
+	}
+
+	/**
+	 * Get all the IP addresses for the device
+	 */
+	private List<String> getIPAddresses() {
+		final List<String> result = new ArrayList<String>();
+		Enumeration<NetworkInterface> interfaces;
+		try {
+			interfaces = NetworkInterface.getNetworkInterfaces();
+		} catch (final SocketException soExc) {
+			BrickLogger.error("Failed to get network interfaces", soExc);
+			return null;
+		}
+		while (interfaces.hasMoreElements()) {
+			final NetworkInterface current = interfaces.nextElement();
+			try {
+				if (!current.isUp() || current.isLoopback()
+						|| current.isVirtual())
+					continue;
+			} catch (final SocketException soExc) {
+				BrickLogger.error("Failed to get network properties", soExc);
+			}
+			final Enumeration<InetAddress> addresses = current
+					.getInetAddresses();
+			while (addresses.hasMoreElements()) {
+				final InetAddress current_addr = addresses.nextElement();
+				if (current_addr.isLoopbackAddress())
+					continue;
+				result.add(current_addr.getHostAddress());
+			}
+		}
+		return result;
+	}
+
+	private class BeatRunner implements Runnable {
+
+		private volatile boolean stopped;
+
 		@Override
 		public void run() {
 			if (verbose)
 				BrickLogger.info("Beat provider started");
-			while (true) {
+			while (!stopped) {
 				final long time = System.currentTimeMillis();
 				if (running) {
 					if (synchroniseBeat) {
@@ -215,14 +265,12 @@ public abstract class AbstractMusician implements Musician {
 					}
 				}
 				Thread.yield();
-
 			}
+			BrickLogger.info("Stopping beat runner");
 		}
 
-	}
-
-	@Override
-	public void Beat() throws RemoteException {
-		synchroniseBeat = true;
+		public void stop() {
+			stopped = true;
+		}
 	}
 }
