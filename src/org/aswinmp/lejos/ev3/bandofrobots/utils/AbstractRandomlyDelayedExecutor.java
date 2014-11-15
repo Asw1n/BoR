@@ -1,4 +1,4 @@
-package org.aswinmp.lejos.ev3.bandofrobots.tests.brick;
+package org.aswinmp.lejos.ev3.bandofrobots.utils;
 
 import java.util.Random;
 

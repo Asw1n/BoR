@@ -11,6 +11,7 @@ import org.aswinmp.lejos.ev3.bandofrobots.utils.BrickLogger;
 public class Drumm3rMusician extends AbstractMusician {
 
 	private final Drumm3r drumm3r;
+	private final RandomlyDelayedMoveTorsoExecutor moveTorso;
 
 	public static void main(final String[] args) {
 		try {
@@ -28,6 +29,7 @@ public class Drumm3rMusician extends AbstractMusician {
 	public Drumm3rMusician() {
 		super();
 		drumm3r = new Drumm3r();
+		moveTorso = new RandomlyDelayedMoveTorsoExecutor(2000, drumm3r);
 		drumm3r.calibrate();
 		drumm3r.reset();
 	}
@@ -35,6 +37,8 @@ public class Drumm3rMusician extends AbstractMusician {
 	@Override
 	public void start() {
 		super.start();
+		drumm3r.openEyes();
+		new Thread(moveTorso).start();
 		drumm3r.enableLEDPattern(true);
 	}
 
@@ -47,6 +51,9 @@ public class Drumm3rMusician extends AbstractMusician {
 	@Override
 	public void stop() {
 		super.stop();
+		if (moveTorso != null) {
+			moveTorso.stop();
+		}
 		drumm3r.reset();
 	}
 
@@ -54,7 +61,7 @@ public class Drumm3rMusician extends AbstractMusician {
 	protected void beatPulse(final int beatNo, final int pulseNo) {
 		super.beatPulse(beatNo, pulseNo);
 		if (beatNo % 2 == 0) {
-			drumm3r.tap();
+			drumm3r.nod();
 		}
 	}
 

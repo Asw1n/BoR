@@ -17,11 +17,14 @@ import org.aswinmp.lejos.ev3.bandofrobots.tests.pc.AbstractMusicianTest;
 public class Drumm3rMusicianTest extends AbstractMusicianTest {
 
 	private static final String MIDI_FILE_NAME = "dire_straits-sultans_of_swing.mid";
+	// private static final String MIDI_FILE_NAME =
+	// "The_Doors_-_Roadhouse_Blues.mid";
 	private static final long SERVER_DELAY = 900;
-	private static final long TEST_DURATION = 10000;
+	private static final long TEST_DURATION = 30000;
 
 	public Drumm3rMusicianTest(final MusicianConfiguration musicianConfiguration) {
-		super(musicianConfiguration, SERVER_DELAY);
+		// super(musicianConfiguration, SERVER_DELAY);
+		super(musicianConfiguration);
 	}
 
 	public static void main(final String[] args) {

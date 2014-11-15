@@ -1,5 +1,7 @@
 package org.aswinmp.lejos.ev3.bandofrobots.tests.brick;
 
+import org.aswinmp.lejos.ev3.bandofrobots.utils.AbstractRandomlyDelayedExecutor;
+
 public class RandomlyDelayedActionExecutor extends
 		AbstractRandomlyDelayedExecutor {
 
