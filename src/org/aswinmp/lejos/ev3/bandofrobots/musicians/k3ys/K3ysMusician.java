@@ -13,6 +13,7 @@ public class K3ysMusician extends AbstractMusician {
 		final K3ysMusician pianoMusician = new K3ysMusician();
 		pianoMusician.piano.calibrate();
 		pianoMusician.piano.spreadHands();
+//		pianoMusician.piano.test();
 		pianoMusician.piano.restLimbs();
 
 		try {

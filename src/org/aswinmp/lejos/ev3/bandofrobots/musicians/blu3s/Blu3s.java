@@ -4,7 +4,6 @@ package org.aswinmp.lejos.ev3.bandofrobots.musicians.blu3s;
 import lejos.hardware.BrickFinder;
 import lejos.hardware.LED;
 import lejos.hardware.ev3.LocalEV3;
-import lejos.hardware.lcd.LCD;
 import lejos.hardware.motor.EV3MediumRegulatedMotor;
 import lejos.hardware.port.MotorPort;
 import lejos.hardware.sensor.EV3UltrasonicSensor;
@@ -30,7 +29,7 @@ public class Blu3s  {
     rightHand.setRange(-1, 1);
     rightHand.setSpeed(1);
 
-    leftHand = new LinearLimb(new EV3MediumRegulatedMotor(MotorPort.B), true, new SingleBoundaryCalibration(false, 15, 140, 20));
+    leftHand = new LinearLimb(new EV3MediumRegulatedMotor(MotorPort.B), true, new SingleBoundaryCalibration(false, 15, 80, 20));
     rightHand.setRange(0, 1);
     leftHand.setSpeed(1);
 
