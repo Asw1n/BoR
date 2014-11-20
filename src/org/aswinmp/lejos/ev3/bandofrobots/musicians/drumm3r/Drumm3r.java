@@ -6,6 +6,8 @@ import lejos.hardware.port.MotorPort;
 import lejos.hardware.port.Port;
 import lejos.hardware.port.SensorPort;
 import lejos.hardware.sensor.EV3UltrasonicSensor;
+import lejos.robotics.RangeFinderAdaptor;
+import lejos.robotics.SampleProvider;
 
 import org.aswinmp.lejos.ev3.bandofrobots.musicians.Limb;
 import org.aswinmp.lejos.ev3.bandofrobots.musicians.LinearLimb;
@@ -32,6 +34,7 @@ public class Drumm3r {
 	// TODO this should be a Limb once un-calibrated limbs are supported
 	private final EV3LargeRegulatedMotor head;
 	private final EV3UltrasonicSensor eyes;
+	private final RangeFinderAdaptor ultrasonicRangeFinder;
 
 	public Drumm3r() {
 		// create and configure limbs
@@ -54,6 +57,9 @@ public class Drumm3r {
 		head = new EV3LargeRegulatedMotor(HEAD_MOTOR_PORT);
 		head.setSpeed(head.getMaxSpeed());
 		eyes = new EV3UltrasonicSensor(EYES_PORT);
+		final SampleProvider eyesSampleProvider = eyes.getDistanceMode();
+		ultrasonicRangeFinder = new RangeFinderAdaptor(eyesSampleProvider);
+
 	}
 
 	public void calibrate() {
@@ -107,11 +113,11 @@ public class Drumm3r {
 	}
 
 	public void reset() {
-		closeEyes();
 		rightHand.moveToCenter(false);
 		leftHand.moveToCenter(false);
 		torso.moveToCenter(false);
 		enableLEDPattern(false);
+		closeEyes();
 	}
 
 	public void enableLEDPattern(final boolean enabled) {
@@ -121,6 +127,10 @@ public class Drumm3r {
 
 	public void nod() {
 		head.rotate(360);
+	}
+
+	public float getDistanceToEyes() {
+		return ultrasonicRangeFinder.getRange();
 	}
 
 	public enum TorsoLocation {

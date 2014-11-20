@@ -57,7 +57,8 @@ public class AssignMusicianCommand {
 			}
 			channels.setInstrumentBrick(Brick.get(brickInfo), channelNo);
 			System.out.println(String.format(
-					"Brick '%s' assigned to channel %d", brickName, channelNo));
+					"Brick '%s' assigned as musician to channel %d", brickName,
+					channelNo));
 
 		} catch (final IOException exc) {
 			throw new BoRCommandException(exc);

@@ -13,6 +13,7 @@ import org.aswinmp.lejos.ev3.bandofrobots.pc.borserver.BoRController;
 import org.aswinmp.lejos.ev3.bandofrobots.pc.configuration.MusicianConfiguration;
 import org.aswinmp.lejos.ev3.bandofrobots.pc.shell.BoRCommandException;
 import org.aswinmp.lejos.ev3.bandofrobots.pc.shell.commands.AssignMusicianCommand;
+import org.aswinmp.lejos.ev3.bandofrobots.pc.shell.commands.AssignSingerCommand;
 import org.aswinmp.lejos.ev3.bandofrobots.pc.shell.commands.PlayCommand;
 import org.aswinmp.lejos.ev3.bandofrobots.pc.shell.commands.QuitCommand;
 import org.aswinmp.lejos.ev3.bandofrobots.pc.shell.commands.SelectSongCommand;
@@ -34,9 +35,10 @@ public abstract class AbstractMusicianTest {
 		this.delay = delay;
 	}
 
-	protected void runTest(final long playTimeInMilliseconds)
-			throws IOException, MidiUnavailableException,
-			InvalidMidiDataException, BoRCommandException {
+	protected void runTest(final long playTimeInMilliseconds,
+			final boolean assignMusician, final boolean assignSinger) throws IOException,
+			MidiUnavailableException, InvalidMidiDataException,
+			BoRCommandException {
 		// instantiate and configure BoR controller
 		final BoRController boRController = new BoRController();
 		if (delay != 0) {
@@ -48,10 +50,17 @@ public abstract class AbstractMusicianTest {
 		// set song
 		new SelectSongCommand(boRController).selectSong(musicianConfiguration
 				.getMidiFile().getAbsolutePath());
-		// assign brick
-		new AssignMusicianCommand(boRController).assignBrick(
-				musicianConfiguration.getBrickIdentifier(),
-				musicianConfiguration.getChannel());
+		// assign brick for playing and/or singing
+		if (assignMusician) {
+			new AssignMusicianCommand(boRController).assignBrick(
+					musicianConfiguration.getBrickIdentifier(),
+					musicianConfiguration.getChannel());
+		}
+		if (assignSinger) {
+			new AssignSingerCommand(boRController).assignVoice(
+					musicianConfiguration.getBrickIdentifier(),
+					musicianConfiguration.getChannel());
+		}
 		// play song for some time, then quit
 		new PlayCommand(boRController).play();
 		final Timer timer = new Timer();

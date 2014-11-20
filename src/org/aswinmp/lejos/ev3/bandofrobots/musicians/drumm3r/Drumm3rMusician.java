@@ -18,7 +18,7 @@ public class Drumm3rMusician extends AbstractMusician {
 			final Drumm3rMusician drumm3rMusician = new Drumm3rMusician();
 			// register
 			drumm3rMusician.register();
-			// final play sound to final signal that setting final up the
+			// finally play sound to signal that setting up the
 			// Drumm3r final is complete
 			Sound.beepSequenceUp();
 		} catch (RemoteException | AlreadyBoundException exc) {
