@@ -1,8 +1,5 @@
 package org.aswinmp.lejos.ev3.bandofrobots.musicians.k3ys;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 import lejos.hardware.LED;
 import lejos.hardware.ev3.LocalEV3;
@@ -14,6 +11,7 @@ import lejos.utility.Delay;
 
 import org.aswinmp.lejos.ev3.bandofrobots.musicians.Limb;
 import org.aswinmp.lejos.ev3.bandofrobots.musicians.LinearLimb;
+import org.aswinmp.lejos.ev3.bandofrobots.musicians.calibration.DualBoundaryCalibration;
 import org.aswinmp.lejos.ev3.bandofrobots.musicians.calibration.SingleBoundaryCalibration;
 import org.aswinmp.lejos.ev3.bandofrobots.utils.BrickLogger;
 
@@ -30,16 +28,17 @@ public class K3ys {
   Limb       leftHand;
   Limb       rightHand;
   Limb       back;
-  Limb head;
+  Limb       head;
   static float lowestNote = 21;                                                        // in notes
   static float highestNote = 108;                                                      // in notes
+  static float toneRange = highestNote-lowestNote;
 
-  static float keyboardWidth = 21-1;                                                     // in Studs
-  static float handWidth = 4.5f;                                                          // in Studs
-  static float handWidthInNotes=  (highestNote-lowestNote) * handWidth / keyboardWidth ;//in notes
+  static float keyboardWidth = 21-1;                                                   // in Studs
+  static float handWidth = 4.5f;                                                       // in Studs
+  static float handWidthInNotes=  toTone(handWidth);              //in notes
 
   static float handRange = 10;                                                         // in studs
-  static float handRangeInNotes = (highestNote-lowestNote) * handRange /keyboardWidth;
+  static float handRangeInNotes = toTone(handRange);
   static float gearRatio = 60;                                                         // in degrees / stud
   static int limbRange= (int) (handRange * gearRatio);                                 // in degrees
   
@@ -47,159 +46,169 @@ public class K3ys {
   static float leftHighest=leftLowest + handRangeInNotes;
   static float rightHighest=highestNote;
   static float rightLowest=highestNote - handRangeInNotes;
+
+  static float bendStart = 6;                                                          // in studs  
+  static float bendFactor = 1 / (toneRange*(handRange-bendStart)/keyboardWidth);             //
+  static float leftBend = studToTone(bendStart);
+  static float rightBend = studToTone(keyboardWidth-bendStart);
+
   
   
-  int rightRest=80;
-  int leftRest=50;
+  static int rightRest=80;
+  static int leftRest=50;
   Limb[] limbs;
-  Mean statistic=new Mean();
+  private float rhmean=rightRest;
+  private float lhmean=leftRest;
+  private float f=0.3f;
   
   public K3ys() {
     leftHand = new LinearLimb(new EV3MediumRegulatedMotor(LEFT_HAND_MOTOR_PORT), false, new SingleBoundaryCalibration(false,20,limbRange,20));
     leftHand.setSpeed(1);
     leftHand.setRange(leftLowest,leftHighest );
     
-    rightHand = new LinearLimb(new EV3MediumRegulatedMotor(RIGHT_HAND_MOTOR_PORT), false, new SingleBoundaryCalibration(true,20,limbRange,20));
+    rightHand = new LinearLimb(new EV3MediumRegulatedMotor(RIGHT_HAND_MOTOR_PORT), false, new SingleBoundaryCalibration(true,20,limbRange,30));
     rightHand.setSpeed(1);
     rightHand.setRange(rightLowest ,rightHighest);
     
-    back = new LinearLimb(new EV3MediumRegulatedMotor(TORSO_MOTOR_PORT), true, new SingleBoundaryCalibration(false, 10, 90, 5));
+    back = new LinearLimb(new EV3MediumRegulatedMotor(TORSO_MOTOR_PORT), true, new SingleBoundaryCalibration(false, 10, 100, 5));
+    //back = new LinearLimb(new EV3MediumRegulatedMotor(TORSO_MOTOR_PORT), true, new DualBoundaryCalibration(5,5,5));
     back.setSpeed(0.1f);
-    back.setRange(leftLowest,rightHighest);
+    back.setRange(-1,1);
     
-    head = new LinearLimb(new EV3MediumRegulatedMotor(HEAD_MOTOR_PORT), false, new SingleBoundaryCalibration(false, 5, 75, 10));
+    head = new LinearLimb(new EV3MediumRegulatedMotor(HEAD_MOTOR_PORT), false, new SingleBoundaryCalibration(false, 5, 45, 10));
     head.setRange(0, 127);
     head.setSpeed(0.2f);
+    limbs = new Limb[]{leftHand, rightHand, back, head};
+  }
+  
+  
+  static float toTone(float stud) {
+    return (toneRange / keyboardWidth)  * stud;
+  }
 
-    
-
-    limbs = new Limb[]{leftHand, rightHand, back};
+  static float toStud(float tone) {
+    return tone * keyboardWidth/toneRange;
+  }
+  
+  static float studToTone(float stud) {
+    return lowestNote +  toTone(stud);
+  }
+  
+  static float toneToStud(float tone) {
+    return toStud(tone-lowestNote);
   }
   
   public void calibrate() {
     rightHand.calibrate();
     leftHand.calibrate();
-    centerHands();
+    centerHands(true);
     back.calibrate();
     back.moveToCenter(false);
-    //head.calibrate();
+    head.calibrate();
   }
   
-  public void centerHands() {
-    rightHand.moveTo(rightRest,true);
-    leftHand.moveTo(leftRest,true);
+  public void openMouth(final float f) {
+    // The mouth opens when singing according to intensity of the note.
+    head.setSpeed(0.1f);
+    head.moveTo(f, true);
   }
   
-  public void spreadHands() {
-    leftHand.moveToMin(false);
-    rightHand.moveToMax(false);
+  public void closeMouth() {
+    head.setSpeed(0.03f);
+    head.moveTo(0, true);
   }
   
-  public void playWithRightHand(int tone) {
-    rightHand.moveTo(tone, true);
-  }
-
-  public void playWithLeftHand(int tone) {
-    leftHand.moveTo(tone, true);
+  public void centerHands(boolean immediateReturn) {
+    play(rightHand,rightRest,immediateReturn);
+    play(leftHand,leftRest,immediateReturn);
   }
   
-  public void playWithAnyHand(int note) {
+  public void spreadHands(boolean immediateReturn) {
+    play(rightHand,highestNote,immediateReturn);
+    play(leftHand,lowestNote,immediateReturn);
+  }
+  
+  public void rest() {
+    for (Limb limb : limbs) limb.rest();
+    rhmean=rightRest;
+    lhmean=leftRest;
+  }
+  
+  /** Play a tone with one hand and makes sure the other gets out of the way. Also move the back.
+   * @param hand
+   * @param note
+   */
+  private void play(Limb hand, float note, boolean immediateReturn) {
+    if (hand==leftHand) {
+      if (note + handWidthInNotes > rightHand.getTarget()) {
+        rightHand.moveTo(note+handWidthInNotes, true);
+      }
+    }
+    else {
+      if (note - handWidthInNotes < leftHand.getTarget()) {
+        leftHand.moveTo(note-handWidthInNotes, true);  
+      }
+    }
+    hand.moveTo(note,immediateReturn);
+    setBack();
+  }
+  
+  public void play(int note) {
     Limb hand;
-    //int middle =statistic.getNewStatistic(note);
-    // Test if note is outside the range of one of the hands, then the other hand should play it
+    //BrickLogger.info("note: %f %f %d ", lhmean, rhmean , note);
    if (note >= leftHighest) {
       hand = rightHand;
       }
     else if (note <= rightLowest) {
       hand = leftHand;
     }
-    else if (Math.abs(note-leftHand.getTarget()) < Math.abs(note-rightHand.getTarget()) ) {
-      hand=leftHand;
-    }
-    else {
+    else if (Math.abs(note-rhmean)<Math.abs(note-lhmean)) {
       hand=rightHand;
     }
-   
-    if (hand==leftHand) {
-      if (rightHand.getTarget()-handWidthInNotes<=note) {
-        rightHand.moveTo(note+handWidthInNotes, true);
-      }
+    else {
+      hand=leftHand;
+    }
+    if (hand==rightHand){
+      rhmean=(1-f)*rhmean+f*note;
     }
     else {
-      if (leftHand.getTarget()+handWidthInNotes<=note) {
-        leftHand.moveTo(note-handWidthInNotes, true);  
-      }
+      lhmean=(1-f)*lhmean+f*note;
     }
-    hand.moveTo(note,true);
-    
-    setBack();
+
+    play(hand, note, true);
   }
   
   public void setBack() {
-    back.moveTo((rightHand.getTarget()+leftHand.getTarget())/2, true);
+    float leftFactor=0;
+    float rightFactor=0;
+    if (leftHand.getTarget()>leftBend) {
+      leftFactor=(leftHand.getTarget()-leftBend) * bendFactor;
+    }
+    if (rightHand.getTarget()<rightBend) {
+      rightFactor=(rightHand.getTarget()-rightBend) * bendFactor;
+    }
+    //BrickLogger.info("Bend: %f %f ", leftFactor , rightFactor);
+    back.moveTo(leftFactor + rightFactor, true);
   }
   
-  private class Median {
-    private int size=10;
-    private List<Integer> lastNotes= new ArrayList<Integer>();
-    
-    public int getNewStatistic(int note) {
-      lastNotes.add(note);
-      if (lastNotes.size()>size)
-        lastNotes.remove(0);
-      int[] notes = new int[lastNotes.size()];
-      Arrays.sort(notes);
-      return notes[lastNotes.size()];
-    }
-  }
-  
-  private class Mean {
-    private int size=10;
-    private List<Integer> lastNotes= new ArrayList<Integer>();
-    private int sum;
-    
-    public int getNewStatistic(int note) {
-      lastNotes.add(note);
-      sum+=note;
-      if (lastNotes.size()>size) {
-        sum -=lastNotes.remove(0);
-      }
-      return sum / lastNotes.size();
-    }
-  }
 
-  public void restLimbs() {
-    for (Limb limb : limbs) {
-      limb.rest();
-    }
-    
-  }
-  
+
+
   public void test() {
-    leftHand.moveTo(leftHand.getMinimum(), true);
-    rightHand.moveTo(rightHand.getMaximum(), true);
-    setBack();
-    Delay.msDelay(5000);
-    leftHand.moveTo(leftHand.getMaximum(),true);
-    setBack();
-    Delay.msDelay(5000);
-    leftHand.moveTo(leftHand.getMinimum(), true);
-    setBack();
-    Delay.msDelay(5000);
-    rightHand.moveTo(rightHand.getMinimum(), true);
-    setBack();
-    Delay.msDelay(5000);
-    for ( float p=lowestNote;p<=highestNote-this.handWidthInNotes;p+=1) {
-      moveTo(p);
+    play(rightHand,rightLowest, false);
+    for (float note=leftLowest;note<=leftHighest; note++) {
+      play(leftHand,note,false);
     }
-    spreadHands();
-    setBack();
-    Delay.msDelay(5000);
+    play(rightHand,rightHighest, true);
+    play(leftHand,leftHighest, false);
+    for (float note=rightHighest;note>=rightLowest; note--) {
+      play(rightHand,note,false);
+    }
   }
   
   private void moveTo(float position) {
     leftHand.moveTo(position, true);
-    rightHand.moveTo(position+this.handWidthInNotes, true);
+    rightHand.moveTo(position+handWidthInNotes, true);
     setBack();
     Delay.msDelay(1000);
     
@@ -212,6 +221,20 @@ public class K3ys {
     head.moveToMax(false);
     head.moveToMin(false);
     Delay.msDelay(5000);
+  }
+  
+  public void testBack() {
+    for (float i=-1;i<=1;i+=0.05) {
+      back.moveTo(i,false); 
+      Delay.msDelay(100);
+    }
+    back.moveToMax(false);
+    back.moveToMin(false);
+    back.moveToMax(false);
+    back.moveToMin(false);
+    back.moveToMax(false);
+    back.moveToMin(false);
+    back.moveTo(0,false);
   }
 
 }

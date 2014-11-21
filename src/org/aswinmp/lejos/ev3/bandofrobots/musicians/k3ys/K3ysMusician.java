@@ -12,9 +12,10 @@ public class K3ysMusician extends AbstractMusician {
 	public static void main(final String[] args) {
 		final K3ysMusician pianoMusician = new K3ysMusician();
 		pianoMusician.piano.calibrate();
-		pianoMusician.piano.spreadHands();
-//		pianoMusician.piano.test();
-		pianoMusician.piano.restLimbs();
+//		pianoMusician.piano.testBack();
+//    pianoMusician.piano.test();
+		pianoMusician.piano.spreadHands(false);
+		pianoMusician.piano.rest();
 
 		try {
 			// register
@@ -27,19 +28,29 @@ public class K3ysMusician extends AbstractMusician {
 
 	@Override
 	public void start() {
-		piano.centerHands();
+		piano.centerHands(true);
 	}
 
 	@Override
 	public void stop() {
-		piano.spreadHands();
-		piano.restLimbs();
+		piano.spreadHands(false);
+		piano.rest();
 	}
 
 	@Override
 	public void noteOn(final int tone, final int intensity) {
-		piano.playWithAnyHand(tone);
+		piano.play(tone);
 	}
+	
+	 @Override
+	  public void voiceOn(final int tone, final int intensity) {
+	   piano.openMouth(intensity);
+	  }
+
+	  @Override
+	  public void voiceOff(final int tone) {
+	    piano.closeMouth();
+	  }
 
 	@Override
 	public String toString() {
