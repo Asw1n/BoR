@@ -10,14 +10,15 @@ public class Blu3sMusician extends AbstractMusician {
 	final Blu3s blu3s = new Blu3s();
 
 	public static void main(final String[] args) {
+    final Blu3sMusician blu3sMusician = new Blu3sMusician();
+    blu3sMusician.blu3s.openEyes();
+    blu3sMusician.blu3s.calibrateLimbs();
+    blu3sMusician.blu3s.closeEyes();
+    blu3sMusician.setBeatPulseDevider(4);
 		try {
-			final Blu3sMusician blu3sMusician = new Blu3sMusician();
 			// register
-			blu3sMusician.register();
-			blu3sMusician.blu3s.openEyes();
-			blu3sMusician.blu3s.calibrateLimbs();
-			blu3sMusician.blu3s.closeEyes();
-			blu3sMusician.setBeatPulseDevider(2);
+      blu3sMusician.register();
+      blu3sMusician.blu3s.switchAmpOn();
 		} catch (RemoteException | AlreadyBoundException exc) {
 			BrickLogger.error("An exception occurred", exc);
 			exc.printStackTrace();

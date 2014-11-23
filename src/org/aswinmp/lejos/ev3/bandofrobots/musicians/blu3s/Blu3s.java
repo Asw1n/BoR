@@ -25,15 +25,15 @@ public class Blu3s  {
 
 	public Blu3s() {
 		super();
-		rightHand = new LinearLimb(new EV3MediumRegulatedMotor(MotorPort.A), true, new SingleBoundaryCalibration(true, 15, 40, 10));
+		rightHand = new LinearLimb(new EV3MediumRegulatedMotor(MotorPort.A), true, new SingleBoundaryCalibration(true, 15, 40, 30));
     rightHand.setRange(-1, 1);
     rightHand.setSpeed(1);
 
-    leftHand = new LinearLimb(new EV3MediumRegulatedMotor(MotorPort.B), true, new SingleBoundaryCalibration(false, 15, 80, 20));
-    rightHand.setRange(0, 1);
+    leftHand = new LinearLimb(new EV3MediumRegulatedMotor(MotorPort.B), true, new SingleBoundaryCalibration(false, 15, 140, 20));
+    leftHand.setRange(0, 1);
     leftHand.setSpeed(1);
 
-    foot = new LinearLimb(new EV3MediumRegulatedMotor(MotorPort.C), false, new SingleBoundaryCalibration(true, 10, 55, 10));
+    foot = new LinearLimb(new EV3MediumRegulatedMotor(MotorPort.C), false, new SingleBoundaryCalibration(true, 10, 50, 10));
     foot.setRange(0, 1);
     foot.setSpeed(1);
 
@@ -68,7 +68,7 @@ public class Blu3s  {
 			isSet = true;
 		}
 		// The left hand moves full speed to the position
-		leftHand.setSpeed(1);
+		//leftHand.setSpeed(1);
 		leftHand.moveTo(tone, true);
 	}
 
@@ -134,6 +134,20 @@ public class Blu3s  {
       limb.calibrate();
       limb.moveToMin(false);
     }
+  }
+  
+  public void testLeftHand() {
+    leftHand.setSpeed(1);
+    leftHand.moveToMin(false);
+    leftHand.moveToMax(false);
+    leftHand.moveToMin(false);
+    leftHand.moveToMax(false);
+    leftHand.moveToMin(false);
+    leftHand.moveToMax(false);
+    leftHand.moveToMin(false);
+    leftHand.moveToMax(false);
+    leftHand.moveToMin(false);
+    leftHand.moveToMax(false);
   }
 
 }
