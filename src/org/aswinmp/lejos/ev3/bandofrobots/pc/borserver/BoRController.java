@@ -136,7 +136,9 @@ public class BoRController {
 
   public void stop() {
     System.out.println("Stopping controller");
-    sequencer.stop();
+    if (sequencer.isOpen()) {
+      sequencer.stop();
+    }
     for (final Brick brick : song.getChannels().getAllBricks()) {
       brick.sendStop();
     }

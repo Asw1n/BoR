@@ -2,8 +2,8 @@ package org.aswinmp.lejos.ev3.bandofrobots.pc.shell;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.SortedMap;
+import java.util.TreeMap;
 
 import javax.sound.midi.MidiUnavailableException;
 
@@ -28,7 +28,7 @@ import org.aswinmp.lejos.ev3.bandofrobots.pc.shell.commands.StopPlaylistCommand;
  */
 public class CommandProcessor {
 
-  private final Map<String, Object> commandMap = new HashMap<>();
+  private final SortedMap<String, Object> commandMap = new TreeMap<String, Object>();
   private final CommandContext commandContext = new CommandContext();
 
   public CommandProcessor() throws MidiUnavailableException {
