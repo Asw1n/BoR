@@ -1,0 +1,45 @@
+// Beatles - Come together
+//
+song 15A-1__Come_Together.mid
+musician BLU3S 1
+musician K3YS 5
+musician DRUMM3R 9
+singer SING3R 2
+singer BLU3S 3
+
+// Beatles - Hey Jude
+//
+song 16B-1__Hey_Jude.mid
+singer SING3R 0
+singer KY3S 1
+singer BLU3S 1
+musician K3YS 7
+musician BLU3S 9
+musician DRUMM3R 9
+
+// Adele - Set fire to the rain
+//
+song adele-set_fire_to_the_rain.mid
+singer SING3R 3
+singer BLU3S 4
+singer K3YS 4
+musician BLU3S 13
+musician K3YS 7
+musician DRUMM3R 9
+
+// Always on my mind
+//
+song Always_On_My_Mind.mid
+singer SING3R 0
+musician BLU3S 8
+musician K3YS 7
+musician DRUMM3R 9
+
+// Queen - Another one bites the dust
+//
+song another.mid
+singer SING3R 3
+musician BLU3S 2
+musician K3YS 4
+musician DRUMM3R 9
+

@@ -1,7 +1,7 @@
 // Prefered settings for midi songs
 // 
 //
-song MIDI\
+song 
 singer SING3R 
 singer BLU3S 
 singer K3YS 
@@ -13,7 +13,7 @@ musician DRUMM3R 9
 
 // Beatles - Come together
 //
-song MIDI\15A-1__Come_Together.mid
+song 15A-1__Come_Together.mid
 musician BLU3S 1
 musician K3YS 5
 musician DRUMM3R 9
@@ -22,7 +22,7 @@ singer BLU3S 3
 
 // Beatles - Hey Jude
 //
-song MIDI\16B-1__Hey_Jude.mid
+song 16B-1__Hey_Jude.mid
 singer SING3R 0
 singer KY3S 1
 singer BLU3S 1
@@ -32,7 +32,7 @@ musician DRUMM3R 9
 
 // Adele - Set fire to the rain
 //
-song MIDI\adele-set_fire_to_the_rain.mid
+song adele-set_fire_to_the_rain.mid
 singer SING3R 3
 singer BLU3S 4
 singer K3YS 4
@@ -42,7 +42,7 @@ musician DRUMM3R 9
 
 // Always on my mind
 //
-song MIDI\Always_On_My_Mind.mid
+song Always_On_My_Mind.mid
 singer SING3R 0
 musician BLU3S 8
 musician K3YS 7
@@ -50,7 +50,7 @@ musician DRUMM3R 9
 
 // Queen - Another one bites the dust
 //
-song MIDI\another.mid
+song another.mid
 singer SING3R 3
 musician BLU3S 2
 musician K3YS 4
@@ -58,7 +58,7 @@ musician DRUMM3R 9
 
 // 
 //
-song MIDI\
+song 
 singer SING3R 
 singer BLU3S 
 singer K3YS 
@@ -68,7 +68,7 @@ musician DRUMM3R 9
 
 // 
 //
-song MIDI\
+song 
 singer SING3R 
 singer BLU3S 
 singer K3YS 
