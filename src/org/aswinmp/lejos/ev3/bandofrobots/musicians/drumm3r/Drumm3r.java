@@ -14,6 +14,12 @@ import org.aswinmp.lejos.ev3.bandofrobots.musicians.LinearLimb;
 import org.aswinmp.lejos.ev3.bandofrobots.musicians.calibration.DualBoundaryCalibration;
 import org.aswinmp.lejos.ev3.bandofrobots.musicians.calibration.DualTouchSensorCalibration;
 
+/**
+ * A drumming robot.
+ * 
+ * @author Matthias Paul Scholz
+ * 
+ */
 public class Drumm3r {
 
 	private static Port LEFT_HAND_MOTOR_PORT = MotorPort.C;

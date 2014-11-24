@@ -1,4 +1,4 @@
-package org.aswinmp.lejos.ev3.bandofrobots.tests.brick.drumm3r;
+package org.aswinmp.lejos.ev3.bandofrobots.tests.brick.sing3r;
 
 import lejos.hardware.Button;
 import lejos.hardware.Sound;
@@ -8,17 +8,23 @@ import lejos.hardware.sensor.NXTSoundSensor;
 import lejos.robotics.SampleProvider;
 import lejos.utility.Delay;
 
-import org.aswinmp.lejos.ev3.bandofrobots.musicians.drumm3r.Drumm3r;
+import org.aswinmp.lejos.ev3.bandofrobots.musicians.sing3r.Sing3r;
 import org.aswinmp.lejos.ev3.bandofrobots.utils.BrickLogger;
 
+/**
+ * Sample that illustrates reading the external sound. Uses the {@link Sing3r}
+ * robot.
+ * 
+ * @author Matthias Paul Scholz
+ * 
+ */
 public class SoundSensorSample {
 
 	private static Port SOUND_SENSOR = SensorPort.S2;
-	private static final int INITIAL_DRUMMING_DELAY = 1000;
 
-	private final Drumm3r drumm3r;
+	private final Sing3r sing3r;
 	private final SoundSensorListener soundSensorListener;
-	private final Drumming drumming;
+	private final Moving moving;
 
 	public static void main(final String[] args) {
 		final SoundSensorSample soundSensorSample = new SoundSensorSample();
@@ -28,28 +34,28 @@ public class SoundSensorSample {
 	}
 
 	public SoundSensorSample() {
-		this.drumm3r = new Drumm3r();
+		this.sing3r = new Sing3r();
 		soundSensorListener = new SoundSensorListener(new NXTSoundSensor(
 				SOUND_SENSOR));
-		drumming = new Drumming(INITIAL_DRUMMING_DELAY);
+		moving = new Moving();
 	}
 
 	public void boot() {
 		BrickLogger.info("Calibrating ..");
-		drumm3r.calibrate();
-		drumm3r.reset();
+		sing3r.calibrate();
+		sing3r.reset();
 		BrickLogger.info("Starting sound listener ..");
 		new Thread(soundSensorListener).start();
 		BrickLogger.info("Starting drumming ..");
-		new Thread(drumming).start();
+		new Thread(moving).start();
 		Sound.beepSequence();
 	}
 
 	public void shutdown() {
 		BrickLogger.info("Shutting down ..");
-		drumming.stop();
+		moving.stop();
 		soundSensorListener.stop();
-		drumm3r.reset();
+		sing3r.reset();
 	}
 
 	class SoundSensorListener implements Runnable {
@@ -69,8 +75,8 @@ public class SoundSensorSample {
 				soundSampleProvider.fetchSample(sample, 0);
 				final float soundValue = sample[0];
 				BrickLogger.info("db: %f", soundValue);
-				drumming.setDelay((int) Math.max(0, INITIAL_DRUMMING_DELAY
-						- soundValue * INITIAL_DRUMMING_DELAY));
+				// TODO set speed properly
+				// moving.setSpeed(?);
 			}
 		}
 
@@ -79,20 +85,17 @@ public class SoundSensorSample {
 		}
 	}
 
-	class Drumming implements Runnable {
+	class Moving implements Runnable {
 
 		private volatile boolean stopped;
-		private int delay;
-
-		public Drumming(final int initialDelay) {
-			this.delay = initialDelay;
-		}
+		private float speed = 0;
 
 		@Override
 		public void run() {
 			while (!stopped) {
-				Delay.msDelay(delay);
-				drumm3r.drum(false);
+				Delay.msDelay(100);
+				// TODO set speed properly
+				// sing3r.setMoveSpeed(speed);
 			}
 		}
 
@@ -100,8 +103,8 @@ public class SoundSensorSample {
 			stopped = true;
 		}
 
-		public void setDelay(final int delay) {
-			this.delay = delay;
+		public void setSpeed(final float speed) {
+			this.speed = speed;
 		}
 
 	}

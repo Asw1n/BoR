@@ -8,6 +8,13 @@ import org.aswinmp.lejos.ev3.bandofrobots.tests.brick.RandomlyDelayedActionExecu
 import org.aswinmp.lejos.ev3.bandofrobots.tests.brick.RobotAction;
 import org.aswinmp.lejos.ev3.bandofrobots.utils.BrickLogger;
 
+/**
+ * 
+ * A mechanical test for the {@link Drumm3r} to be run on the brick.
+ * 
+ * @author Matthias Paul Scholz
+ * 
+ */
 public class Drumm3rTest {
 
 	public static void main(final String[] args) {

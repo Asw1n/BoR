@@ -6,8 +6,16 @@ import java.rmi.RemoteException;
 import lejos.hardware.Sound;
 
 import org.aswinmp.lejos.ev3.bandofrobots.musicians.AbstractMusician;
+import org.aswinmp.lejos.ev3.bandofrobots.musicians.Musician;
 import org.aswinmp.lejos.ev3.bandofrobots.utils.BrickLogger;
 
+/**
+ * An implementation of a {@link Musician} that assigns the {@link Drumm3r} to
+ * MIDI events.
+ * 
+ * @author Matthias Paul Scholz
+ * 
+ */
 public class Drumm3rMusician extends AbstractMusician {
 
 	private final Drumm3r drumm3r;
@@ -19,7 +27,7 @@ public class Drumm3rMusician extends AbstractMusician {
 			// register
 			drumm3rMusician.register();
 			// finally play sound to signal that setting up the
-			// Drumm3r final is complete
+			// Drumm3r is complete
 			Sound.beepSequenceUp();
 		} catch (RemoteException | AlreadyBoundException exc) {
 			BrickLogger.error(exc.getMessage(), exc);

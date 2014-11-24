@@ -5,6 +5,12 @@ import java.util.Random;
 import org.aswinmp.lejos.ev3.bandofrobots.musicians.drumm3r.Drumm3r.TorsoLocation;
 import org.aswinmp.lejos.ev3.bandofrobots.utils.AbstractRandomlyDelayedExecutor;
 
+/**
+ * A runnable that randomly moves the torso of the {@link Drumm3r}.
+ * 
+ * @author Matthias Paul Scholz
+ * 
+ */
 public class RandomlyDelayedMoveTorsoExecutor extends
 		AbstractRandomlyDelayedExecutor {
 
@@ -12,6 +18,14 @@ public class RandomlyDelayedMoveTorsoExecutor extends
 	private final TorsoLocation[] availableTorsoLocations = TorsoLocation
 			.values();
 
+	/**
+	 * Constructor.
+	 * 
+	 * @param randomMax
+	 *            the upper limit for random milliseconds.
+	 * @param drumm3r
+	 *            the {@link Drumm3r}
+	 */
 	public RandomlyDelayedMoveTorsoExecutor(final int randomMax,
 			final Drumm3r drumm3r) {
 		super(randomMax);

@@ -8,6 +8,12 @@ import org.aswinmp.lejos.ev3.bandofrobots.tests.brick.RobotAction;
 import org.aswinmp.lejos.ev3.bandofrobots.utils.AbstractRandomlyDelayedExecutor;
 import org.aswinmp.lejos.ev3.bandofrobots.utils.BrickLogger;
 
+/**
+ * A mechanical test for the {@link Sing3r} to be run on the brick.
+ * 
+ * @author Matthias Paul Scholz
+ * 
+ */
 public class Sing3rTest {
 
 	public static void main(final String[] args) {
