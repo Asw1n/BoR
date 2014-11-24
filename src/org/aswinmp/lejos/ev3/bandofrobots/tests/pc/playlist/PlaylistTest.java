@@ -44,12 +44,12 @@ public class PlaylistTest extends AbstractBorPCTest {
     final PlaylistEntry playlistEntry2 = new PlaylistEntry(bandConfiguration2, PlaylistEntryState.WAITING);
     final Playlist playlist = new Playlist("PlaylistTest", playlistEntry1, playlistEntry2);
     // instantiate BoRPlayer
-    final BorPlayer borPlayer = new BorPlayer(playlist);
+    final BorPlayer borPlayer = new BorPlayer(createBoRController());
     // play playlist in a separate thread, so we can stop it
     new Thread(new Runnable() {
       @Override
       public void run() {
-        borPlayer.play();
+        borPlayer.play(playlist);
       }
     }).start();
     // run test for specified time only

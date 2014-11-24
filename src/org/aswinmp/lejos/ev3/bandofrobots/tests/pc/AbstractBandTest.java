@@ -14,21 +14,19 @@ import org.aswinmp.lejos.ev3.bandofrobots.pc.shell.BoRCommandException;
 
 public abstract class AbstractBandTest extends AbstractBorPCTest {
 
-	protected void runTest(final BandConfiguration bandConfiguration,
-			final long playTimeInMilliseconds) throws IOException,
-			MidiUnavailableException, InvalidMidiDataException,
-			BoRCommandException {
-		// create playlist containing the band configuration only
-		final PlaylistEntry playlistEntry = new PlaylistEntry(
-				bandConfiguration, PlaylistEntryState.WAITING);
-		final Playlist playlist = new Playlist(String.format("TestPlaylist_%s",
-				bandConfiguration.getName()), playlistEntry);
-		// instantiate BoRPlayer
-		final BorPlayer borPlayer = new BorPlayer(playlist);
-		// play band configuration
-		borPlayer.play();
-		// run test for specified time only
-		stopPlayerAfterPeriod(borPlayer, playTimeInMilliseconds);
-	}
+  protected void runTest(final BandConfiguration bandConfiguration, final long playTimeInMilliseconds)
+      throws IOException, MidiUnavailableException, InvalidMidiDataException,
+      BoRCommandException {
+    // create playlist containing the band configuration only
+    final PlaylistEntry playlistEntry = new PlaylistEntry(bandConfiguration, PlaylistEntryState.WAITING);
+    final Playlist playlist = new Playlist(String.format("TestPlaylist_%s", bandConfiguration
+        .getName()), playlistEntry);
+    // instantiate BoRPlayer
+    final BorPlayer borPlayer = new BorPlayer(createBoRController());
+    // play band configuration
+    borPlayer.play(playlist);
+    // run test for specified time only
+    stopPlayerAfterPeriod(borPlayer, playTimeInMilliseconds);
+  }
 
 }

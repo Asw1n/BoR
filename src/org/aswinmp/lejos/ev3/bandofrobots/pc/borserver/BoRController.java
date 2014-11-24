@@ -13,164 +13,158 @@ import javax.sound.midi.Synthesizer;
  * The controller manages all resources of BoR. Loads sequencer, synthesizer and
  * conductor. Connects to bricks and disconnects. Starts and stop playing a
  * song.
- * 
  * @author Aswin
- * 
  */
 public class BoRController {
-	Sequencer sequencer;
-	Synthesizer synthesizer;
-	Song song;
-	Conductor conductor;
-	TimeBuffer timeBuffer;
+  Sequencer sequencer;
+  Synthesizer synthesizer;
+  Song song;
+  Conductor conductor;
+  TimeBuffer timeBuffer;
 
-	public BoRController() {
-		song = new Song();
-		conductor = new Conductor(this);
-		timeBuffer = new TimeBuffer(100);
-		timeBuffer.setDaemon(true);
-		timeBuffer.start();
-	}
+  public BoRController() {
+    song = new Song();
+    conductor = new Conductor(this);
+    timeBuffer = new TimeBuffer(100);
+    timeBuffer.setDaemon(true);
+    timeBuffer.start();
+  }
 
-	public Song getSong() {
-		return song;
-	}
+  public Song getSong() {
+    return song;
+  }
 
-	public Sequencer getSequencer() {
-		return sequencer;
-	}
+  public Sequencer getSequencer() {
+    return sequencer;
+  }
 
-	public void setSequencer(final MidiDevice.Info sequencer) {
-		try {
-			this.sequencer = (Sequencer) MidiSystem.getMidiDevice(sequencer);
-		} catch (final MidiUnavailableException e) {
-			e.printStackTrace();
-		}
-	}
+  public void setSequencer(final MidiDevice.Info sequencer) {
+    try {
+      this.sequencer = (Sequencer) MidiSystem.getMidiDevice(sequencer);
+    } catch (final MidiUnavailableException e) {
+      e.printStackTrace();
+    }
+  }
 
-	public Synthesizer getSynthesizer() {
-		return synthesizer;
-	}
+  public Synthesizer getSynthesizer() {
+    return synthesizer;
+  }
 
-	public void setSynthesizer(final MidiDevice.Info synthesizer) {
-		try {
-			this.synthesizer = (Synthesizer) MidiSystem
-					.getMidiDevice(synthesizer);
-		} catch (final MidiUnavailableException e) {
-			e.printStackTrace();
-		}
-	}
+  public void setSynthesizer(final MidiDevice.Info synthesizer) {
+    try {
+      this.synthesizer = (Synthesizer) MidiSystem.getMidiDevice(synthesizer);
+    } catch (final MidiUnavailableException e) {
+      e.printStackTrace();
+    }
+  }
 
-	public void setFile(final String pathName) throws InvalidMidiDataException,
-			IOException {
-		song.setFilePath(pathName);
-	}
+  public void setFile(final String pathName) throws InvalidMidiDataException,
+      IOException {
+    song.setFilePath(pathName);
+  }
 
-	public String getFile() {
-		return song.getFilePath();
-	}
+  public String getFile() {
+    return song.getFilePath();
+  }
 
-	public boolean songIsSet() {
-		return song.isSet();
-	}
+  public boolean songIsSet() {
+    return song.isSet();
+  }
 
-	private void bind() {
-		try {
-			System.out.println("Binding Midi resources.");
-			sequencer.open();
-			synthesizer.open();
+  private void bind() {
+    try {
+      System.out.println("Binding MIDI resources");
+      sequencer.open();
+      synthesizer.open();
 
-			timeBuffer.setReceiver(synthesizer.getReceiver());
-			sequencer.getTransmitter().setReceiver(timeBuffer);
-			sequencer.getTransmitter().setReceiver(conductor);
+      timeBuffer.setReceiver(synthesizer.getReceiver());
+      sequencer.getTransmitter().setReceiver(timeBuffer);
+      sequencer.getTransmitter().setReceiver(conductor);
 
-			// sequencer.getTransmitter().setReceiver(synthesizer.getReceiver());
-			// sequencer.getTransmitter().setReceiver(conductor);
+      // sequencer.getTransmitter().setReceiver(synthesizer.getReceiver());
+      // sequencer.getTransmitter().setReceiver(conductor);
 
-			sequencer.setSequence(MidiSystem.getSequence(song.getSong()));
-			// TODO: Meta events are not delayed when sent to the Brick. Is this
-			// what is best or do they need a delay?
-			sequencer.addMetaEventListener(conductor);
-		} catch (final Exception e) {
-			e.printStackTrace();
-		}
-	}
+      sequencer.setSequence(MidiSystem.getSequence(song.getSong()));
+      // TODO: Meta events are not delayed when sent to the Brick. Is this
+      // what is best or do they need a delay?
+      sequencer.addMetaEventListener(conductor);
+    } catch (final Exception e) {
+      e.printStackTrace();
+    }
+  }
 
-	public void close() {
-		System.out.println("Closing controller");
-		sequencer.close();
-		synthesizer.close();
-		conductor.close();
-		System.out.println("Controller closed");
-	}
+  public void close() {
+    System.out.println("Closing controller");
+    sequencer.close();
+    synthesizer.close();
+    conductor.close();
+    System.out.println("Controller closed");
+  }
 
-	private void connect() {
-		System.out.println("Connecting to bricks.");
-		for (final Brick brick : song.getChannels().getAllBricks()) {
-			brick.connect();
-		}
-		// TODO: aggregate dynamic range per brick (instead of per channel)
-		for (int channel = 0; channel < Channels.CHANNELCOUNT; channel++) {
-			for (final Brick brick : song.getChannels().getInstrumentBricks(
-					channel)) {
-				brick.sendDynamicRange(song.getChannels()
-						.getLowestNote(channel), song.getChannels()
-						.getHighestNote(channel));
-			}
-		}
-	}
+  private void connect() {
+    System.out.println("Connecting to bricks");
+    for (final Brick brick : song.getChannels().getAllBricks()) {
+      brick.connect();
+    }
+    // TODO: aggregate dynamic range per brick (instead of per channel)
+    for (int channel = 0; channel < Channels.CHANNELCOUNT; channel++) {
+      for (final Brick brick : song.getChannels().getInstrumentBricks(channel)) {
+        brick.sendDynamicRange(song.getChannels().getLowestNote(channel), song
+            .getChannels().getHighestNote(channel));
+      }
+    }
+  }
 
-	private void disconnect() {
-		System.out.println("Disconnecting from bricks.");
-		for (final Brick brick : song.getChannels().getAllBricks()) {
-			brick.disconnect();
-		}
-	}
+  private void disconnect() {
+    System.out.println("Disconnecting from bricks");
+    for (final Brick brick : song.getChannels().getAllBricks()) {
+      brick.disconnect();
+    }
+  }
 
-	public void play() {
-		bind();
-		conductor.setSong(song);
-		connect();
-		System.out.println("Start song.");
-		sequencer.setTickPosition(0);
-		for (final Brick brick : song.getChannels().getAllBricks()) {
-			brick.sendStart();
-		}
-		sequencer.start();
-	}
+  public void play() {
+    bind();
+    conductor.setSong(song);
+    connect();
+    System.out.println("Starting song ...");
+    sequencer.setTickPosition(0);
+    for (final Brick brick : song.getChannels().getAllBricks()) {
+      brick.sendStart();
+    }
+    sequencer.start();
+  }
 
-	public void stop() {
-		System.out.println("Stopping controller");
-		sequencer.stop();
-		for (final Brick brick : song.getChannels().getAllBricks()) {
-			brick.sendStop();
-		}
-		disconnect();
-		System.out.println("Controller stopped");
-	}
+  public void stop() {
+    System.out.println("Stopping controller");
+    sequencer.stop();
+    for (final Brick brick : song.getChannels().getAllBricks()) {
+      brick.sendStop();
+    }
+    disconnect();
+    System.out.println("Controller stopped");
+  }
 
-	public boolean isPlaying() {
-		return sequencer.isRunning();
-	}
+  public boolean isPlaying() {
+    return sequencer.isRunning();
+  }
 
-	public void dumpChannels() {
-		song.dumpChannels();
-	}
+  public void dumpChannels() {
+    song.dumpChannels();
+  }
 
-	/**
-	 * Sets the delay of the audible music. The delay gives the musicians time
-	 * to anticipate on notes.
-	 * 
-	 * @param delay
-	 *            in milliseconds
-	 */
-	public void setSoundDelay(final long delay) {
-		assert delay >= 0 : "Delay has to be a positive long value";
-		System.out.println("Setting delay to " + delay);
-		timeBuffer.setDelay(delay);
-	}
+  /**
+   * Sets the delay of the audible music. The delay gives the musicians time to
+   * anticipate on notes.
+   * @param delay
+   *          in milliseconds
+   */
+  public void setSoundDelay(final long delay) {
+    assert delay >= 0 : "Delay has to be a positive long value";
+    System.out.println("Setting delay to " + delay);
+    timeBuffer.setDelay(delay);
+  }
 
-	public long getSoundDelay() {
-		return timeBuffer.getDelay();
-	}
+  public long getSoundDelay() {
+    return timeBuffer.getDelay();
+  }
 }

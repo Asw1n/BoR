@@ -1,23 +1,23 @@
 package org.aswinmp.lejos.ev3.bandofrobots.pc.shell.commands;
 
-import org.aswinmp.lejos.ev3.bandofrobots.pc.borserver.BoRController;
+import org.aswinmp.lejos.ev3.bandofrobots.pc.borserver.Song;
 import org.aswinmp.lejos.ev3.bandofrobots.pc.shell.BoRCommandException;
+import org.aswinmp.lejos.ev3.bandofrobots.pc.shell.CommandContext;
 
 @ShellCommand(label = "play", parameters = "", description = "plays the selected song")
-public class PlayCommand {
+public class PlayCommand extends AbstractBoRCommand {
 
-	private final BoRController boRController;
+  public PlayCommand(final CommandContext commandContext) {
+    super(commandContext);
+  }
 
-	public PlayCommand(final BoRController boRController) {
-		this.boRController = boRController;
-	}
+  @ShellExecute
+  public void play() throws BoRCommandException {
+    final Song song = getBoRController().getSong();
+    if (!song.isSet()) {
+      throw new BoRCommandException("No song selected");
+    }
+    getBoRController().play();
 
-	@ShellExecute
-	public void play() throws BoRCommandException {
-		if (!boRController.getSong().isSet()) {
-			throw new BoRCommandException("No song selected");
-		}
-		boRController.play();
-
-	}
+  }
 }

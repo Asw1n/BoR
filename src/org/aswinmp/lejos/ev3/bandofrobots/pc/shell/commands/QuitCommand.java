@@ -1,18 +1,17 @@
 package org.aswinmp.lejos.ev3.bandofrobots.pc.shell.commands;
 
-import org.aswinmp.lejos.ev3.bandofrobots.pc.borserver.BoRController;
+import org.aswinmp.lejos.ev3.bandofrobots.pc.shell.BoRCommandException;
+import org.aswinmp.lejos.ev3.bandofrobots.pc.shell.CommandContext;
 
 @ShellCommand(label = "quit", parameters = "", description = "quits the shell")
-public class QuitCommand {
+public class QuitCommand extends AbstractBoRCommand {
 
-	private final BoRController boRController;
+  public QuitCommand(final CommandContext commandContext) {
+    super(commandContext);
+  }
 
-	public QuitCommand(final BoRController boRController) {
-		this.boRController = boRController;
-	}
-
-	@ShellExecute
-	public void quit() {
-		boRController.close();
-	}
+  @ShellExecute
+  public void quit() throws BoRCommandException {
+    getBoRController().close();
+  }
 }
