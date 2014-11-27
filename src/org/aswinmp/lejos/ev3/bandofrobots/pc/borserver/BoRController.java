@@ -25,9 +25,9 @@ public class BoRController {
   public BoRController() {
     song = new Song();
     conductor = new Conductor(this);
-    timeBuffer = new TimeBuffer(100);
-    timeBuffer.setDaemon(true);
-    timeBuffer.start();
+//    timeBuffer = new TimeBuffer(100);
+//    timeBuffer.setDaemon(true);
+//    timeBuffer.start();
   }
 
   public Song getSong() {
@@ -77,12 +77,12 @@ public class BoRController {
       sequencer.open();
       synthesizer.open();
 
-      timeBuffer.setReceiver(synthesizer.getReceiver());
-      sequencer.getTransmitter().setReceiver(timeBuffer);
-      sequencer.getTransmitter().setReceiver(conductor);
+//      timeBuffer.setReceiver(synthesizer.getReceiver());
+//      sequencer.getTransmitter().setReceiver(timeBuffer);
+//      sequencer.getTransmitter().setReceiver(conductor);
 
-      // sequencer.getTransmitter().setReceiver(synthesizer.getReceiver());
-      // sequencer.getTransmitter().setReceiver(conductor);
+       sequencer.getTransmitter().setReceiver(synthesizer.getReceiver());
+       sequencer.getTransmitter().setReceiver(conductor);
 
       sequencer.setSequence(MidiSystem.getSequence(song.getSong()));
       // TODO: Meta events are not delayed when sent to the Brick. Is this

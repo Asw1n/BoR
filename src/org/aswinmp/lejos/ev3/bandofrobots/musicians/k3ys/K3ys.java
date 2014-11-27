@@ -75,9 +75,9 @@ public class K3ys {
     back.setSpeed(0.1f);
     back.setRange(-1,1);
     
-    head = new LinearLimb(new EV3MediumRegulatedMotor(HEAD_MOTOR_PORT), false, new SingleBoundaryCalibration(false, 5, 45, 10));
-    head.setRange(0, 127);
-    head.setSpeed(0.2f);
+	head = new LinearLimb(new EV3MediumRegulatedMotor(MotorPort.D), true, new SingleBoundaryCalibration(true, 10, 40, 15));
+	head.setRange(0, 127);
+	head.setSpeed(1);
     limbs = new Limb[]{leftHand, rightHand, back, head};
   }
   

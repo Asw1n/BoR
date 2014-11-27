@@ -1,0 +1,205 @@
+// Beatles - Come together
+//
+song MIDI/come_together.mid
+musician blu 1
+singer sin 3
+musician key 5
+musician dru 9
+
+
+
+// Beatles - Hey Jude
+//
+song MIDI/16B-1__Hey_Jude.mid
+singer sin 0
+singer key 1
+singer blu 1
+musician key 7
+musician blu 8
+musician dru 9
+
+// Adele - Set fire to the rain
+//
+song MIDI/adele-set_fire_to_the_rain.mid
+singer sin 3
+singer blu 4
+singer key 4
+musician blu 13
+musician key 7
+musician dru 9
+
+// Always on my mind
+//
+song MIDI/Always_On_My_Mind.mid
+singer sin 0
+musician blu 8
+musician key 7
+musician dru 9
+
+// Queen - Another one bites the dust
+//
+song MIDI/another.mid
+singer sin 3
+musician blu 2
+musician key 4
+musician dru 9
+
+// Meta Loaf - Paradise by the dashboard lights
+// No lyrics, stops abrupt
+song meat_loaf-paradise_by_the_dashboard.mid
+singer blu 3
+singer key 3
+musician blu 4
+musician key 1
+musician dru 9
+
+// BJ Thomas - Raindrops keep falling on my head
+//
+song raindrops.mid
+musician blu 0
+musician key 1
+musician dru 9
+
+// Beethove - Sonate 14
+//
+song Beethoven-Sonate14.mid
+musician key 0
+musician key 1
+musician key 2
+musician key 3
+
+
+// Queen - Bohemian rapsody
+//
+song bohemian1.mid
+singer sin 3
+singer blu 4
+singer key 2
+musician blu 8
+musician key 0
+musician dru 9
+
+// The Doors - Riders on the storm
+//
+song doors-riders_on_the_storm.mid
+singer sin 
+singer blu 
+singer key 
+musician blu 1
+musician key 2
+musician dru 9
+
+//  Mary J Blige - Family affair
+//
+song familyaffair_maryjblige.mid
+singer sin 
+singer blu 
+singer key 
+musician blu 
+musician key 7
+musician dru 9
+
+// ABBA - Fernando
+//
+song Fernando.mid
+singer sin 3
+singer blu 
+singer key 
+musician blu 0
+musician key 10
+musician key 6
+musician dru 9
+
+// Beethoven - Sonate 14
+song MIDI\Beethoven-Sonate14.mid
+musician key 0
+musician key 1
+musician key 2
+musician key 3
+
+// AC/DC - Highway to hell
+song MIDI\acdc-highway_to_hell.mid
+musician blu 0
+singer sin 2
+musician dru 9
+
+
+// Queen - another one bites the dust
+song MIDI/another.mid
+musician blu 1
+singer sin 3
+musician dru 9
+musician key 5
+
+// Billy Idol - Dancing with myself
+song MIDI\billy_idol-dancing_with_myself.mid
+musician blu 0
+singer sin 3
+musician key 4
+musician dru 9
+
+// Black Eyed Peas - Shut up
+song MIDI\black_eyed_peas_-_shut_up.mid
+mucisian dru 9
+musician blu 2
+singer sin 3
+singer key 5
+singer blu 6
+musician key 11
+
+// Bloodhound gang - Bad Touch
+song MIDI\bloodhound_gang-bad_touch.mid
+musician blu 2
+musician blu 8
+musician dru 9
+singer sin 7
+
+// Bob Marly - Redemption Song
+song MIDI/bob_marley-redemption_song.mid
+musician blu 0
+singer sin 1
+singer blu 1
+
+// Breaking the Habit
+song MIDI/breaking_the_habit.mid
+musician key 0
+musician blu 2
+singer sin 3
+musician dru 9
+
+// Chuck Berry - Johnny be good
+song MIDI/chuck_berry-johnny_be_good.mid
+musician blu 0
+musician key 2
+musician dru 9
+singer sin 3
+singer key 3
+singer blu 3
+
+// Coolio - Gangstas Paradise
+musician dru 9
+musician key 0
+musician blu 1
+singer sin 2
+singer key 4
+singer blu 7
+
+// CCR - Looking out my backdoor
+singer sin 0
+musician blu 1
+musician dru 9
+musician key 5
+
+// Dire Straits - Private investigator
+song MIDI/private.mid
+musician key 8
+musician dru 9
+musician blu 0
+singer sin 4
+singer key 4
+singer blu 4
+
+
+
+
+

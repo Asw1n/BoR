@@ -43,3 +43,15 @@ musician BLU3S 2
 musician K3YS 4
 musician DRUMM3R 9
 
+// Queen - Bohemian rapsody
+
+song MIDI\bohemian1.mid
+musician key 1
+musician dru 9
+musician blu 8
+singer blu 2
+singer key 4
+singer sin 3
+
+
+
