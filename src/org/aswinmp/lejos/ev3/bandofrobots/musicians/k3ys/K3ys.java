@@ -1,12 +1,14 @@
 package org.aswinmp.lejos.ev3.bandofrobots.musicians.k3ys;
 
 
+import lejos.hardware.BrickFinder;
 import lejos.hardware.LED;
 import lejos.hardware.ev3.LocalEV3;
 import lejos.hardware.motor.EV3MediumRegulatedMotor;
 import lejos.hardware.port.MotorPort;
 import lejos.hardware.port.Port;
 import lejos.hardware.port.SensorPort;
+import lejos.hardware.sensor.EV3UltrasonicSensor;
 import lejos.utility.Delay;
 
 import org.aswinmp.lejos.ev3.bandofrobots.musicians.Limb;
@@ -22,7 +24,9 @@ public class K3ys {
   private static Port RIGHT_HAND_MOTOR_PORT = MotorPort.B;
   private static Port TORSO_MOTOR_PORT = MotorPort.C;
   private static Port HEAD_MOTOR_PORT = MotorPort.D;
-  private static Port EYES_PORT = SensorPort.S1;
+  private static Port EYES_PORT = SensorPort.S2;
+  private final EV3UltrasonicSensor eyes;
+
 
   
   Limb       leftHand;
@@ -79,6 +83,9 @@ public class K3ys {
 	head.setRange(0, 127);
 	head.setSpeed(1);
     limbs = new Limb[]{leftHand, rightHand, back, head};
+    
+	eyes = new EV3UltrasonicSensor(BrickFinder.getDefault().getPort("S2"));
+
   }
   
   
@@ -106,6 +113,16 @@ public class K3ys {
     back.moveToCenter(false);
     head.calibrate();
   }
+  
+  public void openEyes() {
+	    eyes.enable();
+	  }
+
+  public void closeEyes() {
+	    eyes.disable();
+	  }
+
+  
   
   public void openMouth(final float f) {
     // The mouth opens when singing according to intensity of the note.

@@ -28,12 +28,14 @@ public class K3ysMusician extends AbstractMusician {
 
 	@Override
 	public void start() {
+		piano.openEyes();
 		piano.centerHands(true);
 	}
 
 	@Override
 	public void stop() {
 		piano.spreadHands(false);
+		piano.closeEyes();
 		piano.rest();
 	}
 
