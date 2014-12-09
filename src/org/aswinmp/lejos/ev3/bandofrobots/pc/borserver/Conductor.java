@@ -67,13 +67,6 @@ public class Conductor implements Receiver, MetaEventListener {
       final ShortMessage message = (ShortMessage) arg0;
       final int channel = message.getChannel();
       final int command = message.getCommand();
-      if (song.metronomeIsSet && channel == song.metronomeChannel
-          && command == ShortMessage.NOTE_ON) {
-        for (final Brick brick : channels.getAllBricks()) {
-          brick.sendBeat(message);
-        }
-
-      }
       if (command == ShortMessage.NOTE_ON /* || command == ShortMessage.NOTE_OFF */) {
         for (final Brick brick : channels.getInstrumentBricks(channel)) {
           brick.sendInstrumentEvent(message);

@@ -96,7 +96,6 @@ public class BorPlayer {
     System.out.println(String
         .format("Playing band configuration %s", bandConfiguration));
     // configure BoR controller
-    boRController.setSoundDelay(bandConfiguration.getDelay());
     // set song
     final Song song = boRController.getSong();
     song.setFilePath(bandConfiguration.getMidiFile().getAbsolutePath());

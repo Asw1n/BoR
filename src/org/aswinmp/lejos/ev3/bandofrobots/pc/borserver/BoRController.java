@@ -9,6 +9,8 @@ import javax.sound.midi.MidiUnavailableException;
 import javax.sound.midi.Sequencer;
 import javax.sound.midi.Synthesizer;
 
+import org.aswinmp.lejos.ev3.bandofrobots.utils.BrickLogger;
+
 /**
  * The controller manages all resources of BoR. Loads sequencer, synthesizer and
  * conductor. Connects to bricks and disconnects. Starts and stop playing a
@@ -20,14 +22,10 @@ public class BoRController {
   Synthesizer synthesizer;
   Song song;
   Conductor conductor;
-  TimeBuffer timeBuffer;
 
   public BoRController() {
     song = new Song();
     conductor = new Conductor(this);
-//    timeBuffer = new TimeBuffer(100);
-//    timeBuffer.setDaemon(true);
-//    timeBuffer.start();
   }
 
   public Song getSong() {
@@ -76,17 +74,10 @@ public class BoRController {
       System.out.println("Binding MIDI resources");
       sequencer.open();
       synthesizer.open();
-
-//      timeBuffer.setReceiver(synthesizer.getReceiver());
-//      sequencer.getTransmitter().setReceiver(timeBuffer);
-//      sequencer.getTransmitter().setReceiver(conductor);
-
        sequencer.getTransmitter().setReceiver(synthesizer.getReceiver());
        sequencer.getTransmitter().setReceiver(conductor);
 
       sequencer.setSequence(MidiSystem.getSequence(song.getSong()));
-      // TODO: Meta events are not delayed when sent to the Brick. Is this
-      // what is best or do they need a delay?
       sequencer.addMetaEventListener(conductor);
     } catch (final Exception e) {
       e.printStackTrace();
@@ -126,7 +117,7 @@ public class BoRController {
     bind();
     conductor.setSong(song);
     connect();
-    System.out.println("Starting song ...");
+    BrickLogger.info("Starting song ...");
     sequencer.setTickPosition(0);
     for (final Brick brick : song.getChannels().getAllBricks()) {
       brick.sendStart();
@@ -135,7 +126,7 @@ public class BoRController {
   }
 
   public void stop() {
-    System.out.println("Stopping controller");
+    BrickLogger.info("Stopping controller");
     if (sequencer.isOpen()) {
       sequencer.stop();
     }
@@ -143,7 +134,7 @@ public class BoRController {
       brick.sendStop();
     }
     disconnect();
-    System.out.println("Controller stopped");
+    BrickLogger.info("Controller stopped");
   }
 
   public boolean isPlaying() {
@@ -154,19 +145,5 @@ public class BoRController {
     song.dumpChannels();
   }
 
-  /**
-   * Sets the delay of the audible music. The delay gives the musicians time to
-   * anticipate on notes.
-   * @param delay
-   *          in milliseconds
-   */
-  public void setSoundDelay(final long delay) {
-    assert delay >= 0 : "Delay has to be a positive long value";
-    System.out.println("Setting delay to " + delay);
-    timeBuffer.setDelay(delay);
-  }
 
-  public long getSoundDelay() {
-    return timeBuffer.getDelay();
-  }
 }

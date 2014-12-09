@@ -20,12 +20,7 @@ public class Song {
     protected File     song;
     protected Channels channels = new Channels();
     protected boolean isSet;
-    protected int metronomeChannel =0;
-    protected boolean metronomeIsSet=false;
 
-    public boolean isMetronomeIsSet() {
-      return metronomeIsSet;
-    }
 
     /** Sets a midi song by its pathname
      * @param fileName
@@ -118,9 +113,5 @@ public class Song {
       this.isSet = isSet;
     }
 
-    public void setMetronomeChannel(int channelNo) {
-      metronomeIsSet=true;
-      metronomeChannel=channelNo;
-    }
 
 }

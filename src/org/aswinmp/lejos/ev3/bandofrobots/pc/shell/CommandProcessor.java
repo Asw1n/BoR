@@ -14,8 +14,6 @@ import org.aswinmp.lejos.ev3.bandofrobots.pc.shell.commands.DumpChannelsCommand;
 import org.aswinmp.lejos.ev3.bandofrobots.pc.shell.commands.PlayCommand;
 import org.aswinmp.lejos.ev3.bandofrobots.pc.shell.commands.QuitCommand;
 import org.aswinmp.lejos.ev3.bandofrobots.pc.shell.commands.SelectSongCommand;
-import org.aswinmp.lejos.ev3.bandofrobots.pc.shell.commands.SetDelayCommand;
-import org.aswinmp.lejos.ev3.bandofrobots.pc.shell.commands.SetMetronomeCommand;
 import org.aswinmp.lejos.ev3.bandofrobots.pc.shell.commands.ShellCommand;
 import org.aswinmp.lejos.ev3.bandofrobots.pc.shell.commands.ShellExecute;
 import org.aswinmp.lejos.ev3.bandofrobots.pc.shell.commands.StartPlaylistCommand;
@@ -121,12 +119,6 @@ public class CommandProcessor {
     final AssignSingerCommand assignSingerCommand = new AssignSingerCommand(commandContext);
     commandMap.put(assignSingerCommand.getClass()
         .getAnnotation(ShellCommand.class).label(), assignSingerCommand);
-    final SetMetronomeCommand setMetronomeCommand = new SetMetronomeCommand(commandContext);
-    commandMap.put(setMetronomeCommand.getClass()
-        .getAnnotation(ShellCommand.class).label(), setMetronomeCommand);
-    final SetDelayCommand setDelayCommand = new SetDelayCommand(commandContext);
-    commandMap.put(setDelayCommand.getClass().getAnnotation(ShellCommand.class)
-        .label(), setDelayCommand);
     final StartPlaylistCommand startPlaylistCommand = new StartPlaylistCommand(commandContext);
     commandMap.put(startPlaylistCommand.getClass()
         .getAnnotation(ShellCommand.class).label(), startPlaylistCommand);
