@@ -19,7 +19,7 @@ public class CircularLimb implements Limb {
   private float                logicalMinimum = 0;
   private final RegulatedMotor motor;
   private CalibrationStrategy  calibrater;
-  private float				   gearRatio = 360;
+  private float				   gearRatio = 180;
   
 
   /** Constructor. Logical range defaults to 0-1 and can be modified later.
