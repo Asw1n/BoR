@@ -50,6 +50,7 @@ public class SingleTouchSensorCalibration implements CalibrationStrategy {
 		this.speed = speed;
 		this.range = range;
 		this.strechZone = strechZone;
+    this.port = port;
 	}
 
 	/**

@@ -22,7 +22,7 @@ public class DumpBricksCommand extends AbstractBoRCommand {
         System.out.println(String.format("%s (%s)", info.getName(), info
             .getIPAddress()));
       }
-    } catch (final IOException ioe) {
+    } catch (final Exception ioe) {
       throw new BoRCommandException(ioe);
     }
   }

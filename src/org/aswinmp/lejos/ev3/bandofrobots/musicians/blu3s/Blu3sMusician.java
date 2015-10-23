@@ -29,6 +29,7 @@ public class Blu3sMusician extends AbstractMusician {
 	public void start() {
 		super.start();
 		blu3s.openEyes();
+    blu3s.closeEyes();
 		blu3s.switchAmpOn();
 	}
 

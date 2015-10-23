@@ -16,7 +16,7 @@ public class LinearLimb implements Limb {
 
   private float                logicalMaximum = 1;
   private float                logicalMinimum = 0;
-  private final RegulatedMotor motor;
+  protected final RegulatedMotor motor;
   private CalibrationStrategy  calibrater;
   private LimbRange            range = new LimbRange(0,1);
   private Boolean              reverse = false;

@@ -16,32 +16,47 @@ public class test {
 
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
-	    Limb leftShoulder = new LinearLimb(new EV3MediumRegulatedMotor(MotorPort.A), true, new SingleBoundaryCalibration(true,20,90,10));
-	    Limb rightShoulder = new LinearLimb(new EV3MediumRegulatedMotor(MotorPort.D), false, new SingleBoundaryCalibration(false,20,90,10));
+	    Limb leftShoulder = new LinearLimb(new EV3MediumRegulatedMotor(MotorPort.A), true, new SingleBoundaryCalibration(true,20,120,10));
+	    Limb rightShoulder = new LinearLimb(new EV3MediumRegulatedMotor(MotorPort.D), false, new SingleBoundaryCalibration(false,20,120,10));
 
-		Limb leftArm = new CircularLimb(new EV3MediumRegulatedMotor(MotorPort.B),false, new SingleTouchSensorCalibration(SensorPort.S1,false,20,0,0),180);
-		Limb rightArm = new CircularLimb(new EV3MediumRegulatedMotor(MotorPort.C),true, new SingleTouchSensorCalibration(SensorPort.S2,true,20,0,0),180);
+	    CircularLimb leftArm = new CircularLimb(new EV3MediumRegulatedMotor(MotorPort.B),false, new SingleTouchSensorCalibration(SensorPort.S1, true, 60, 0, 30),180, true);
+	    CircularLimb rightArm = new CircularLimb(new EV3MediumRegulatedMotor(MotorPort.C),true, new SingleTouchSensorCalibration(SensorPort.S4,true,60, 0, 30),180, true);
 
+    leftShoulder.calibrate();
+    leftShoulder.moveToMax(false);
+    rightShoulder.calibrate();
+    rightShoulder.moveToMax(false);
+
+    
+    
+    
+    
+    leftArm.adaptToRhythm(true);
+    rightArm.adaptToRhythm(true);
+		
 		
 		leftArm.setSpeed(1);
 		rightArm.setSpeed(1);
 		leftShoulder.setSpeed(1);
 		rightShoulder.setSpeed(1);
-		leftShoulder.calibrate();
-		rightShoulder.calibrate();
-		leftShoulder.setRange(1, 3);
-		rightShoulder.setRange(1, 3);
-		for (int j=1;j<4;j++) {
+		leftShoulder.setRange(0, 3);
+		rightShoulder.setRange(0, 3);
+		
+		
+		for (int j=0;j<3;j++) {
 			leftShoulder.moveTo(j, true);
 			rightShoulder.moveTo(j, true);
 			for (int i=0;i<10;i++) {
-				leftArm.moveTo(1, true);
-				rightArm.moveTo(1, true);
+				leftArm.moveTo(0, true);
+				rightArm.moveTo(0, true);
 				Delay.msDelay(200*j);
 		}
 		}
-	leftShoulder.moveTo(1, true);
-	rightShoulder.moveTo(1, false);
+  leftArm.moveToMax(true);
+  rightArm.moveToMax(true);
+	leftShoulder.moveTo(0, true);
+	rightShoulder.moveTo(0, false);
+  Delay.msDelay(2000);
 	}
 
 }

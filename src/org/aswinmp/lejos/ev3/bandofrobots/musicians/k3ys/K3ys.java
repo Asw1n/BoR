@@ -20,8 +20,8 @@ import org.aswinmp.lejos.ev3.bandofrobots.utils.BrickLogger;
 public class K3ys {
   static LED led = LocalEV3.get().getLED();
   
-  private static Port LEFT_HAND_MOTOR_PORT = MotorPort.A;
-  private static Port RIGHT_HAND_MOTOR_PORT = MotorPort.B;
+  private static Port LEFT_HAND_MOTOR_PORT = MotorPort.B;
+  private static Port RIGHT_HAND_MOTOR_PORT = MotorPort.A;
   private static Port TORSO_MOTOR_PORT = MotorPort.C;
   private static Port HEAD_MOTOR_PORT = MotorPort.D;
   private static Port EYES_PORT = SensorPort.S2;
@@ -35,6 +35,8 @@ public class K3ys {
   Limb       head;
   static float lowestNote = 21;                                                        // in notes
   static float highestNote = 108;                                                      // in notes
+//  static float lowestNote = 29;                                                        // in notes
+//  static float highestNote = 83;                                                      // in notes
   static float toneRange = highestNote-lowestNote;
 
   static float keyboardWidth = 21-1;                                                   // in Studs

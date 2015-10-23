@@ -2,12 +2,15 @@ package org.aswinmp.lejos.ev3.bandofrobots.pc.borserver;
 
 import java.io.File;
 import java.io.IOException;
+
 import javax.sound.midi.InvalidMidiDataException;
 import javax.sound.midi.MidiEvent;
 import javax.sound.midi.MidiSystem;
 import javax.sound.midi.Sequence;
 import javax.sound.midi.ShortMessage;
 import javax.sound.midi.Track;
+
+import org.aswinmp.lejos.ev3.bandofrobots.utils.BorFilePathCreator;
 
 
 
@@ -28,8 +31,13 @@ public class Song {
      * @throws InvalidMidiDataException 
      */
     public void setFilePath(String fileName) throws InvalidMidiDataException, IOException {
+      if (new File(fileName).getAbsolutePath().equals(fileName)) 
         setSong(new File(fileName));
-
+      else {
+        final String fileSeparator = System.getProperty("file.separator");
+        final String executionDir = System.getProperty("user.dir");
+        setSong(new File(String.format("%s%s%s%s%s", executionDir, fileSeparator, "MIDI", fileSeparator, fileName)));
+      }
     }
 
     /** Sets a midi song using a File

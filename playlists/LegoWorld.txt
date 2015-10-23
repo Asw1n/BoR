@@ -1,0 +1,98 @@
+// Chuck Berry - Johnny be good
+song chuck_berry-johnny_be_good.mid
+musician blu 0
+musician key 2
+singer key 3
+singer blu 3
+
+// John Lee Hooker - Boom Boom
+song John_Lee_Hooker_-_Boom_Boom_Boom.mid
+musician blu 2
+singer blu 3
+musician key 0
+
+// Animals - House of the rising sun 
+song HouseOfTheRisingSun.mid
+musician blu 4
+singer blu 3
+musician key 5
+singer key 3
+
+// Adele - Set fire to the rain
+song adele-set_fire_to_the_rain.mid
+singer blu 4
+singer key 3
+musician blu 13
+musician key 7
+
+// Always on my mind
+song Always_On_My_Mind.mid
+singer blu 0
+musician blu 8
+musician key 7
+
+// Beethove - Sonate 14
+song Beethoven-Sonate14.mid
+musician key 0
+musician key 1
+musician key 2
+musician key 3
+
+//  Mary J Blige - Family affair
+song familyaffair_maryjblige.mid
+musician blu 1
+musician key 7
+
+// Bob Marly - Redemption Song
+song bob_marley-redemption_song.mid
+musician blu 0
+singer blu 1
+
+// Rembrandts - I'll be there for you 
+song rembrandts-ill_be_there_for_you.mid
+musician key 4
+musician blu 3
+singer key 0
+singer blu 1
+
+
+// Eagles - Hotel California
+song The_Eagles_-_Hotel_California.mid
+musician blu 7
+singer blu 3
+
+// Santana_-_Black_Magic_Woman
+song Santana_-_Black_Magic_Woman.mid
+musician blu 5
+musician blu 6
+singer blu 7
+musician key 4
+musician key 2
+singer key 7
+
+// Ram_Jam_-_Black_Betty
+song Ram_Jam_-_Black_Betty.mid
+musician blu 2
+musician blu 6
+singer blu 3
+musician key 3
+singer key 3
+
+song John_Legend-All_of_Me.mid
+musician key 0
+
+song belle_helene.mid
+musician key 1 
+singer key 2
+musician blu 5
+singer blu 0
+
+
+
+
+
+ 
+ 
+
+
+

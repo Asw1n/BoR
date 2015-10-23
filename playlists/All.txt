@@ -1,5 +1,5 @@
 // Beatles - Come together
-song MIDI/come_together.mid
+song come_together.mid
 musician blu 1
 singer sin 3
 musician key 5
@@ -8,7 +8,7 @@ musician dru 9
 
 
 // Beatles - Hey Jude
-song MIDI/16B-1__Hey_Jude.mid
+song 16B-1__Hey_Jude.mid
 singer sin 0
 singer key 1
 singer blu 1
@@ -17,7 +17,7 @@ musician blu 8
 musician dru 9
 
 // Adele - Set fire to the rain
-song MIDI/adele-set_fire_to_the_rain.mid
+song adele-set_fire_to_the_rain.mid
 singer sin 3
 singer blu 4
 singer key 4
@@ -26,14 +26,14 @@ musician key 7
 musician dru 9
 
 // Always on my mind
-song MIDI/Always_On_My_Mind.mid
+song Always_On_My_Mind.mid
 singer sin 0
 musician blu 8
 musician key 7
 musician dru 9
 
 // Queen - Another one bites the dust
-song MIDI/another.mid
+song another.mid
 singer sin 3
 musician blu 2
 musician key 4
@@ -55,7 +55,7 @@ musician key 1
 musician dru 9
 
 // Beethove - Sonate 14
-song MIDI/Beethoven-Sonate14.mid
+song Beethoven-Sonate14.mid
 musician key 0
 musician key 1
 musician key 2
@@ -63,7 +63,7 @@ musician key 3
 
 
 // Queen - Bohemian rapsody
-song MIDI/bohemian1.mid
+song bohemian1.mid
 singer sin 3
 singer blu 4
 singer key 2
@@ -179,7 +179,7 @@ musician dru 9
 singer sin 4
 
 // John Lee Hooker - Boom Boom
-song MIDI/John_Lee_Hooker_-_Boom_Boom_Boom.mid
+song John_Lee_Hooker_-_Boom_Boom_Boom.mid
 musician blu 2
 singer blu 3
 musician key 0
@@ -193,7 +193,7 @@ musician key 8
 singer sin 7
 
 // Roberta Flack - Killing me softly
-song MIDI/roberta_flack-killing_me_softly.mid
+song roberta_flack-killing_me_softly.mid
 musician key 0
 musician key 4
 musician dru 9
@@ -201,7 +201,7 @@ musician blu 2
 singer sin 3
 
 // Jingle Bell Rock
-song MIDI/jbelrock.mid
+song jbelrock.mid
 musician blu 0
 musician key 1
 musician dru 9
@@ -210,10 +210,92 @@ singer blu 0
 singer key 0
 
 // Little drummer boy
-song MIDI/drummerboy.mid
+song drummerboy.mid
 musician blu 1
 musician key 3
 musician dru 4
 singer sin 0
 singer blu 0
 singer key 0
+
+// Rembrandts - I'll be there for you 
+song rembrandts-ill_be_there_for_you.mid
+musician key 4
+musician blu 3
+singer key 0
+singer blu 1
+
+// Animals - House of the rising sun 
+song HouseOfTheRisingSun.mid
+musician blu 4
+singer blu 3
+musician key 5
+
+// Eagles - Hotel California
+song The_Eagles_-_Hotel_California.mid
+musician blu 7
+singer blu 3
+
+
+//Simon_and_Garfunkel_-_Bridge_Over_Troubled_Waters
+song Simon_and_Garfunkel_-_Bridge_Over_Troubled_Waters.mid
+musician key 0
+singer key 3
+musician BLU 8
+
+// Santana_-_Black_Magic_Woman
+song Santana_-_Black_Magic_Woman.mid
+musician blu 5
+musician blu 6
+singer blu 7
+musician key 4
+musician key 2
+singer key 7
+ 
+
+// Ram_Jam_-_Black_Betty
+song Ram_Jam_-_Black_Betty.mid
+musician blu 2
+musician blu 6
+singer blu 3
+musician key 3
+singer key 3
+
+song Lynyrd_Skynyrd_-_Sweet_Home_Alabama.mid
+musician blu 6
+singer blu 3
+
+song BB_King_-_The_Thrill_Is_Gone.mid
+musician blu 8
+singer blu 3
+
+song John_Legend-All_of_Me.mid
+musician key 0
+
+song Led_Zeppelin_-_Whole_Lotta_Love.mid
+musician blu 2
+singer blu 0
+
+song pharrell_williams-happy.mid
+singer key 0 
+musician key 1
+musician blu 4
+
+
+song SMOK_WAT.MID
+musician blu 7
+musician blu 5
+singer key 3
+musician key 0
+
+song belle_helene.mid
+musician key 1 
+singer key 4
+musician blu 3
+singer blu 2
+
+
+
+
+
+

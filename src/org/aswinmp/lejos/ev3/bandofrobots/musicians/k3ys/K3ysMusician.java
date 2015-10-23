@@ -29,6 +29,7 @@ public class K3ysMusician extends AbstractMusician {
 	@Override
 	public void start() {
 		piano.openEyes();
+    piano.closeEyes();
 		piano.centerHands(true);
 	}
 

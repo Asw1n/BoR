@@ -4,6 +4,7 @@ package org.aswinmp.lejos.ev3.bandofrobots.musicians.blu3s;
 import lejos.hardware.BrickFinder;
 import lejos.hardware.LED;
 import lejos.hardware.ev3.LocalEV3;
+import lejos.hardware.lcd.LCD;
 import lejos.hardware.motor.EV3MediumRegulatedMotor;
 import lejos.hardware.port.MotorPort;
 import lejos.hardware.sensor.EV3UltrasonicSensor;
@@ -13,6 +14,7 @@ import org.aswinmp.lejos.ev3.bandofrobots.musicians.LinearLimb;
 import org.aswinmp.lejos.ev3.bandofrobots.musicians.calibration.SingleBoundaryCalibration;
 
 public class Blu3s  {
+  static int[] strings = new int[]{40, 45, 50, 55 , 59, 64};
 	Limb rightHand, leftHand, foot, head;
 	Limb[] limbs ;
 	boolean isUp = true;
@@ -25,7 +27,7 @@ public class Blu3s  {
 
 	public Blu3s() {
 		super();
-		rightHand = new LinearLimb(new EV3MediumRegulatedMotor(MotorPort.A), true, new SingleBoundaryCalibration(true, 15, 40, 30));
+		rightHand = new LinearLimb(new EV3MediumRegulatedMotor(MotorPort.A), true, new SingleBoundaryCalibration(true, 15, 20, 30));
     rightHand.setRange(-1, 1);
     rightHand.setSpeed(1);
 
@@ -33,7 +35,7 @@ public class Blu3s  {
     leftHand.setRange(0, 1);
     leftHand.setSpeed(1);
 
-    foot = new LinearLimb(new EV3MediumRegulatedMotor(MotorPort.C), false, new SingleBoundaryCalibration(true, 10, 50, 10));
+    foot = new LinearLimb(new EV3MediumRegulatedMotor(MotorPort.C), false, new SingleBoundaryCalibration(true, 10, 15, 50));
     foot.setRange(0, 1);
     foot.setSpeed(1);
 
@@ -48,10 +50,26 @@ public class Blu3s  {
 		eyes = new EV3UltrasonicSensor(BrickFinder.getDefault().getPort("S2"));
 
 	}
+	
+	private int toFret(int tone) {
+	  for (int x=strings.length-1; x>=0; x--) {
+	    if (tone >= strings[x]) return tone - strings[x];
+	  }
+    return 0;
+	}
 
+	 private int toGuitarString(int tone) {
+	    for (int x=strings.length-1; x>=0; x--) {
+	      if (tone >= strings[x]) return x;
+	    }
+	    return 0;
+	  }
+
+	
 
 	public void setGuitarRange(final int lowestNote, final int highestNote){
 		leftHand.setRange(lowestNote, highestNote);
+		leftHand.setRange(40,82);
 	}
 
 	public void play(final int tone, final int intensity) {
@@ -71,6 +89,7 @@ public class Blu3s  {
 		//leftHand.setSpeed(1);
 		leftHand.moveTo(tone, true);
 	}
+	
 
 	public void openMouth(final float f) {
 		// The mouth opens when singing according to intensity of the note.

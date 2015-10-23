@@ -24,7 +24,7 @@ public class CircularLimb implements Limb {
   private CalibrationStrategy  calibrater;
   private float				   gearRatio = 360;
   private int 				   currentTarget;
-  private boolean              adaptToRhythm=true;
+  private boolean              adaptToRhythm=false;
   private long                 lastTime=Long.MIN_VALUE;
   
 
@@ -32,7 +32,11 @@ public class CircularLimb implements Limb {
 	return adaptToRhythm;
 }
 
-public void setAdaptToRhythm(boolean adaptToRhythm) {
+/** The limb tries to predict its optimum speed when the limb is adapting to rhythm. Optimum sped is when the limb makes one full circle 
+ * between two calls to MoveTo(). 
+ * @param adaptToRhythm
+ */
+public void adaptToRhythm(boolean adaptToRhythm) {
 	this.adaptToRhythm = adaptToRhythm;
 }
 
@@ -53,16 +57,17 @@ public void setGearRatio(float gearRatio) {
    * Calibration strategy to align limb
    */
   public CircularLimb(final RegulatedMotor motor, boolean reverse,  CalibrationStrategy calibrater) {
+    this.calibrater = calibrater;
 	  if (reverse) 
 		  this.motor=MirrorMotor.invertMotor(motor);
 	  else 
 		  this.motor = motor;
-    this.calibrater = calibrater;
   }
 
-  public CircularLimb(final RegulatedMotor motor, boolean reverse,  CalibrationStrategy calibrater, int gearRatio) {
+  public CircularLimb(final RegulatedMotor motor, boolean reverse,  CalibrationStrategy calibrater, int gearRatio, boolean adaptToRhythm) {
 	this(motor,reverse,calibrater);
 	this.gearRatio=gearRatio;
+	this.adaptToRhythm=adaptToRhythm;
 }
 
 @Override
@@ -129,9 +134,12 @@ public void setGearRatio(float gearRatio) {
 
   @Override
   public void moveTo(float position, boolean immediateReturn) {
+//    int aim = (int) (currentTarget  + position * gearRatio);
+//    int pos=motor.getTachoCount();
+//    while (aim > motor.getTachoCount() + gearRatio * 1.1) aim-=gearRatio;
+    
+    if (currentTarget-motor.getTachoCount() > gearRatio/4) return;
     int aim = (int) (currentTarget  + position * gearRatio);
-    if (aim < currentTarget) aim+=gearRatio;
-    if (aim> currentTarget+gearRatio) aim-=gearRatio;
     currentTarget=aim;
     motor.rotateTo(currentTarget, immediateReturn);
     if (adaptToRhythm) {
@@ -142,6 +150,10 @@ public void setGearRatio(float gearRatio) {
     	else motor.setSpeed((int) motor.getMaxSpeed());
     	lastTime=current;
     }
+  }
+  
+  private int getRounds() {
+    return (int) (motor.getTachoCount()/gearRatio);
   }
 
   @Override
